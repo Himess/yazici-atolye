@@ -1,65 +1,87 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { products, categories } from "@/lib/products";
+import { ProductCard } from "@/components/product-card";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="flex flex-col">
+      {/* Hero Section */}
+      <section className="relative h-[600px] md:h-[700px] overflow-hidden">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/images/yuzuk-2.png')" }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+        <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent" />
+
+        <div className="container mx-auto px-4 h-full flex items-center relative z-10">
+          <div className="max-w-xl">
+            <p className="text-sm uppercase tracking-widest text-[#BFAE8F] mb-4 font-medium">El Yapimi Tasarimlar</p>
+            <h1 className="font-playfair text-4xl md:text-5xl lg:text-6xl font-bold text-[#2B2B2B] mb-6 leading-tight">
+              Zarafetin ve Kalitenin Bulustugu Yer
+            </h1>
+            <p className="text-lg text-[#6D6B68] mb-8 max-w-lg">
+              Yazici Atolye olarak, her parcayi ozenle tasarliyor ve el iscigiyle hayata geciriyoruz.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button size="lg" className="bg-[#095246] hover:bg-[#BFAE8F] hover:text-[#2B2B2B] text-white transition-all duration-300">
+                <Link href="/urunler">Koleksiyonu Kesfet</Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-[#095246] text-[#095246] hover:bg-[#095246] hover:text-white transition-all duration-300">
+                <Link href="/iletisim">Randevu Al</Link>
+              </Button>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Kategoriler */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="font-playfair text-3xl font-bold text-[#2B2B2B] mb-4">Kategoriler</h2>
+            <p className="text-[#6D6B68]">Aradiginiz her seyi bulabilirsiniz</p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4">
+            {categories.map((category) => (
+              <Link key={category.id} href={`/urunler?kategori=${category.id}`}>
+                <Button variant="outline" className="border-[#E5E5E5] text-[#6D6B68] hover:bg-[#F7F6F4] hover:border-[#095246] hover:text-[#095246] px-6 py-2 transition-all duration-300">
+                  {category.name}
+                </Button>
+              </Link>
+            ))}
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Tum Urunler */}
+      <section className="py-16 bg-[#F7F6F4]">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="font-playfair text-3xl font-bold text-[#2B2B2B] mb-4">Urunlerimiz</h2>
+            <p className="text-[#6D6B68]">En cok tercih edilen parcalarimiz</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 bg-[#2B2B2B] text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4">Ozel Bir Parca mi Ariyorsunuz?</h2>
+          <p className="text-[#6D6B68] mb-8 max-w-2xl mx-auto">Size ozel tasarim yapmak icin sabirsizlaniyoruz.</p>
+          <Button size="lg" className="bg-[#095246] hover:bg-[#BFAE8F] hover:text-[#2B2B2B] text-white transition-all duration-300">
+            <Link href="/iletisim">Bize Ulasin</Link>
+          </Button>
+        </div>
+      </section>
     </div>
   );
 }

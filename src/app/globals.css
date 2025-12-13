@@ -1,26 +1,130 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
+/* Modern Heirloom - Yazici Atolye Brand Colors */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand Colors */
+  --imperial-emerald: #095246;
+  --champagne-gold: #BFAE8F;
+  --deep-charcoal: #2B2B2B;
+  --warm-stone: #6D6B68;
+  --atelier-mist: #F7F6F4;
+
+  /* Theme Variables */
+  --radius: 0.625rem;
+  --background: #FFFFFF;
+  --foreground: #2B2B2B;
+  --card: #FFFFFF;
+  --card-foreground: #2B2B2B;
+  --popover: #FFFFFF;
+  --popover-foreground: #2B2B2B;
+  --primary: #095246;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F7F6F4;
+  --secondary-foreground: #2B2B2B;
+  --muted: #F7F6F4;
+  --muted-foreground: #6D6B68;
+  --accent: #BFAE8F;
+  --accent-foreground: #2B2B2B;
+  --destructive: #DC2626;
+  --border: #E5E5E5;
+  --input: #E5E5E5;
+  --ring: #095246;
+  --chart-1: #095246;
+  --chart-2: #BFAE8F;
+  --chart-3: #6D6B68;
+  --chart-4: #2B2B2B;
+  --chart-5: #F7F6F4;
+  --sidebar: #F7F6F4;
+  --sidebar-foreground: #2B2B2B;
+  --sidebar-primary: #095246;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #BFAE8F;
+  --sidebar-accent-foreground: #2B2B2B;
+  --sidebar-border: #E5E5E5;
+  --sidebar-ring: #095246;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-montserrat);
+  --font-serif: var(--font-playfair);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Custom Brand Colors */
+  --color-imperial: #095246;
+  --color-champagne: #BFAE8F;
+  --color-charcoal: #2B2B2B;
+  --color-warmstone: #6D6B68;
+  --color-mist: #F7F6F4;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-charcoal;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom Button Styles */
+.btn-primary {
+  @apply bg-imperial text-white transition-all duration-300;
+}
+.btn-primary:hover {
+  @apply bg-champagne text-charcoal;
+}
+
+.btn-secondary {
+  @apply bg-transparent border border-warmstone text-warmstone transition-all duration-300;
+}
+.btn-secondary:hover {
+  @apply border-imperial text-imperial;
+}
+
+/* Smooth transitions */
+.transition-brand {
+  @apply transition-all duration-300 ease-in-out;
 }

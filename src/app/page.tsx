@@ -9,28 +9,28 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[600px] md:h-[700px] overflow-hidden">
+      <section className="relative h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden">
         {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('/images/yuzuk-2.png')" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-white/30 sm:from-white/90 sm:via-white/50 sm:to-transparent" />
 
         <div className="container mx-auto px-4 h-full flex items-center relative z-10">
           <div className="max-w-xl">
-            <p className="text-sm uppercase tracking-widest text-[#BFAE8F] mb-4 font-medium">El Yapimi Tasarimlar</p>
-            <h1 className="font-playfair text-4xl md:text-5xl lg:text-6xl font-bold text-[#2B2B2B] mb-6 leading-tight">
+            <p className="text-xs sm:text-sm uppercase tracking-widest text-[#BFAE8F] mb-3 sm:mb-4 font-medium">El Yapimi Tasarimlar</p>
+            <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#2B2B2B] mb-4 sm:mb-6 leading-tight">
               Zarafetin ve Kalitenin Bulustugu Yer
             </h1>
-            <p className="text-lg text-[#6D6B68] mb-8 max-w-lg">
+            <p className="text-base sm:text-lg text-[#6D6B68] mb-6 sm:mb-8 max-w-lg">
               Yazici Atolye olarak, her parcayi ozenle tasarliyor ve el iscigiyle hayata geciriyoruz.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="bg-[#095246] hover:bg-[#BFAE8F] hover:text-[#2B2B2B] text-white transition-all duration-300">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <Button size="lg" className="bg-[#095246] hover:bg-[#BFAE8F] hover:text-[#2B2B2B] text-white transition-all duration-300 w-full sm:w-auto">
                 <Link href="/urunler">Koleksiyonu Kesfet</Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-[#095246] text-[#095246] hover:bg-[#095246] hover:text-white transition-all duration-300">
+              <Button size="lg" variant="outline" className="border-[#095246] text-[#095246] hover:bg-[#095246] hover:text-white transition-all duration-300 w-full sm:w-auto">
                 <Link href="/iletisim">Randevu Al</Link>
               </Button>
             </div>
@@ -41,7 +41,7 @@ export default function Home() {
       {/* Güven İkonları - Blue Diamond Tarzı */}
       <section className="py-6 bg-white border-b border-[#E5E5E5]">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-4 md:gap-6">
             <div className="flex flex-col items-center text-center p-3">
               <div className="w-12 h-12 rounded-full bg-[#F7F6F4] flex items-center justify-center mb-2">
                 <svg className="w-6 h-6 text-[#095246]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,7 +141,7 @@ export default function Home() {
             <h2 className="font-playfair text-3xl font-bold text-[#2B2B2B] mb-4">Urunlerimiz</h2>
             <p className="text-[#6D6B68]">En cok tercih edilen parcalarimiz</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

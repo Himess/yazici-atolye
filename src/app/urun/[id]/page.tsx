@@ -96,11 +96,11 @@ export default function UrunDetayPage() {
           <span className="text-stone-900 truncate max-w-[200px]">{product.name}</span>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
           {/* Sol: Resim Galerisi */}
-          <div className="flex gap-4">
-            {/* Thumbnails - Sol taraf */}
-            <div className="flex flex-col gap-2 flex-shrink-0">
+          <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4">
+            {/* Thumbnails - Mobilde altta, masaüstünde solda */}
+            <div className="flex sm:flex-col gap-2 overflow-x-auto sm:overflow-visible pb-2 sm:pb-0 flex-shrink-0">
               {allImages.map((img, index) => {
                 const isHoverImage = product.hoverImage && img === product.hoverImage;
                 return (
@@ -116,7 +116,7 @@ export default function UrunDetayPage() {
                         setSelectedImage((prev) => Math.max(prev - 1, 0));
                       }
                     }}
-                    className={`w-16 h-16 lg:w-20 lg:h-20 rounded-lg overflow-hidden transition-all relative ${selectedImage === index ? 'ring-2 ring-[#095246]' : 'ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#BFAE8F]'}`}
+                    className={`w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-lg overflow-hidden transition-all relative flex-shrink-0 ${selectedImage === index ? 'ring-2 ring-[#095246]' : 'ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#BFAE8F]'}`}
                   >
                     <img
                       src={img}
@@ -125,15 +125,15 @@ export default function UrunDetayPage() {
                     />
                     {isHoverImage && (
                       <div className="absolute inset-0 bg-[#095246]/10 flex items-center justify-center">
-                        <span className="text-[8px] bg-[#095246] text-white px-1 rounded">Kullanımda</span>
+                        <span className="text-[6px] sm:text-[8px] bg-[#095246] text-white px-1 rounded">Kullanımda</span>
                       </div>
                     )}
                   </button>
                 );
               })}
               {/* Video butonu (placeholder) */}
-              <button className="w-16 h-16 lg:w-20 lg:h-20 bg-[#F7F6F4] rounded-lg flex items-center justify-center ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#BFAE8F] transition-all">
-                <svg className="w-6 h-6 lg:w-8 lg:h-8 text-[#6D6B68]" fill="currentColor" viewBox="0 0 24 24">
+              <button className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-[#F7F6F4] rounded-lg flex items-center justify-center ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#BFAE8F] transition-all flex-shrink-0">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-[#6D6B68]" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z"/>
                 </svg>
               </button>

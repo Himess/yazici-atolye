@@ -76,14 +76,14 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
         </div>
-        <CardContent className="p-4">
-          <h3 className="font-medium text-[#2B2B2B] group-hover:text-[#095246] transition-colors mb-1">{product.name}</h3>
-          <p className="text-sm text-[#6D6B68] mb-2">{product.material}</p>
-          <div className="flex items-center gap-2">
+        <CardContent className="p-2 sm:p-4">
+          <h3 className="font-medium text-[#2B2B2B] group-hover:text-[#095246] transition-colors mb-1 text-xs sm:text-sm md:text-base line-clamp-2">{product.name}</h3>
+          <p className="text-xs sm:text-sm text-[#6D6B68] mb-1 sm:mb-2 hidden sm:block">{product.material}</p>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-2">
             {product.oldPrice && (
-              <span className="text-sm text-[#6D6B68] line-through">{formatPrice(product.oldPrice)}</span>
+              <span className="text-xs sm:text-sm text-[#6D6B68] line-through">{formatPrice(product.oldPrice)}</span>
             )}
-            <p className="text-lg font-semibold text-[#2B2B2B]">{formatPrice(product.price)}</p>
+            <p className="text-sm sm:text-lg font-semibold text-[#2B2B2B]">{formatPrice(product.price)}</p>
           </div>
         </CardContent>
       </Card>

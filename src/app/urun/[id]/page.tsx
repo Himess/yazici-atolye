@@ -28,19 +28,24 @@ export default function UrunDetayPage() {
     }
   }, [id]);
 
+  // Tüm görseller (hover dahil)
+  const allImages = product
+    ? (product.hoverImage ? [...product.images, product.hoverImage] : product.images)
+    : [];
+
   // Klavye sağ/sol ok desteği
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!product) return;
+      if (!product || allImages.length === 0) return;
       if (e.key === 'ArrowRight') {
-        setSelectedImage((prev) => (prev + 1) % product.images.length);
+        setSelectedImage((prev) => (prev + 1) % allImages.length);
       } else if (e.key === 'ArrowLeft') {
-        setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length);
+        setSelectedImage((prev) => (prev - 1 + allImages.length) % allImages.length);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [product]);
+  }, [product, allImages.length]);
 
   const handleAddToCart = () => {
     if (product) {
@@ -96,28 +101,36 @@ export default function UrunDetayPage() {
           <div className="flex gap-4">
             {/* Thumbnails - Sol taraf */}
             <div className="flex flex-col gap-2 flex-shrink-0">
-              {product.images.map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'ArrowDown') {
-                      e.preventDefault();
-                      setSelectedImage((prev) => Math.min(prev + 1, product.images.length - 1));
-                    } else if (e.key === 'ArrowUp') {
-                      e.preventDefault();
-                      setSelectedImage((prev) => Math.max(prev - 1, 0));
-                    }
-                  }}
-                  className={`w-16 h-16 lg:w-20 lg:h-20 rounded-lg overflow-hidden transition-all ${selectedImage === index ? 'ring-2 ring-[#095246]' : 'ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#BFAE8F]'}`}
-                >
-                  <img
-                    src={img}
-                    alt={`${product.name} - Görsel ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
+              {allImages.map((img, index) => {
+                const isHoverImage = product.hoverImage && img === product.hoverImage;
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        setSelectedImage((prev) => Math.min(prev + 1, allImages.length - 1));
+                      } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        setSelectedImage((prev) => Math.max(prev - 1, 0));
+                      }
+                    }}
+                    className={`w-16 h-16 lg:w-20 lg:h-20 rounded-lg overflow-hidden transition-all relative ${selectedImage === index ? 'ring-2 ring-[#095246]' : 'ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#BFAE8F]'}`}
+                  >
+                    <img
+                      src={img}
+                      alt={`${product.name} - ${isHoverImage ? 'Kullanımda' : `Görsel ${index + 1}`}`}
+                      className="w-full h-full object-cover"
+                    />
+                    {isHoverImage && (
+                      <div className="absolute inset-0 bg-[#095246]/10 flex items-center justify-center">
+                        <span className="text-[8px] bg-[#095246] text-white px-1 rounded">Kullanımda</span>
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
               {/* Video butonu (placeholder) */}
               <button className="w-16 h-16 lg:w-20 lg:h-20 bg-[#F7F6F4] rounded-lg flex items-center justify-center ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#BFAE8F] transition-all">
                 <svg className="w-6 h-6 lg:w-8 lg:h-8 text-[#6D6B68]" fill="currentColor" viewBox="0 0 24 24">
@@ -128,20 +141,28 @@ export default function UrunDetayPage() {
 
             {/* Ana Resim */}
             <div className="flex-1 aspect-square bg-[#F7F6F4] rounded-lg flex items-center justify-center relative min-w-0 overflow-hidden group">
-              {product.images[selectedImage] ? (
-                <img
-                  src={product.images[selectedImage]}
-                  alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
+              {allImages[selectedImage] ? (
+                <>
+                  <img
+                    src={allImages[selectedImage]}
+                    alt={product.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  {/* Kullanımda etiketi */}
+                  {product.hoverImage && allImages[selectedImage] === product.hoverImage && (
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className="text-sm bg-[#095246] text-white px-3 py-1 rounded-full">Kullanımda</span>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="w-48 h-48 lg:w-64 lg:h-64 rounded-full bg-[#E5E5E5]" />
               )}
 
               {/* Sol Ok */}
-              {product.images.length > 1 && (
+              {allImages.length > 1 && (
                 <button
-                  onClick={() => setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length)}
+                  onClick={() => setSelectedImage((prev) => (prev - 1 + allImages.length) % allImages.length)}
                   className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all"
                 >
                   <svg className="w-5 h-5 text-[#2B2B2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -151,9 +172,9 @@ export default function UrunDetayPage() {
               )}
 
               {/* Sağ Ok */}
-              {product.images.length > 1 && (
+              {allImages.length > 1 && (
                 <button
-                  onClick={() => setSelectedImage((prev) => (prev + 1) % product.images.length)}
+                  onClick={() => setSelectedImage((prev) => (prev + 1) % allImages.length)}
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all"
                 >
                   <svg className="w-5 h-5 text-[#2B2B2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,11 +212,11 @@ export default function UrunDetayPage() {
               </button>
 
               {/* Sol Ok */}
-              {product.images.length > 1 && (
+              {allImages.length > 1 && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length);
+                    setSelectedImage((prev) => (prev - 1 + allImages.length) % allImages.length);
                   }}
                   className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all"
                 >
@@ -207,18 +228,18 @@ export default function UrunDetayPage() {
 
               {/* Büyük Resim */}
               <img
-                src={product.images[selectedImage]}
+                src={allImages[selectedImage]}
                 alt={product.name}
                 className="max-w-[90vw] max-h-[90vh] object-contain"
                 onClick={(e) => e.stopPropagation()}
               />
 
               {/* Sağ Ok */}
-              {product.images.length > 1 && (
+              {allImages.length > 1 && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedImage((prev) => (prev + 1) % product.images.length);
+                    setSelectedImage((prev) => (prev + 1) % allImages.length);
                   }}
                   className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all"
                 >
@@ -229,9 +250,9 @@ export default function UrunDetayPage() {
               )}
 
               {/* Alt noktalar */}
-              {product.images.length > 1 && (
+              {allImages.length > 1 && (
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-                  {product.images.map((_, index) => (
+                  {allImages.map((_, index) => (
                     <button
                       key={index}
                       onClick={(e) => {

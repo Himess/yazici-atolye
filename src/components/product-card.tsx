@@ -10,20 +10,42 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
-  const hasMultipleImages = product.images.length > 1;
+  // Hover görseli varsa onu göster, yoksa ana görseli göster
+  const displayImage = isHovered && product.hoverImage
+    ? product.hoverImage
+    : product.images[0];
 
   return (
     <Link href={`/urun/${product.id}`}>
-      <Card className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden bg-white border-[#E5E5E5]">
+      <Card
+        className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden bg-white border-[#E5E5E5]"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div className="aspect-square bg-[#F7F6F4] relative overflow-hidden">
           {product.images[0]?.includes('/images/') ? (
-            <img
-              src={product.images[currentImageIndex] || product.images[0]}
-              alt={product.name}
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
+            <>
+              {/* Ana görsel */}
+              <img
+                src={product.images[0]}
+                alt={product.name}
+                className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${
+                  isHovered && product.hoverImage ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
+                }`}
+              />
+              {/* Hover görseli (varsa) */}
+              {product.hoverImage && (
+                <img
+                  src={product.hoverImage}
+                  alt={`${product.name} - Kullanımda`}
+                  className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${
+                    isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                  }`}
+                />
+              )}
+            </>
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-32 h-32 rounded-full bg-[#E5E5E5]" />
@@ -31,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
 
           {/* Favori butonu */}
-          <div className="absolute top-3 right-3 flex gap-2">
+          <div className="absolute top-3 right-3 flex gap-2 z-10">
             <button
               className="p-2 bg-white rounded-full shadow-sm hover:bg-[#F7F6F4] transition-colors"
               onClick={(e) => e.preventDefault()}
@@ -43,35 +65,26 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
 
           {/* Kategori etiketi */}
-          <div className="absolute bottom-3 left-3">
+          <div className="absolute bottom-3 left-3 z-10">
             <span className="text-xs bg-white px-2 py-1 rounded text-[#6D6B68]">{product.categoryLabel}</span>
           </div>
 
-          {/* Resim noktaları (birden fazla resim varsa) */}
-          {hasMultipleImages && (
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-              {product.images.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentImageIndex(index);
-                  }}
-                  onMouseEnter={() => setCurrentImageIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    currentImageIndex === index
-                      ? 'bg-[#095246] w-4'
-                      : 'bg-white/70 hover:bg-white'
-                  }`}
-                />
-              ))}
+          {/* Hover görseli varsa "Kullanımda" etiketi */}
+          {product.hoverImage && isHovered && (
+            <div className="absolute top-3 left-3 z-10">
+              <span className="text-xs bg-[#095246] text-white px-2 py-1 rounded">Kullanımda</span>
             </div>
           )}
         </div>
         <CardContent className="p-4">
           <h3 className="font-medium text-[#2B2B2B] group-hover:text-[#095246] transition-colors mb-1">{product.name}</h3>
           <p className="text-sm text-[#6D6B68] mb-2">{product.material}</p>
-          <p className="text-lg font-semibold text-[#2B2B2B]">{formatPrice(product.price)}</p>
+          <div className="flex items-center gap-2">
+            {product.oldPrice && (
+              <span className="text-sm text-[#6D6B68] line-through">{formatPrice(product.oldPrice)}</span>
+            )}
+            <p className="text-lg font-semibold text-[#2B2B2B]">{formatPrice(product.price)}</p>
+          </div>
         </CardContent>
       </Card>
     </Link>

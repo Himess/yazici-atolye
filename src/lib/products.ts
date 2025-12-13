@@ -22,6 +22,7 @@ export type Product = {
   purity: string;
   stones: Stone[];
   images: string[];
+  hoverImage?: string; // Swarovski tarzı - elde/boyunda/kulakta duruş görseli
   featured: boolean;
   inStock: boolean;
 };
@@ -44,6 +45,7 @@ export const products: Product[] = [
       { type: "Pirlanta", count: 1, carat: 0.50, color: "F/G", clarity: "VS1", shape: "Yuvarlak" }
     ],
     images: ["/images/yuzuk-1-main.jpg", "/images/yuzuk-1-back.jpg", "/images/yuzuk-1-side.jpg"],
+    hoverImage: "/images/yüzük1-1.png",
     featured: true,
     inStock: true,
   },
@@ -64,6 +66,7 @@ export const products: Product[] = [
       { type: "Pirlanta", count: 1, carat: 0.30, color: "F/G", clarity: "VS2", shape: "Yuvarlak" }
     ],
     images: ["/images/kolye-1.png"],
+    hoverImage: "/images/kolye1-1.png",
     featured: true,
     inStock: true,
   },
@@ -84,6 +87,7 @@ export const products: Product[] = [
       { type: "Pirlanta", count: 2, carat: 0.40, color: "G/H", clarity: "VS2", shape: "Yuvarlak" }
     ],
     images: ["/images/kupe-1.png"],
+    hoverImage: "/images/küpe1-1.png",
     featured: true,
     inStock: true,
   },
@@ -142,6 +146,7 @@ export const products: Product[] = [
     purity: "14 Ayar",
     stones: [],
     images: ["/images/bileklik-1.png"],
+    hoverImage: "/images/bileklik1-1.png",
     featured: true,
     inStock: true,
   },

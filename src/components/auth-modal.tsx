@@ -40,7 +40,7 @@ export function AuthModal() {
           setError("E-posta veya sifre hatali");
         }
       }
-    } catch (err) {
+    } catch {
       setError("Bir hata olustu, lutfen tekrar deneyin");
     }
 

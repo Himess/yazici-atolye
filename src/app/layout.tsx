@@ -18,9 +18,43 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Yazici Atolye | El Yapimi Takilar & Mucevherat",
-  description: "Yazici Atolye - Ozel tasarim el yapimi takilar, nisan yuzukleri, alyanslar ve mucevherat. Kalite ve zarafetin bulustugu adres.",
-  keywords: ["kuyumcu", "mucevher", "altin", "yuzuk", "kolye", "kupe", "el yapimi taki"],
+  title: {
+    default: "Yazici Atolye | El Yapimi Takilar & Mucevherat",
+    template: "%s | Yazici Atolye",
+  },
+  description:
+    "Yazici Atolye - Ozel tasarim el yapimi takilar, nisan yuzukleri, alyanslar ve mucevherat. Kalite ve zarafetin bulustugu adres.",
+  keywords: [
+    "kuyumcu",
+    "mucevher",
+    "altin",
+    "yuzuk",
+    "kolye",
+    "kupe",
+    "el yapimi taki",
+    "pirlanta",
+    "nisan yuzugu",
+    "alyans",
+  ],
+  authors: [{ name: "Yazici Atolye" }],
+  creator: "Yazici Atolye",
+  openGraph: {
+    type: "website",
+    locale: "tr_TR",
+    siteName: "Yazici Atolye",
+    title: "Yazici Atolye | El Yapimi Takilar & Mucevherat",
+    description:
+      "Ozel tasarim el yapimi takilar, nisan yuzukleri, alyanslar ve mucevherat.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yazici Atolye | El Yapimi Takilar",
+    description: "Ozel tasarim el yapimi takilar ve mucevherat.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -35,9 +69,7 @@ export default function RootLayout({
       >
         <Providers>
           <Header />
-          <main className="min-h-screen">
-            {children}
-          </main>
+          <main className="min-h-screen">{children}</main>
           <Footer />
         </Providers>
       </body>

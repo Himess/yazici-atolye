@@ -1,32 +1,29 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getProductById, formatPrice } from "@/lib/products";
 import { useCart } from "@/lib/cart-context";
-import { useState, useEffect } from "react";
+import { useFavorites } from "@/lib/favorites-context";
+import { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
+import { Heart, Share2, ShoppingBag, ZoomIn, ChevronLeft, ChevronRight, X, Play, Shield, FileText, Package } from "lucide-react";
 
 export default function UrunDetayPage() {
   const params = useParams();
   const id = params?.id as string;
-  const [product, setProduct] = useState<ReturnType<typeof getProductById>>(undefined);
+
+  // Get product synchronously using useMemo
+  const product = useMemo(() => getProductById(id), [id]);
+
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const { addToCart } = useCart();
-
-  useEffect(() => {
-    if (id) {
-      const foundProduct = getProductById(id);
-      setProduct(foundProduct);
-      setIsLoading(false);
-    }
-  }, [id]);
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   // Tüm görseller (hover dahil)
   const allImages = product
@@ -53,17 +50,12 @@ export default function UrunDetayPage() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-stone-900"></div>
-      </div>
-    );
-  }
-
+  // Handle not found
   if (!product) {
     notFound();
   }
+
+  const favorite = isFavorite(product.id);
 
   const discountPercent = product.oldPrice
     ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
@@ -116,81 +108,82 @@ export default function UrunDetayPage() {
                         setSelectedImage((prev) => Math.max(prev - 1, 0));
                       }
                     }}
-                    className={`w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-lg overflow-hidden transition-all relative flex-shrink-0 ${selectedImage === index ? 'ring-2 ring-[#095246]' : 'ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#BFAE8F]'}`}
+                    className={`w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-lg overflow-hidden transition-all relative flex-shrink-0 ${selectedImage === index ? 'ring-2 ring-primary' : 'ring-1 ring-border hover:ring-2 hover:ring-accent'}`}
+                    aria-label={`${product.name} - ${isHoverImage ? 'Kullanımda' : `Görsel ${index + 1}`}`}
                   >
-                    <img
+                    <Image
                       src={img}
                       alt={`${product.name} - ${isHoverImage ? 'Kullanımda' : `Görsel ${index + 1}`}`}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="80px"
+                      className="object-cover"
                     />
                     {isHoverImage && (
-                      <div className="absolute inset-0 bg-[#095246]/10 flex items-center justify-center">
-                        <span className="text-[6px] sm:text-[8px] bg-[#095246] text-white px-1 rounded">Kullanımda</span>
+                      <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
+                        <span className="text-[6px] sm:text-[8px] bg-primary text-primary-foreground px-1 rounded">Kullanımda</span>
                       </div>
                     )}
                   </button>
                 );
               })}
               {/* Video butonu (placeholder) */}
-              <button className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-[#F7F6F4] rounded-lg flex items-center justify-center ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#BFAE8F] transition-all flex-shrink-0">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-[#6D6B68]" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
+              <button className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-muted rounded-lg flex items-center justify-center ring-1 ring-border hover:ring-2 hover:ring-accent transition-all flex-shrink-0" aria-label="Video izle">
+                <Play className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-muted-foreground" />
               </button>
             </div>
 
             {/* Ana Resim */}
-            <div className="flex-1 aspect-square bg-[#F7F6F4] rounded-lg flex items-center justify-center relative min-w-0 overflow-hidden group">
+            <div className="flex-1 aspect-square bg-muted rounded-lg flex items-center justify-center relative min-w-0 overflow-hidden group">
               {allImages[selectedImage] ? (
                 <>
-                  <img
+                  <Image
                     src={allImages[selectedImage]}
                     alt={product.name}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                    priority
                   />
                   {/* Kullanımda etiketi */}
                   {product.hoverImage && allImages[selectedImage] === product.hoverImage && (
                     <div className="absolute top-4 left-4 z-10">
-                      <span className="text-sm bg-[#095246] text-white px-3 py-1 rounded-full">Kullanımda</span>
+                      <span className="text-sm bg-primary text-primary-foreground px-3 py-1 rounded-full">Kullanımda</span>
                     </div>
                   )}
                 </>
               ) : (
-                <div className="w-48 h-48 lg:w-64 lg:h-64 rounded-full bg-[#E5E5E5]" />
+                <div className="w-48 h-48 lg:w-64 lg:h-64 rounded-full bg-border" />
               )}
 
               {/* Sol Ok */}
               {allImages.length > 1 && (
                 <button
                   onClick={() => setSelectedImage((prev) => (prev - 1 + allImages.length) % allImages.length)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-background/80 hover:bg-background rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all"
+                  aria-label="Onceki gorsel"
                 >
-                  <svg className="w-5 h-5 text-[#2B2B2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
+                  <ChevronLeft className="w-5 h-5 text-foreground" />
                 </button>
               )}
 
-              {/* Sağ Ok */}
+              {/* Sag Ok */}
               {allImages.length > 1 && (
                 <button
                   onClick={() => setSelectedImage((prev) => (prev + 1) % allImages.length)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-background/80 hover:bg-background rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all"
+                  aria-label="Sonraki gorsel"
                 >
-                  <svg className="w-5 h-5 text-[#2B2B2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <ChevronRight className="w-5 h-5 text-foreground" />
                 </button>
               )}
 
               {/* Zoom icon */}
               <button
                 onClick={() => setIsZoomOpen(true)}
-                className="absolute bottom-4 right-4 p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-all"
+                className="absolute bottom-4 right-4 p-2 bg-background rounded-full shadow-md hover:shadow-lg transition-all"
+                aria-label="Buyut"
               >
-                <svg className="w-5 h-5 text-[#6D6B68]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                </svg>
+                <ZoomIn className="w-5 h-5 text-muted-foreground" />
               </button>
             </div>
           </div>
@@ -200,15 +193,17 @@ export default function UrunDetayPage() {
             <div
               className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
               onClick={() => setIsZoomOpen(false)}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Buyutulmus gorsel"
             >
               {/* Kapat butonu */}
               <button
                 onClick={() => setIsZoomOpen(false)}
                 className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all"
+                aria-label="Kapat"
               >
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <X className="w-6 h-6 text-white" />
               </button>
 
               {/* Sol Ok */}
@@ -219,22 +214,24 @@ export default function UrunDetayPage() {
                     setSelectedImage((prev) => (prev - 1 + allImages.length) % allImages.length);
                   }}
                   className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all"
+                  aria-label="Onceki gorsel"
                 >
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
+                  <ChevronLeft className="w-6 h-6 text-white" />
                 </button>
               )}
 
-              {/* Büyük Resim */}
-              <img
-                src={allImages[selectedImage]}
-                alt={product.name}
-                className="max-w-[90vw] max-h-[90vh] object-contain"
-                onClick={(e) => e.stopPropagation()}
-              />
+              {/* Buyuk Resim */}
+              <div className="relative max-w-[90vw] max-h-[90vh] w-full h-full" onClick={(e) => e.stopPropagation()}>
+                <Image
+                  src={allImages[selectedImage]}
+                  alt={product.name}
+                  fill
+                  sizes="90vw"
+                  className="object-contain"
+                />
+              </div>
 
-              {/* Sağ Ok */}
+              {/* Sag Ok */}
               {allImages.length > 1 && (
                 <button
                   onClick={(e) => {
@@ -242,10 +239,9 @@ export default function UrunDetayPage() {
                     setSelectedImage((prev) => (prev + 1) % allImages.length);
                   }}
                   className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all"
+                  aria-label="Sonraki gorsel"
                 >
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <ChevronRight className="w-6 h-6 text-white" />
                 </button>
               )}
 
@@ -262,6 +258,7 @@ export default function UrunDetayPage() {
                       className={`w-2.5 h-2.5 rounded-full transition-all ${
                         selectedImage === index ? 'bg-white w-6' : 'bg-white/50 hover:bg-white/70'
                       }`}
+                      aria-label={`Gorsel ${index + 1}`}
                     />
                   ))}
                 </div>
@@ -273,25 +270,23 @@ export default function UrunDetayPage() {
           <div className="min-w-0">
             {/* Kategori ve Butonlar */}
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-stone-500">{product.categoryLabel}</span>
+              <span className="text-sm text-muted-foreground">{product.categoryLabel}</span>
               <div className="flex gap-2 flex-shrink-0">
                 <button
-                  onClick={() => setIsFavorite(!isFavorite)}
-                  className={`p-2 border rounded-lg transition-all ${isFavorite ? 'border-red-500 bg-red-50' : 'border-stone-200 hover:bg-stone-50'}`}
-                  title="Favorilere Ekle"
+                  onClick={() => toggleFavorite(product.id)}
+                  className={`p-2 border rounded-lg transition-all ${favorite ? 'border-red-500 bg-red-50' : 'border-border hover:bg-muted'}`}
+                  title={favorite ? "Favorilerden Cikar" : "Favorilere Ekle"}
+                  aria-label={favorite ? "Favorilerden Cikar" : "Favorilere Ekle"}
                 >
-                  <svg className={`w-5 h-5 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-stone-600'}`} fill={isFavorite ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
+                  <Heart className={`w-5 h-5 ${favorite ? 'text-red-500 fill-red-500' : 'text-muted-foreground'}`} />
                 </button>
                 <button
                   onClick={handleShare}
-                  className="p-2 border border-stone-200 rounded-lg hover:bg-stone-50 transition-all"
+                  className="p-2 border border-border rounded-lg hover:bg-muted transition-all"
                   title="Paylas"
+                  aria-label="Paylas"
                 >
-                  <svg className="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                  </svg>
+                  <Share2 className="w-5 h-5 text-muted-foreground" />
                 </button>
               </div>
             </div>
@@ -336,15 +331,13 @@ export default function UrunDetayPage() {
             {/* Sepete Ekle Butonu */}
             <Button
               size="lg"
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-base sm:text-lg py-5 sm:py-6 mb-4"
+              className="w-full bg-primary hover:bg-accent hover:text-accent-foreground text-primary-foreground text-base sm:text-lg py-5 sm:py-6 mb-4"
               onClick={handleAddToCart}
               disabled={!product.inStock}
             >
               {product.inStock ? (
                 <>
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
+                  <ShoppingBag className="w-5 h-5 mr-2" />
                   SEPETE EKLE
                 </>
               ) : (
@@ -454,31 +447,25 @@ export default function UrunDetayPage() {
 
           {/* Sertifika ve Garanti Bilgisi */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-8">
-            <div className="flex items-start gap-3 p-4 bg-stone-50 rounded-lg">
-              <svg className="w-8 h-8 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
+            <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
+              <Shield className="w-8 h-8 text-primary flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-stone-900">Garanti</h4>
-                <p className="text-sm text-stone-600">2 yil garanti kapsaminda</p>
+                <h4 className="font-semibold text-foreground">Garanti</h4>
+                <p className="text-sm text-muted-foreground">2 yil garanti kapsaminda</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-4 bg-stone-50 rounded-lg">
-              <svg className="w-8 h-8 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
+            <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
+              <FileText className="w-8 h-8 text-primary flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-stone-900">Sertifika</h4>
-                <p className="text-sm text-stone-600">Urunlerimiz sertifikalidir</p>
+                <h4 className="font-semibold text-foreground">Sertifika</h4>
+                <p className="text-sm text-muted-foreground">Urunlerimiz sertifikalidir</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-4 bg-stone-50 rounded-lg">
-              <svg className="w-8 h-8 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
+            <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
+              <Package className="w-8 h-8 text-primary flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-stone-900">Ucretsiz Kargo</h4>
-                <p className="text-sm text-stone-600">500 TL ustu siparislerde</p>
+                <h4 className="font-semibold text-foreground">Ucretsiz Kargo</h4>
+                <p className="text-sm text-muted-foreground">500 TL ustu siparislerde</p>
               </div>
             </div>
           </div>

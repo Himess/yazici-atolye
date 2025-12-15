@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Product, formatPrice } from "@/lib/products";
+import { useFavorites } from "@/lib/favorites-context";
+import { Heart } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
@@ -11,79 +14,112 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-
-  // Hover görseli varsa onu göster, yoksa ana görseli göster
-  const displayImage = isHovered && product.hoverImage
-    ? product.hoverImage
-    : product.images[0];
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorite = isFavorite(product.id);
 
   return (
     <Link href={`/urun/${product.id}`}>
       <Card
-        className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden bg-white border-[#E5E5E5]"
+        className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden bg-background border-border"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="aspect-square bg-[#F7F6F4] relative overflow-hidden">
-          {product.images[0]?.includes('/images/') ? (
+        <div className="aspect-square bg-muted relative overflow-hidden">
+          {product.images[0]?.includes("/images/") ? (
             <>
-              {/* Ana görsel */}
-              <img
+              {/* Ana gorsel */}
+              <Image
                 src={product.images[0]}
                 alt={product.name}
-                className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${
-                  isHovered && product.hoverImage ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
+                fill
+                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                className={`object-cover transition-all duration-500 ${
+                  isHovered && product.hoverImage
+                    ? "opacity-0 scale-105"
+                    : "opacity-100 scale-100"
                 }`}
               />
-              {/* Hover görseli (varsa) */}
+              {/* Hover gorseli (varsa) */}
               {product.hoverImage && (
-                <img
+                <Image
                   src={product.hoverImage}
                   alt={`${product.name} - Kullanımda`}
-                  className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${
-                    isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                  className={`object-cover transition-all duration-500 ${
+                    isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
                   }`}
                 />
               )}
             </>
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-32 h-32 rounded-full bg-[#E5E5E5]" />
+              <div className="w-32 h-32 rounded-full bg-border" />
             </div>
           )}
 
           {/* Favori butonu */}
           <div className="absolute top-3 right-3 flex gap-2 z-10">
             <button
-              className="p-2 bg-white rounded-full shadow-sm hover:bg-[#F7F6F4] transition-colors"
-              onClick={(e) => e.preventDefault()}
+              className={`p-2 rounded-full shadow-sm transition-colors ${
+                favorite
+                  ? "bg-red-50 text-red-500"
+                  : "bg-background hover:bg-muted text-muted-foreground"
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleFavorite(product.id);
+              }}
+              aria-label={favorite ? "Favorilerden cikar" : "Favorilere ekle"}
             >
-              <svg className="w-4 h-4 text-[#6D6B68]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
+              <Heart
+                className={`w-4 h-4 ${favorite ? "fill-current" : ""}`}
+              />
             </button>
           </div>
 
           {/* Kategori etiketi */}
           <div className="absolute bottom-3 left-3 z-10">
-            <span className="text-xs bg-white px-2 py-1 rounded text-[#6D6B68]">{product.categoryLabel}</span>
+            <span className="text-xs bg-background px-2 py-1 rounded text-muted-foreground">
+              {product.categoryLabel}
+            </span>
           </div>
 
-          {/* Hover görseli varsa "Kullanımda" etiketi */}
+          {/* Hover gorseli varsa "Kullanımda" etiketi */}
           {product.hoverImage && isHovered && (
             <div className="absolute top-3 left-3 z-10">
-              <span className="text-xs bg-[#095246] text-white px-2 py-1 rounded">Kullanımda</span>
+              <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">
+                Kullanımda
+              </span>
+            </div>
+          )}
+
+          {/* Indirim yüzdesi */}
+          {product.oldPrice && (
+            <div className="absolute top-3 left-3 z-10">
+              <span className="text-xs bg-red-500 text-white px-2 py-1 rounded font-medium">
+                %{Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)}
+              </span>
             </div>
           )}
         </div>
         <CardContent className="p-2 sm:p-4">
-          <h3 className="font-medium text-[#2B2B2B] group-hover:text-[#095246] transition-colors mb-1 text-xs sm:text-sm md:text-base line-clamp-2">{product.name}</h3>
-          <p className="text-xs sm:text-sm text-[#6D6B68] mb-1 sm:mb-2 hidden sm:block">{product.material}</p>
+          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors mb-1 text-xs sm:text-sm md:text-base line-clamp-2">
+            {product.name}
+          </h3>
+          <p className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2 hidden sm:block">
+            {product.material}
+          </p>
           <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-2">
             {product.oldPrice && (
-              <span className="text-xs sm:text-sm text-[#6D6B68] line-through">{formatPrice(product.oldPrice)}</span>
+              <span className="text-xs sm:text-sm text-muted-foreground line-through">
+                {formatPrice(product.oldPrice)}
+              </span>
             )}
-            <p className="text-sm sm:text-lg font-semibold text-[#2B2B2B]">{formatPrice(product.price)}</p>
+            <p className="text-sm sm:text-lg font-semibold text-foreground">
+              {formatPrice(product.price)}
+            </p>
           </div>
         </CardContent>
       </Card>

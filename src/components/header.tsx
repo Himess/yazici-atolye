@@ -1,13 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import Image from "next/image";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
+import { useFavorites } from "@/lib/favorites-context";
+import { useSearch } from "@/lib/search-context";
 import { CartDrawer } from "@/components/cart-drawer";
 import { AuthModal } from "@/components/auth-modal";
+import { formatPrice } from "@/lib/products";
+import {
+  Search,
+  User,
+  Heart,
+  ShoppingBag,
+  Menu,
+  Package,
+  Shield,
+  X,
+} from "lucide-react";
 
 const categories = [
   { name: "Pirlanta Yuzukler", href: "/urunler?kategori=yuzuk&tip=pirlanta" },
@@ -29,34 +43,56 @@ const subMenuItems = [
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { searchQuery, setSearchQuery, searchResults, isSearching, clearSearch } = useSearch();
   const { totalItems, setIsCartOpen } = useCart();
   const { user, setIsLoginOpen } = useAuth();
+  const { favorites } = useFavorites();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchResultsRef = useRef<HTMLDivElement>(null);
+
+  // Close search results when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchResultsRef.current &&
+        !searchResultsRef.current.contains(event.target as Node) &&
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target as Node)
+      ) {
+        clearSearch();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [clearSearch]);
 
   return (
     <>
-      {/* Üst Bar - Kampanya / Bilgi */}
-      <div className="bg-[#095246] text-white text-xs sm:text-sm">
+      {/* Ust Bar - Kampanya / Bilgi */}
+      <div className="bg-primary text-primary-foreground text-xs sm:text-sm">
         <div className="container mx-auto px-4 py-2 flex items-center justify-between">
           <div className="hidden sm:flex items-center gap-4">
             <span className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-              </svg>
+              <Package className="w-4 h-4" aria-hidden="true" />
               Ucretsiz Kargo
             </span>
             <span className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
+              <Shield className="w-4 h-4" aria-hidden="true" />
               Sigortali Teslimat
             </span>
           </div>
           <div className="flex-1 text-center">
-            <span className="font-medium">Yilbasi Firsatlari Basladi! <span className="text-[#BFAE8F]">%20 Indirim</span></span>
+            <span className="font-medium">
+              Yilbasi Firsatlari Basladi!{" "}
+              <span className="text-accent">%20 Indirim</span>
+            </span>
           </div>
           <div className="hidden sm:block">
-            <Link href="/iletisim" className="hover:text-[#BFAE8F] transition-colors">
+            <Link
+              href="/iletisim"
+              className="hover:text-accent transition-colors"
+            >
               Siparis Takibi
             </Link>
           </div>
@@ -64,83 +100,160 @@ export function Header() {
       </div>
 
       {/* Ana Header */}
-      <header className="sticky top-0 z-50 w-full bg-white shadow-sm">
-        {/* Logo + Arama + İkonlar */}
+      <header className="sticky top-0 z-50 w-full bg-background shadow-sm">
+        {/* Logo + Arama + Ikonlar */}
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-4">
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
-              <img
+              <Image
                 src="/images/logo-dark.png"
                 alt="Yazici Atolye"
+                width={160}
+                height={64}
                 className="h-12 md:h-16 w-auto"
+                priority
               />
             </Link>
 
             {/* Arama - Desktop */}
-            <div className="hidden md:flex flex-1 max-w-xl mx-8">
+            <div className="hidden md:flex flex-1 max-w-xl mx-8 relative">
               <div className="relative w-full">
                 <input
+                  ref={searchInputRef}
                   type="text"
                   placeholder="Urun kodu ya da urun adi yaziniz"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2.5 pr-10 border border-[#E5E5E5] rounded-lg text-sm focus:outline-none focus:border-[#095246] transition-colors"
+                  className="w-full px-4 py-2.5 pr-10 border border-border rounded-lg text-sm focus:outline-none focus:border-primary transition-colors"
+                  aria-label="Urun ara"
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6D6B68] hover:text-[#095246]">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+                <button
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary"
+                  aria-label="Ara"
+                >
+                  <Search className="w-5 h-5" />
                 </button>
               </div>
+
+              {/* Arama Sonuclari */}
+              {isSearching && searchResults.length > 0 && (
+                <div
+                  ref={searchResultsRef}
+                  className="absolute top-full left-0 right-0 mt-2 bg-background border border-border rounded-lg shadow-lg max-h-96 overflow-y-auto z-50"
+                >
+                  <div className="p-2">
+                    <p className="text-xs text-muted-foreground px-3 py-2">
+                      {searchResults.length} urun bulundu
+                    </p>
+                    {searchResults.slice(0, 5).map((product) => (
+                      <Link
+                        key={product.id}
+                        href={`/urun/${product.id}`}
+                        onClick={() => clearSearch()}
+                        className="flex items-center gap-3 p-3 hover:bg-muted rounded-lg transition-colors"
+                      >
+                        <div className="w-12 h-12 bg-muted rounded-lg overflow-hidden flex-shrink-0">
+                          {product.images[0] && (
+                            <Image
+                              src={product.images[0]}
+                              alt={product.name}
+                              width={48}
+                              height={48}
+                              className="w-full h-full object-cover"
+                            />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-foreground truncate">
+                            {product.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {product.code}
+                          </p>
+                        </div>
+                        <p className="text-sm font-semibold text-foreground">
+                          {formatPrice(product.price)}
+                        </p>
+                      </Link>
+                    ))}
+                    {searchResults.length > 5 && (
+                      <Link
+                        href={`/urunler?arama=${encodeURIComponent(searchQuery)}`}
+                        onClick={() => clearSearch()}
+                        className="block text-center text-sm text-primary hover:underline py-3"
+                      >
+                        Tum sonuclari gor ({searchResults.length})
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {isSearching && searchResults.length === 0 && searchQuery.length > 2 && (
+                <div
+                  ref={searchResultsRef}
+                  className="absolute top-full left-0 right-0 mt-2 bg-background border border-border rounded-lg shadow-lg p-4 z-50"
+                >
+                  <p className="text-sm text-muted-foreground text-center">
+                    &quot;{searchQuery}&quot; icin sonuc bulunamadi
+                  </p>
+                </div>
+              )}
             </div>
 
-            {/* Sağ İkonlar */}
+            {/* Sag Ikonlar */}
             <div className="flex items-center gap-1 sm:gap-3">
               {/* Arama - Mobile */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="md:hidden p-2 text-[#6D6B68] hover:text-[#095246] transition-colors"
+                className="md:hidden p-2 text-muted-foreground hover:text-primary transition-colors"
+                aria-label="Ara"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+                <Search className="w-6 h-6" />
               </button>
 
-              {/* Kullanıcı */}
+              {/* Kullanici */}
               <button
                 onClick={() => setIsLoginOpen(true)}
-                className="p-2 text-[#6D6B68] hover:text-[#095246] transition-colors"
+                className="p-2 text-muted-foreground hover:text-primary transition-colors"
                 title={user ? user.name : "Giris Yap"}
+                aria-label={user ? `Hesabim: ${user.name}` : "Giris Yap"}
               >
                 {user ? (
-                  <div className="w-6 h-6 bg-[#095246] rounded-full flex items-center justify-center">
-                    <span className="text-xs font-medium text-white">{user.name.charAt(0).toUpperCase()}</span>
+                  <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                    <span className="text-xs font-medium text-primary-foreground">
+                      {user.name.charAt(0).toUpperCase()}
+                    </span>
                   </div>
                 ) : (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                  <User className="w-6 h-6" />
                 )}
               </button>
 
               {/* Favoriler */}
-              <button className="hidden sm:block p-2 text-[#6D6B68] hover:text-[#095246] transition-colors">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </button>
+              <Link
+                href="/favoriler"
+                className="hidden sm:block p-2 text-muted-foreground hover:text-primary transition-colors relative"
+                aria-label={`Favoriler (${favorites.length} urun)`}
+              >
+                <Heart className="w-6 h-6" />
+                {favorites.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-medium rounded-full flex items-center justify-center">
+                    {favorites.length}
+                  </span>
+                )}
+              </Link>
 
               {/* Sepet */}
               <button
                 onClick={() => setIsCartOpen(true)}
-                className="p-2 text-[#6D6B68] hover:text-[#095246] transition-colors relative"
+                className="p-2 text-muted-foreground hover:text-primary transition-colors relative"
+                aria-label={`Sepet (${totalItems} urun)`}
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
+                <ShoppingBag className="w-6 h-6" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#095246] text-white text-xs font-medium rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs font-medium rounded-full flex items-center justify-center">
                     {totalItems}
                   </span>
                 )}
@@ -149,69 +262,86 @@ export function Header() {
               {/* Mobile Menu Button */}
               <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild className="lg:hidden">
-                  <Button variant="ghost" size="icon" className="text-[#6D6B68] hover:text-[#095246]">
-                    <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-muted-foreground hover:text-primary"
+                    aria-label="Menu"
+                  >
+                    <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] bg-white overflow-y-auto">
+                <SheetContent
+                  side="right"
+                  className="w-[300px] bg-background overflow-y-auto"
+                >
                   <nav className="flex flex-col space-y-4 mt-8">
                     <Link
                       href="/"
                       onClick={() => setIsOpen(false)}
-                      className="text-lg font-medium text-[#2B2B2B] hover:text-[#095246]"
+                      className="text-lg font-medium text-foreground hover:text-primary"
                     >
                       Ana Sayfa
                     </Link>
 
-                    <div className="border-t border-[#E5E5E5] pt-4">
-                      <p className="text-xs font-semibold text-[#6D6B68] uppercase tracking-wider mb-3">Kategoriler</p>
+                    <div className="border-t border-border pt-4">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                        Kategoriler
+                      </p>
                       {categories.map((cat) => (
                         <Link
                           key={cat.name}
                           href={cat.href}
                           onClick={() => setIsOpen(false)}
-                          className="block py-2 text-[#2B2B2B] hover:text-[#095246] transition-colors"
+                          className="block py-2 text-foreground hover:text-primary transition-colors"
                         >
                           {cat.name}
                         </Link>
                       ))}
                     </div>
 
-                    <div className="border-t border-[#E5E5E5] pt-4">
-                      <p className="text-xs font-semibold text-[#6D6B68] uppercase tracking-wider mb-3">Kesfet</p>
+                    <div className="border-t border-border pt-4">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                        Kesfet
+                      </p>
                       {subMenuItems.map((item) => (
                         <Link
                           key={item.name}
                           href={item.href}
                           onClick={() => setIsOpen(false)}
-                          className="block py-2 text-[#2B2B2B] hover:text-[#095246] transition-colors"
+                          className="block py-2 text-foreground hover:text-primary transition-colors"
                         >
                           {item.name}
                         </Link>
                       ))}
                     </div>
 
-                    <div className="border-t border-[#E5E5E5] pt-4">
+                    <div className="border-t border-border pt-4">
+                      <Link
+                        href="/favoriler"
+                        onClick={() => setIsOpen(false)}
+                        className="block py-2 text-foreground hover:text-primary"
+                      >
+                        Favorilerim ({favorites.length})
+                      </Link>
                       <Link
                         href="/hakkimizda"
                         onClick={() => setIsOpen(false)}
-                        className="block py-2 text-[#2B2B2B] hover:text-[#095246]"
+                        className="block py-2 text-foreground hover:text-primary"
                       >
                         Hakkimizda
                       </Link>
                       <Link
                         href="/iletisim"
                         onClick={() => setIsOpen(false)}
-                        className="block py-2 text-[#2B2B2B] hover:text-[#095246]"
+                        className="block py-2 text-foreground hover:text-primary"
                       >
                         Iletisim
                       </Link>
                     </div>
 
-                    <Button className="mt-4 w-full bg-[#095246] hover:bg-[#BFAE8F] hover:text-[#2B2B2B] text-white">
-                      Randevu Al
+                    <Button className="mt-4 w-full bg-primary hover:bg-accent hover:text-accent-foreground text-primary-foreground">
+                      <Link href="/iletisim">Randevu Al</Link>
                     </Button>
                   </nav>
                 </SheetContent>
@@ -219,37 +349,76 @@ export function Header() {
             </div>
           </div>
 
-          {/* Mobile Arama - Açılır */}
+          {/* Mobile Arama - Acilir */}
           {isSearchOpen && (
-            <div className="md:hidden mt-3">
+            <div className="md:hidden mt-3 relative">
               <div className="relative">
                 <input
                   type="text"
                   placeholder="Urun ara..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2.5 pr-10 border border-[#E5E5E5] rounded-lg text-sm focus:outline-none focus:border-[#095246]"
+                  className="w-full px-4 py-2.5 pr-10 border border-border rounded-lg text-sm focus:outline-none focus:border-primary"
                   autoFocus
+                  aria-label="Urun ara"
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6D6B68]">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+                <button
+                  onClick={() => {
+                    clearSearch();
+                    setIsSearchOpen(false);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  aria-label="Aramayı kapat"
+                >
+                  <X className="w-5 h-5" />
                 </button>
               </div>
+
+              {/* Mobile Arama Sonuclari */}
+              {isSearching && searchResults.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-background border border-border rounded-lg shadow-lg max-h-80 overflow-y-auto z-50">
+                  {searchResults.slice(0, 5).map((product) => (
+                    <Link
+                      key={product.id}
+                      href={`/urun/${product.id}`}
+                      onClick={() => {
+                        clearSearch();
+                        setIsSearchOpen(false);
+                      }}
+                      className="flex items-center gap-3 p-3 hover:bg-muted border-b border-border last:border-0"
+                    >
+                      <div className="w-10 h-10 bg-muted rounded overflow-hidden flex-shrink-0">
+                        {product.images[0] && (
+                          <Image
+                            src={product.images[0]}
+                            alt={product.name}
+                            width={40}
+                            height={40}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{product.name}</p>
+                        <p className="text-xs text-muted-foreground">{formatPrice(product.price)}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        {/* Kategori Menüsü - Desktop */}
-        <nav className="hidden lg:block border-t border-[#E5E5E5]">
+        {/* Kategori Menusu - Desktop */}
+        <nav className="hidden lg:block border-t border-border" aria-label="Kategori navigasyonu">
           <div className="container mx-auto px-4">
             <ul className="flex items-center justify-center gap-1">
               {categories.map((cat) => (
                 <li key={cat.name}>
                   <Link
                     href={cat.href}
-                    className="block px-4 py-3 text-sm font-medium text-[#2B2B2B] hover:text-[#095246] hover:bg-[#F7F6F4] transition-colors"
+                    className="block px-4 py-3 text-sm font-medium text-foreground hover:text-primary hover:bg-muted transition-colors"
                   >
                     {cat.name}
                   </Link>
@@ -259,15 +428,15 @@ export function Header() {
           </div>
         </nav>
 
-        {/* Alt Menü - Desktop */}
-        <nav className="hidden lg:block bg-[#F7F6F4] border-t border-[#E5E5E5]">
+        {/* Alt Menu - Desktop */}
+        <nav className="hidden lg:block bg-muted border-t border-border" aria-label="Alt navigasyon">
           <div className="container mx-auto px-4">
             <ul className="flex items-center justify-center gap-6">
               {subMenuItems.map((item) => (
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="block py-2 text-xs font-medium text-[#6D6B68] hover:text-[#095246] transition-colors uppercase tracking-wide"
+                    className="block py-2 text-xs font-medium text-muted-foreground hover:text-primary transition-colors uppercase tracking-wide"
                   >
                     {item.name}
                   </Link>
@@ -276,7 +445,7 @@ export function Header() {
               <li>
                 <Link
                   href="/hakkimizda"
-                  className="block py-2 text-xs font-medium text-[#6D6B68] hover:text-[#095246] transition-colors uppercase tracking-wide"
+                  className="block py-2 text-xs font-medium text-muted-foreground hover:text-primary transition-colors uppercase tracking-wide"
                 >
                   Hakkimizda
                 </Link>
@@ -284,7 +453,7 @@ export function Header() {
               <li>
                 <Link
                   href="/iletisim"
-                  className="block py-2 text-xs font-medium text-[#6D6B68] hover:text-[#095246] transition-colors uppercase tracking-wide"
+                  className="block py-2 text-xs font-medium text-muted-foreground hover:text-primary transition-colors uppercase tracking-wide"
                 >
                   Iletisim
                 </Link>

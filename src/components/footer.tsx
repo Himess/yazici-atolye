@@ -9,7 +9,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Hakkimizda */}
           <div>
-            <h4 className="text-sm font-medium uppercase tracking-wider mb-6">Hakkimizda</h4>
+            <h4 className="text-sm font-medium uppercase tracking-wider mb-6 text-white">Hakkimizda</h4>
             <p className="text-sm text-gray-400 leading-relaxed">
               El yapimi takilar ve ozel tasarim mucevherat. Her parca ozenle ve sevgiyle uretilir.
               Kalite ve zarafetin bulustugu adres.
@@ -32,7 +32,7 @@ export function Footer() {
 
           {/* Menu */}
           <div>
-            <h4 className="text-sm font-medium uppercase tracking-wider mb-6">Menu</h4>
+            <h4 className="text-sm font-medium uppercase tracking-wider mb-6 text-white">Menu</h4>
             <ul className="space-y-3 text-sm">
               <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Ana Sayfa</Link></li>
               <li><Link href="/urunler?kategori=kolye" className="text-gray-400 hover:text-white transition-colors">Kolyeler</Link></li>
@@ -44,7 +44,7 @@ export function Footer() {
 
           {/* Destek */}
           <div>
-            <h4 className="text-sm font-medium uppercase tracking-wider mb-6">Destek</h4>
+            <h4 className="text-sm font-medium uppercase tracking-wider mb-6 text-white">Destek</h4>
             <ul className="space-y-3 text-sm">
               <li><Link href="/iletisim" className="text-gray-400 hover:text-white transition-colors">Sikca Sorulan Sorular</Link></li>
               <li><Link href="/iletisim" className="text-gray-400 hover:text-white transition-colors">Iade ve Degisim</Link></li>
@@ -56,7 +56,7 @@ export function Footer() {
 
           {/* Iletisim */}
           <div>
-            <h4 className="text-sm font-medium uppercase tracking-wider mb-6">7/24 Ulasim</h4>
+            <h4 className="text-sm font-medium uppercase tracking-wider mb-6 text-white">7/24 Ulasim</h4>
             <p className="text-sm text-gray-400 leading-relaxed mb-4">
               Sorulariniz icin bize e-posta ile ulasabilirsiniz. Her turlu talebiniz icin yardimci olmaktan mutluluk duyariz.
             </p>

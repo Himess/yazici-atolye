@@ -187,7 +187,7 @@ export default function HakkimizdaPage() {
                     <MapPin className="w-5 h-5 text-[#C4A574]" />
                   </div>
                   <div>
-                    <h3 className="font-medium mb-1">Adres</h3>
+                    <h3 className="font-medium mb-1 text-white">Adres</h3>
                     <p className="text-white/70">
                       Kapalıcarsı, Kuyumcular Caddesi No: 42<br />
                       Fatih, Istanbul
@@ -200,7 +200,7 @@ export default function HakkimizdaPage() {
                     <Phone className="w-5 h-5 text-[#C4A574]" />
                   </div>
                   <div>
-                    <h3 className="font-medium mb-1">Telefon</h3>
+                    <h3 className="font-medium mb-1 text-white">Telefon</h3>
                     <p className="text-white/70">
                       <a href="tel:+902125551234" className="hover:text-[#C4A574] transition-colors">
                         +90 (212) 555 12 34
@@ -219,7 +219,7 @@ export default function HakkimizdaPage() {
                     <Mail className="w-5 h-5 text-[#C4A574]" />
                   </div>
                   <div>
-                    <h3 className="font-medium mb-1">E-posta</h3>
+                    <h3 className="font-medium mb-1 text-white">E-posta</h3>
                     <p className="text-white/70">
                       <a href="mailto:info@yaziciatolye.com" className="hover:text-[#C4A574] transition-colors">
                         info@yaziciatolye.com
@@ -233,7 +233,7 @@ export default function HakkimizdaPage() {
                     <Clock className="w-5 h-5 text-[#C4A574]" />
                   </div>
                   <div>
-                    <h3 className="font-medium mb-1">Calisma Saatleri</h3>
+                    <h3 className="font-medium mb-1 text-white">Calisma Saatleri</h3>
                     <p className="text-white/70">
                       Pazartesi - Cumartesi: 10:00 - 19:00<br />
                       Pazar: Kapali

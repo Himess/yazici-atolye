@@ -19,7 +19,7 @@ const slides = [
   },
   {
     id: 2,
-    image: "/images/yüzük1-1.png",
+    image: "/images/yuzuk-2.png",
     title: "Zarafetin ve Kalitenin",
     subtitle: "Bulustugu Yer",
     description: "El yapimi, ozenle tasarlanmis ozel mucevherler",

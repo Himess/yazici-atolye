@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { products, categories } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
-import { ChevronDown, Heart, Sparkles, Gem } from "lucide-react";
+import { ChevronDown, Heart, Sparkles, Gem, Factory, BadgePercent, Award } from "lucide-react";
 
 const testimonials = [
   {
@@ -199,36 +199,90 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ozel Tasarim - Yan Yana */}
-      <section className="py-16 bg-white border-t border-border">
+      {/* Uretimden Direkt Size */}
+      <section className="py-16 bg-[#1A1A1A] text-white">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="relative aspect-square overflow-hidden bg-[#F5F5F5]">
-              <Image
-                src="/images/bileklik1-1.png"
-                alt="Ozel Tasarim"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="py-8 md:py-16 md:pl-8">
-              <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4 tracking-tight">
-                Ozel Tasarim
+            <div className="order-2 md:order-1 py-8 md:py-16 md:pr-8">
+              <div className="inline-block bg-[#C4A574] text-black text-xs px-3 py-1 mb-4 uppercase tracking-wider">
+                Aracisiz Fabrika Fiyati
+              </div>
+              <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4 tracking-tight text-white">
+                Uretimden Direkt<br />Size Ulastiryoruz
               </h2>
-              <p className="text-lg text-muted-foreground mb-4 uppercase tracking-wide">
-                Size Ozel, Tek ve Benzersiz
+              <p className="text-gray-300 mb-6 leading-relaxed">
+                40 yildir buyuk kuyumculara toptan uretim yapan atolyemiz, artik
+                <span className="text-[#C4A574] font-medium"> ayni kaliteyi aracisiz fiyatlarla </span>
+                sizlere sunuyor. Piyasada ayni urunu %50-70 daha yuksek fiyata bulabilirsiniz.
               </p>
-              <p className="text-muted-foreground mb-8 leading-relaxed">
-                Her parca, kendinize olan guveninizi yansitiyor. Sadece bir taki degil,
-                gucunuzun ve ozgunlugunuzun sembolu. Hayalinizdeki takilari birlikte tasarlayalim.
-              </p>
+
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                <div className="text-center">
+                  <Factory className="w-6 h-6 text-[#C4A574] mx-auto mb-2" />
+                  <p className="text-xs text-gray-400">Kendi Uretimimiz</p>
+                </div>
+                <div className="text-center">
+                  <BadgePercent className="w-6 h-6 text-[#C4A574] mx-auto mb-2" />
+                  <p className="text-xs text-gray-400">Fabrika Fiyati</p>
+                </div>
+                <div className="text-center">
+                  <Award className="w-6 h-6 text-[#C4A574] mx-auto mb-2" />
+                  <p className="text-xs text-gray-400">Ayni Kalite</p>
+                </div>
+              </div>
+
               <Link
-                href="/iletisim"
-                className="inline-block bg-black text-white px-8 py-3 text-sm tracking-wider uppercase hover:bg-gray-800 transition-colors"
+                href="/urunler"
+                className="inline-block bg-white text-black px-8 py-3 text-sm tracking-wider uppercase hover:bg-[#C4A574] transition-colors"
               >
-                Iletisime Gec
+                Fiyatlari Karsilastir
               </Link>
             </div>
+            <div className="order-1 md:order-2 grid grid-cols-2 gap-2">
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src="/images/atolye-usta-1.png"
+                  alt="Atolyemizde usta calismasi"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src="/images/atolye-kutu-1.png"
+                  alt="El isciligi"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="col-span-2 relative aspect-[2/1] overflow-hidden">
+                <Image
+                  src="/images/atolye-3.png"
+                  alt="Atolye ortami"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Alyans Koleksiyonu */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="section-line">
+            <h2 className="section-title">Alyans Koleksiyonu</h2>
+          </div>
+          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Evliliginizin simgesi olacak alyanslar, atölyemizde el iscigiyle uretiliyor.
+            Piyasa fiyatinin yarisina, ayni kalite.
+          </p>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {products.filter(p => p.categoryLabel === "Alyans").map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
         </div>
       </section>

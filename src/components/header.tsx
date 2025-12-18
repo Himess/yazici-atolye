@@ -24,7 +24,7 @@ import {
 
 const navItems = [
   {
-    name: "Jewellery",
+    name: "Takılar",
     href: "/urunler",
     hasDropdown: true,
     dropdownItems: [
@@ -36,7 +36,7 @@ const navItems = [
     ]
   },
   {
-    name: "Collections",
+    name: "Koleksiyonlar",
     href: "/urunler?koleksiyon=all",
     hasDropdown: true,
     dropdownItems: [
@@ -47,7 +47,7 @@ const navItems = [
     ]
   },
   {
-    name: "Favourites",
+    name: "Favoriler",
     href: "/favoriler",
     hasDropdown: false
   },
@@ -83,26 +83,26 @@ export function Header() {
 
   return (
     <>
-      {/* Top Bar - Promo */}
+      {/* Ust Bar - Kampanya */}
       <div className="bg-black text-white text-xs tracking-wider">
         <div className="container mx-auto px-4 py-2.5 flex items-center justify-center">
           <span className="flex items-center gap-2">
-            <span className="hidden sm:inline">Free delivery on orders above 500 TL</span>
-            <span className="sm:hidden">Free delivery above 500 TL</span>
+            <span className="hidden sm:inline">500 TL ustu siparislerde ucretsiz kargo</span>
+            <span className="sm:hidden">500 TL ustu ucretsiz kargo</span>
             <span className="text-[#C4A574]">|</span>
             <Link href="/urunler?indirimli=true" className="hover:text-[#C4A574] transition-colors underline underline-offset-2">
-              Shop Now
+              Hemen Alisverise Basla
             </Link>
           </span>
         </div>
       </div>
 
-      {/* Main Header */}
+      {/* Ana Header */}
       <header className="sticky top-0 z-50 w-full bg-white border-b border-border">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16 md:h-20">
 
-            {/* Left - Navigation (Desktop) */}
+            {/* Sol - Navigasyon (Desktop) */}
             <nav className="hidden lg:flex items-center gap-8">
               {navItems.map((item) => (
                 <div
@@ -139,7 +139,7 @@ export function Header() {
               ))}
             </nav>
 
-            {/* Mobile Menu Button */}
+            {/* Mobil Menu Butonu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild className="lg:hidden">
                 <Button
@@ -216,7 +216,7 @@ export function Header() {
               </SheetContent>
             </Sheet>
 
-            {/* Center - Logo */}
+            {/* Orta - Logo */}
             <Link href="/" className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 lg:mx-auto">
               <Image
                 src="/images/logo-dark.png"
@@ -228,9 +228,9 @@ export function Header() {
               />
             </Link>
 
-            {/* Right - Icons */}
+            {/* Sag - Ikonlar */}
             <div className="flex items-center gap-1 sm:gap-2">
-              {/* Search */}
+              {/* Arama */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="p-2 text-foreground hover:text-muted-foreground transition-colors"
@@ -239,7 +239,7 @@ export function Header() {
                 <Search className="w-5 h-5" />
               </button>
 
-              {/* User */}
+              {/* Kullanici */}
               <button
                 onClick={() => setIsLoginOpen(true)}
                 className="p-2 text-foreground hover:text-muted-foreground transition-colors"
@@ -257,7 +257,7 @@ export function Header() {
                 )}
               </button>
 
-              {/* Favorites */}
+              {/* Favoriler */}
               <Link
                 href="/favoriler"
                 className="hidden sm:block p-2 text-foreground hover:text-muted-foreground transition-colors relative"
@@ -271,7 +271,7 @@ export function Header() {
                 )}
               </Link>
 
-              {/* Cart */}
+              {/* Sepet */}
               <button
                 onClick={() => setIsCartOpen(true)}
                 className="p-2 text-foreground hover:text-muted-foreground transition-colors relative"
@@ -288,7 +288,7 @@ export function Header() {
           </div>
         </div>
 
-        {/* Search Overlay */}
+        {/* Arama Overlay */}
         {isSearchOpen && (
           <div className="absolute top-full left-0 right-0 bg-white border-b border-border shadow-lg">
             <div className="container mx-auto px-4 py-6">
@@ -323,7 +323,7 @@ export function Header() {
                 </div>
               </div>
 
-              {/* Search Results */}
+              {/* Arama Sonuclari */}
               {isSearching && searchResults.length > 0 && (
                 <div
                   ref={searchResultsRef}

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { products, categories } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
-import { ChevronDown, Heart, Sparkles, Shield, Gem } from "lucide-react";
+import { ChevronDown, Heart, Sparkles, Gem } from "lucide-react";
 
 const testimonials = [
   {
@@ -54,72 +54,71 @@ const faqs = [
 ];
 
 const priceRanges = [
-  { label: "1.000 TL Alti", image: "/images/price-1.jpg", href: "/urunler?fiyat=0-1000" },
-  { label: "1.000 - 3.000 TL", image: "/images/price-2.jpg", href: "/urunler?fiyat=1000-3000" },
-  { label: "3.000 - 5.000 TL", image: "/images/price-3.jpg", href: "/urunler?fiyat=3000-5000" },
-  { label: "5.000 - 10.000 TL", image: "/images/price-4.jpg", href: "/urunler?fiyat=5000-10000" },
-  { label: "10.000 TL Ustu", image: "/images/price-5.jpg", href: "/urunler?fiyat=10000-99999" },
+  { label: "10.000 TL Alti", image: "/images/kolye-1.png", href: "/urunler?fiyat=0-10000" },
+  { label: "10.000 - 20.000 TL", image: "/images/kupe-1.png", href: "/urunler?fiyat=10000-20000" },
+  { label: "20.000 - 30.000 TL", image: "/images/bileklik-1.png", href: "/urunler?fiyat=20000-30000" },
+  { label: "30.000 - 50.000 TL", image: "/images/yuzuk-2.png", href: "/urunler?fiyat=30000-50000" },
+  { label: "50.000 TL Ustu", image: "/images/yuzuk-3.png", href: "/urunler?fiyat=50000-99999" },
 ];
 
+// Kategoriler için mevcut ürün görsellerini kullan
 const categoryImages = [
-  { name: "Bileklikler", image: "/images/cat-bileklik.jpg", href: "/urunler?kategori=bileklik" },
-  { name: "Kupeler", image: "/images/cat-kupe.jpg", href: "/urunler?kategori=kupe" },
-  { name: "Kolyeler", image: "/images/cat-kolye.jpg", href: "/urunler?kategori=kolye" },
-  { name: "Yuzukler", image: "/images/cat-yuzuk.jpg", href: "/urunler?kategori=yuzuk" },
+  { name: "Bileklikler", image: "/images/bileklik1-1.png", href: "/urunler?kategori=bileklik" },
+  { name: "Kupeler", image: "/images/küpe1-1.png", href: "/urunler?kategori=kupe" },
+  { name: "Kolyeler", image: "/images/kolye1-1.png", href: "/urunler?kategori=kolye" },
+  { name: "Yuzukler", image: "/images/yüzük1-1.png", href: "/urunler?kategori=yuzuk" },
 ];
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const featuredProducts = products.slice(0, 4);
-  const braceletProducts = products.filter(p => p.category === "bileklik").slice(0, 4);
-  const earringProducts = products.filter(p => p.category === "kupe").slice(0, 4);
+  const featuredProducts = products.filter(p => p.featured).slice(0, 4);
+  const ringProducts = products.filter(p => p.category === "yuzuk").slice(0, 4);
+  const necklaceProducts = products.filter(p => p.category === "kolye").slice(0, 4);
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section - Full Width Image with Overlay Text */}
+      {/* Hero Section */}
       <section className="relative h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/images/hero-main.jpg')" }}
+          style={{ backgroundImage: "url('/images/yuzuk-2.png')" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/60 to-transparent" />
 
         <div className="container mx-auto px-4 h-full flex items-center relative z-10">
           <div className="max-w-lg">
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-black mb-4 sm:mb-6 leading-tight tracking-tight uppercase">
-              Jewels for the<br />Fearlessly<br />Authentic
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-black mb-4 sm:mb-6 leading-tight tracking-tight">
+              Zarafetin ve<br />Kalitenin<br />Bulustugu Yer
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-md tracking-wide">
-              Kendine ozgu, cesur ve otantik tasarimlar
+              El yapimi, ozenle tasarlanmis ozel mucevherler
             </p>
             <Link
               href="/urunler"
               className="inline-block bg-black text-white px-8 py-3 text-sm tracking-wider uppercase hover:bg-gray-800 transition-colors"
             >
-              Shop All
+              Koleksiyonu Kesfet
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Shop by Category */}
+      {/* Kategorilere Gore Alisveris */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="section-line">
-            <h2 className="section-title">Shop by category</h2>
+            <h2 className="section-title">Kategorilere Gore Alisveris</h2>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
             {categoryImages.map((cat) => (
-              <Link key={cat.name} href={cat.href} className="group relative aspect-[3/4] overflow-hidden">
-                <div className="absolute inset-0 bg-gray-200">
-                  <Image
-                    src={cat.image}
-                    alt={cat.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
+              <Link key={cat.name} href={cat.href} className="group relative aspect-[3/4] overflow-hidden bg-[#F5F5F5]">
+                <Image
+                  src={cat.image}
+                  alt={cat.name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
                   <span className="text-white text-sm font-medium tracking-wide uppercase">
                     {cat.name}
@@ -131,114 +130,120 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Bracelets Section */}
+      {/* One Cikan Urunler */}
       <section className="py-16 bg-white border-t border-border">
         <div className="container mx-auto px-4">
           <div className="section-line">
-            <h2 className="section-title">Bracelets</h2>
+            <h2 className="section-title">One Cikan Urunler</h2>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
-            {braceletProducts.length > 0 ? (
-              braceletProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
-            ) : (
-              featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
-            )}
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <Link
+              href="/urunler"
+              className="inline-block bg-black text-white px-8 py-3 text-sm tracking-wider uppercase hover:bg-gray-800 transition-colors"
+            >
+              Tum Urunleri Gor
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Banner - Shine Every Day */}
+      {/* Banner - Her Gun Isilda */}
       <section className="relative h-[400px] md:h-[500px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/images/banner-shine.jpg')" }}
+          style={{ backgroundImage: "url('/images/kolye1-1.png')" }}
         />
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white px-4">
-          <p className="font-script text-4xl md:text-6xl mb-4">Shine Every Day</p>
+          <p className="font-script text-4xl md:text-6xl mb-4">Her Gun Isilda</p>
           <p className="text-sm tracking-wider mb-6 max-w-md">
-            Explore Our Stunning Jewelry Collection
+            Essiz koleksiyonumuzu kesfedin
           </p>
           <Link
             href="/urunler"
-            className="inline-block bg-black text-white px-8 py-3 text-sm tracking-wider uppercase hover:bg-gray-800 transition-colors"
+            className="inline-block bg-white text-black px-8 py-3 text-sm tracking-wider uppercase hover:bg-gray-100 transition-colors"
           >
-            Shop All
+            Hemen Alisverise Basla
           </Link>
         </div>
       </section>
 
-      {/* Earrings Section */}
+      {/* Yuzukler */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="section-line">
-            <h2 className="section-title">Earrings</h2>
+            <h2 className="section-title">Yuzukler</h2>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
-            {earringProducts.length > 0 ? (
-              earringProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
-            ) : (
-              featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
-            )}
+            {ringProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <Link
+              href="/urunler?kategori=yuzuk"
+              className="inline-block border border-black text-black px-8 py-3 text-sm tracking-wider uppercase hover:bg-black hover:text-white transition-colors"
+            >
+              Tum Yuzukleri Gor
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Radiant Rebellion - Side by Side */}
+      {/* Ozel Tasarim - Yan Yana */}
       <section className="py-16 bg-white border-t border-border">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="relative aspect-square overflow-hidden">
+            <div className="relative aspect-square overflow-hidden bg-[#F5F5F5]">
               <Image
-                src="/images/radiant-rebellion.jpg"
-                alt="Radiant Rebellion"
+                src="/images/bileklik1-1.png"
+                alt="Ozel Tasarim"
                 fill
                 className="object-cover"
               />
             </div>
             <div className="py-8 md:py-16 md:pl-8">
-              <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4 tracking-tight uppercase">
-                Radiant Rebellion
+              <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4 tracking-tight">
+                Ozel Tasarim
               </h2>
               <p className="text-lg text-muted-foreground mb-4 uppercase tracking-wide">
-                Jewels for the Fearlessly Authentic
+                Size Ozel, Tek ve Benzersiz
               </p>
               <p className="text-muted-foreground mb-8 leading-relaxed">
                 Her parca, kendinize olan guveninizi yansitiyor. Sadece bir taki degil,
-                gucunuzun ve ozgunlugunuzun sembolu. One cikmaktan korkmayanlara ozel.
+                gucunuzun ve ozgunlugunuzun sembolu. Hayalinizdeki takilari birlikte tasarlayalim.
               </p>
               <Link
-                href="/urunler"
+                href="/iletisim"
                 className="inline-block bg-black text-white px-8 py-3 text-sm tracking-wider uppercase hover:bg-gray-800 transition-colors"
               >
-                Explore All
+                Iletisime Gec
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Shop by Price */}
+      {/* Fiyata Gore Alisveris */}
       <section className="py-16 bg-white border-t border-border">
         <div className="container mx-auto px-4">
           <div className="section-line">
-            <h2 className="section-title">Shop by Price</h2>
+            <h2 className="section-title">Fiyata Gore Alisveris</h2>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-10">
             {priceRanges.map((range) => (
               <Link key={range.label} href={range.href} className="group text-center">
-                <div className="relative aspect-[3/4] mb-4 overflow-hidden bg-gray-100">
+                <div className="relative aspect-[3/4] mb-4 overflow-hidden bg-[#F5F5F5]">
                   <Image
                     src={range.image}
                     alt={range.label}
@@ -255,27 +260,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Trust Icons */}
+      {/* Guven Ikonlari */}
       <section className="py-12 bg-[#F5F5F5] border-t border-border">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="trust-icon">
               <Heart className="w-8 h-8 text-[#C4A574]" />
-              <h3 className="font-serif text-lg mb-2">Handcrafted with Love and Care</h3>
+              <h3 className="font-serif text-lg mb-2">Sevgiyle El Yapimi</h3>
               <p className="text-sm text-muted-foreground">
                 Her parca, uzman ustalarimiz tarafindan ozenle el iscigiyle uretilir.
               </p>
             </div>
             <div className="trust-icon">
               <Sparkles className="w-8 h-8 text-[#C4A574]" />
-              <h3 className="font-serif text-lg mb-2">Hypoallergenic and Lightweight</h3>
+              <h3 className="font-serif text-lg mb-2">Alerjik Degil ve Hafif</h3>
               <p className="text-sm text-muted-foreground">
                 Cildinize zarar vermez, gun boyu rahatlikla takabilirsiniz.
               </p>
             </div>
             <div className="trust-icon">
               <Gem className="w-8 h-8 text-[#C4A574]" />
-              <h3 className="font-serif text-lg mb-2">Natural Gemstones</h3>
+              <h3 className="font-serif text-lg mb-2">Dogal Taslar</h3>
               <p className="text-sm text-muted-foreground">
                 Sertifikali dogal taslar ve pirlantalar kullaniyoruz.
               </p>
@@ -284,11 +289,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* What Our Customers Say */}
+      {/* Musterilerimiz Ne Diyor */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="section-line">
-            <h2 className="section-title">What Our Customers Say</h2>
+            <h2 className="section-title">Musterilerimiz Ne Diyor</h2>
           </div>
 
           <div className="relative mt-16">
@@ -322,14 +327,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* Sikca Sorulan Sorular */}
       <section className="py-16 bg-white border-t border-border">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="section-line">
-            <h2 className="section-title">Frequently Asked Questions</h2>
+            <h2 className="section-title">Sikca Sorulan Sorular</h2>
           </div>
           <p className="text-center text-muted-foreground mb-10">
-            If You Have Any Problems, Consult The FAQs On Our Website
+            Herhangi bir sorunuz varsa, web sitemizdeki SSS bolumumuze basvurun
           </p>
 
           <div className="space-y-0">
@@ -357,11 +362,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Instagram / Wrapped with Love */}
+      {/* Instagram / Sevgiyle Paketlendi */}
       <section className="py-16 bg-white border-t border-border">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
-            <p className="font-script text-3xl md:text-4xl mb-2">Wrapped with Love</p>
+            <p className="font-script text-3xl md:text-4xl mb-2">Sevgiyle Paketlendi</p>
             <p className="text-muted-foreground text-sm">@yaziciatolye</p>
           </div>
 

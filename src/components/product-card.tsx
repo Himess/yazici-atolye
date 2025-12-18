@@ -90,13 +90,13 @@ export function ProductCard({ product }: ProductCardProps) {
             />
           </button>
 
-          {/* Quick View on Hover */}
+          {/* Hizli Bakis - Hover */}
           <div
             className={`absolute bottom-0 left-0 right-0 bg-black text-white text-center py-2 text-xs tracking-wider uppercase transition-all duration-300 ${
               isHovered ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
             }`}
           >
-            Quick View
+            Hizli Bakis
           </div>
         </div>
 

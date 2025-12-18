@@ -326,7 +326,7 @@ export default function Home() {
       </section>
 
       {/* Hakkimizda / Uretimden Direkt Size */}
-      <section id="hakkimizda" className="py-16 bg-[#F5F5F5] border-t border-border">
+      <section className="py-16 bg-[#F5F5F5] border-t border-border">
         <div className="container mx-auto px-4">
           <div className="section-line">
             <h2 className="section-title">Uretimden Direkt Size</h2>
@@ -353,7 +353,7 @@ export default function Home() {
 
             <div className="relative aspect-[4/3] overflow-hidden group">
               <Image
-                src="/images/atolye-usta-2.png"
+                src="/images/atolye-3.png"
                 alt="El Isciligi"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -367,7 +367,7 @@ export default function Home() {
 
             <div className="relative aspect-[4/3] overflow-hidden group">
               <Image
-                src="/images/atolye-usta-3.png"
+                src="/images/atolye-4.png"
                 alt="Kalite Kontrol"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"

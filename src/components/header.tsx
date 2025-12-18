@@ -48,7 +48,7 @@ const navItems = [
   },
   {
     name: "Hakkimizda",
-    href: "/#hakkimizda",
+    href: "/hakkimizda",
     hasDropdown: false
   },
   {

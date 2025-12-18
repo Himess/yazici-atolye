@@ -27,7 +27,7 @@ export default function HakkimizdaPage() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-4">
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl mb-4">
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl mb-4 text-white">
               Uretimden Direkt Size
             </h1>
             <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
@@ -175,7 +175,7 @@ export default function HakkimizdaPage() {
       <section className="py-16 bg-[#1A1A1A] text-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-serif text-3xl md:text-4xl text-center mb-12">
+            <h2 className="font-serif text-3xl md:text-4xl text-center mb-12 text-white">
               Bize Ulasin
             </h2>
 

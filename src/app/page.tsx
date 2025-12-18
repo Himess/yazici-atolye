@@ -325,6 +325,72 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Hakkimizda / Uretimden Direkt Size */}
+      <section id="hakkimizda" className="py-16 bg-[#F5F5F5] border-t border-border">
+        <div className="container mx-auto px-4">
+          <div className="section-line">
+            <h2 className="section-title">Uretimden Direkt Size</h2>
+          </div>
+          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+            40 yili askin tecrubemiz ile buyuk kuyumculara toptan satis yapiyoruz.
+            Simdi ayni kaliteyi, aracisiz fiyatlarla sizlere sunuyoruz.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="relative aspect-[4/3] overflow-hidden group">
+              <Image
+                src="/images/atolye-usta-1.png"
+                alt="Atolye Ustamiz"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <h3 className="font-serif text-lg mb-1">40 Yillik Tecrube</h3>
+                <p className="text-sm text-white/80">Usta ellerden, ozenle islenen parcalar</p>
+              </div>
+            </div>
+
+            <div className="relative aspect-[4/3] overflow-hidden group">
+              <Image
+                src="/images/atolye-usta-2.png"
+                alt="El Isciligi"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <h3 className="font-serif text-lg mb-1">El Isciligi</h3>
+                <p className="text-sm text-white/80">Her parca, tek tek elle uretilir</p>
+              </div>
+            </div>
+
+            <div className="relative aspect-[4/3] overflow-hidden group">
+              <Image
+                src="/images/atolye-usta-3.png"
+                alt="Kalite Kontrol"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <h3 className="font-serif text-lg mb-1">Kalite Garantisi</h3>
+                <p className="text-sm text-white/80">Sertifikali malzeme, titiz iscilik</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mt-10">
+            <Link
+              href="/hakkimizda"
+              className="inline-block border border-black text-black px-8 py-3 text-sm tracking-wider uppercase hover:bg-black hover:text-white transition-colors"
+            >
+              Hikayemizi Kesfet
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Instagram / Sevgiyle Paketlendi */}
       <section className="py-16 bg-white border-t border-border">
         <div className="container mx-auto px-4">

@@ -47,6 +47,11 @@ const navItems = [
     ]
   },
   {
+    name: "Hakkimizda",
+    href: "/#hakkimizda",
+    hasDropdown: false
+  },
+  {
     name: "Favoriler",
     href: "/favoriler",
     hasDropdown: false

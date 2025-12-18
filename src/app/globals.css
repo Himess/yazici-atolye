@@ -3,54 +3,57 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Modern Heirloom - Yazici Atolye Brand Colors */
+/* Gen-Z Jewellery - Modern Minimalist Design */
 :root {
-  /* Brand Colors */
-  --imperial-emerald: #095246;
-  --champagne-gold: #BFAE8F;
-  --deep-charcoal: #2B2B2B;
-  --warm-stone: #6D6B68;
-  --atelier-mist: #F7F6F4;
+  /* Brand Colors - Clean & Minimal */
+  --pure-white: #FFFFFF;
+  --jet-black: #000000;
+  --soft-black: #1A1A1A;
+  --warm-gray: #4A4A4A;
+  --light-gray: #F5F5F5;
+  --border-gray: #E5E5E5;
+  --caramel: #C4A574;
+  --warm-beige: #D4B896;
 
   /* Theme Variables */
-  --radius: 0.625rem;
+  --radius: 0.25rem;
   --background: #FFFFFF;
-  --foreground: #2B2B2B;
+  --foreground: #000000;
   --card: #FFFFFF;
-  --card-foreground: #2B2B2B;
+  --card-foreground: #000000;
   --popover: #FFFFFF;
-  --popover-foreground: #2B2B2B;
-  --primary: #095246;
+  --popover-foreground: #000000;
+  --primary: #000000;
   --primary-foreground: #FFFFFF;
-  --secondary: #F7F6F4;
-  --secondary-foreground: #2B2B2B;
-  --muted: #F7F6F4;
-  --muted-foreground: #6D6B68;
-  --accent: #BFAE8F;
-  --accent-foreground: #2B2B2B;
+  --secondary: #F5F5F5;
+  --secondary-foreground: #000000;
+  --muted: #F5F5F5;
+  --muted-foreground: #4A4A4A;
+  --accent: #C4A574;
+  --accent-foreground: #000000;
   --destructive: #DC2626;
   --border: #E5E5E5;
   --input: #E5E5E5;
-  --ring: #095246;
-  --chart-1: #095246;
-  --chart-2: #BFAE8F;
-  --chart-3: #6D6B68;
-  --chart-4: #2B2B2B;
-  --chart-5: #F7F6F4;
-  --sidebar: #F7F6F4;
-  --sidebar-foreground: #2B2B2B;
-  --sidebar-primary: #095246;
+  --ring: #000000;
+  --chart-1: #000000;
+  --chart-2: #C4A574;
+  --chart-3: #4A4A4A;
+  --chart-4: #1A1A1A;
+  --chart-5: #F5F5F5;
+  --sidebar: #F5F5F5;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #000000;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #BFAE8F;
-  --sidebar-accent-foreground: #2B2B2B;
+  --sidebar-accent: #C4A574;
+  --sidebar-accent-foreground: #000000;
   --sidebar-border: #E5E5E5;
-  --sidebar-ring: #095246;
+  --sidebar-ring: #000000;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-montserrat);
+  --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -81,20 +84,21 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
 
   /* Custom Brand Colors */
-  --color-imperial: #095246;
-  --color-champagne: #BFAE8F;
-  --color-charcoal: #2B2B2B;
-  --color-warmstone: #6D6B68;
-  --color-mist: #F7F6F4;
+  --color-jet: #000000;
+  --color-soft-black: #1A1A1A;
+  --color-warm-gray: #4A4A4A;
+  --color-caramel: #C4A574;
+  --color-beige: #D4B896;
+  --color-light: #F5F5F5;
 }
 
 @layer base {
@@ -102,29 +106,125 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif text-charcoal;
+    @apply font-serif text-foreground tracking-tight;
   }
+}
+
+/* Script/Cursive Font for special headings */
+@font-face {
+  font-family: 'Pinyon Script';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/pinyonscript/v21/6xKpdSJbL9-e9LuoeQiDRQR8aOLQO4bhiDY.woff2') format('woff2');
+}
+
+.font-script {
+  font-family: 'Pinyon Script', cursive;
 }
 
 /* Custom Button Styles */
 .btn-primary {
-  @apply bg-imperial text-white transition-all duration-300;
+  @apply bg-black text-white px-8 py-3 text-sm tracking-wider uppercase transition-all duration-300;
 }
 .btn-primary:hover {
-  @apply bg-champagne text-charcoal;
+  @apply bg-warm-gray;
 }
 
-.btn-secondary {
-  @apply bg-transparent border border-warmstone text-warmstone transition-all duration-300;
+.btn-outline {
+  @apply bg-transparent border border-black text-black px-8 py-3 text-sm tracking-wider uppercase transition-all duration-300;
 }
-.btn-secondary:hover {
-  @apply border-imperial text-imperial;
+.btn-outline:hover {
+  @apply bg-black text-white;
+}
+
+/* Section Titles */
+.section-title {
+  @apply text-center text-2xl md:text-3xl font-serif tracking-wide;
+}
+
+.section-line {
+  @apply flex items-center justify-center gap-4 my-8;
+}
+
+.section-line::before,
+.section-line::after {
+  content: '';
+  @apply h-px w-16 bg-border;
+}
+
+/* Product Card Hover Effect */
+.product-card {
+  @apply transition-all duration-300;
+}
+.product-card:hover {
+  @apply shadow-lg;
+}
+
+/* Discount Badge */
+.discount-badge {
+  @apply absolute top-3 left-3 bg-black text-white text-xs px-2 py-1 font-medium;
 }
 
 /* Smooth transitions */
 .transition-brand {
   @apply transition-all duration-300 ease-in-out;
+}
+
+/* FAQ Accordion */
+.faq-item {
+  @apply border-b border-border py-4;
+}
+
+.faq-question {
+  @apply flex justify-between items-center cursor-pointer text-left w-full font-medium;
+}
+
+.faq-answer {
+  @apply pt-3 text-muted-foreground;
+}
+
+/* Testimonial Card */
+.testimonial-card {
+  @apply relative;
+}
+
+.testimonial-card::before {
+  content: '';
+  @apply absolute -top-4 left-1/2 -translate-x-1/2 w-px h-8 bg-border;
+}
+
+/* Instagram Grid */
+.instagram-grid {
+  @apply grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1;
+}
+
+/* Price Range Cards */
+.price-card {
+  @apply text-center p-4 transition-all duration-300 cursor-pointer;
+}
+.price-card:hover {
+  @apply bg-light;
+}
+
+/* Trust Icons */
+.trust-icon {
+  @apply flex flex-col items-center text-center p-6;
+}
+
+.trust-icon svg {
+  @apply w-8 h-8 mb-3 text-caramel;
+}
+
+/* Clothesline effect for testimonials */
+.clothesline {
+  @apply relative;
+}
+
+.clothesline::before {
+  content: '';
+  @apply absolute top-0 left-0 right-0 h-px bg-border;
 }

@@ -325,11 +325,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Hakkimizda / Uretimden Direkt Size */}
+      {/* Hakkimizda / Uretimden Sizlere */}
       <section className="py-16 bg-[#F5F5F5] border-t border-border">
         <div className="container mx-auto px-4">
           <div className="section-line">
-            <h2 className="section-title">Uretimden Direkt Size</h2>
+            <h2 className="section-title">Uretimden Sizlere</h2>
           </div>
           <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
             40 yili askin tecrubemiz ile buyuk kuyumculara toptan satis yapiyoruz.

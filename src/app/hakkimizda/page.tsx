@@ -28,7 +28,7 @@ export default function HakkimizdaPage() {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-4">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl mb-4 text-white">
-              Uretimden Direkt Size
+              Uretimden Sizlere
             </h1>
             <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
               40 yili askin tecrubemiz ile buyuk kuyumculara toptan satis yapiyoruz.

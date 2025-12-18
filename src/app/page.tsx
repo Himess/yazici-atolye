@@ -5,7 +5,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { products, categories } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
-import { ChevronDown, Heart, Sparkles, Gem, Factory, BadgePercent, Award } from "lucide-react";
+import { HeroSlider } from "@/components/hero-slider";
+import { ChevronDown, Heart, Sparkles, Gem } from "lucide-react";
 
 const testimonials = [
   {
@@ -77,31 +78,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/images/yuzuk-2.png')" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/60 to-transparent" />
-
-        <div className="container mx-auto px-4 h-full flex items-center relative z-10">
-          <div className="max-w-lg">
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-black mb-4 sm:mb-6 leading-tight tracking-tight">
-              Zarafetin ve<br />Kalitenin<br />Bulustugu Yer
-            </h1>
-            <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-md tracking-wide">
-              El yapimi, ozenle tasarlanmis ozel mucevherler
-            </p>
-            <Link
-              href="/urunler"
-              className="inline-block bg-black text-white px-8 py-3 text-sm tracking-wider uppercase hover:bg-gray-800 transition-colors"
-            >
-              Koleksiyonu Kesfet
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Hero Slider */}
+      <HeroSlider />
 
       {/* Kategorilere Gore Alisveris */}
       <section className="py-16 bg-white">
@@ -195,75 +173,6 @@ export default function Home() {
             >
               Tum Yuzukleri Gor
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Uretimden Direkt Size */}
-      <section className="py-16 bg-[#1A1A1A] text-white">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="order-2 md:order-1 py-8 md:py-16 md:pr-8">
-              <div className="inline-block bg-[#C4A574] text-black text-xs px-3 py-1 mb-4 uppercase tracking-wider">
-                Aracisiz Fabrika Fiyati
-              </div>
-              <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4 tracking-tight text-white">
-                Uretimden Direkt<br />Size Ulastiryoruz
-              </h2>
-              <p className="text-gray-300 mb-6 leading-relaxed">
-                40 yildir buyuk kuyumculara toptan uretim yapan atolyemiz, artik
-                <span className="text-[#C4A574] font-medium"> ayni kaliteyi aracisiz fiyatlarla </span>
-                sizlere sunuyor. Piyasada ayni urunu %50-70 daha yuksek fiyata bulabilirsiniz.
-              </p>
-
-              <div className="grid grid-cols-3 gap-4 mb-8">
-                <div className="text-center">
-                  <Factory className="w-6 h-6 text-[#C4A574] mx-auto mb-2" />
-                  <p className="text-xs text-gray-400">Kendi Uretimimiz</p>
-                </div>
-                <div className="text-center">
-                  <BadgePercent className="w-6 h-6 text-[#C4A574] mx-auto mb-2" />
-                  <p className="text-xs text-gray-400">Fabrika Fiyati</p>
-                </div>
-                <div className="text-center">
-                  <Award className="w-6 h-6 text-[#C4A574] mx-auto mb-2" />
-                  <p className="text-xs text-gray-400">Ayni Kalite</p>
-                </div>
-              </div>
-
-              <Link
-                href="/urunler"
-                className="inline-block bg-white text-black px-8 py-3 text-sm tracking-wider uppercase hover:bg-[#C4A574] transition-colors"
-              >
-                Fiyatlari Karsilastir
-              </Link>
-            </div>
-            <div className="order-1 md:order-2 grid grid-cols-2 gap-2">
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src="/images/atolye-usta-1.png"
-                  alt="Atolyemizde usta calismasi"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src="/images/atolye-kutu-1.png"
-                  alt="El isciligi"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="col-span-2 relative aspect-[2/1] overflow-hidden">
-                <Image
-                  src="/images/atolye-3.png"
-                  alt="Atolye ortami"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </section>

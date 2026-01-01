@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/components/providers";
+import { PriceTicker } from "@/components/price-ticker";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -68,6 +69,7 @@ export default function RootLayout({
         className={`${playfair.variable} ${montserrat.variable} font-sans antialiased`}
       >
         <Providers>
+          <PriceTicker />
           <Header />
           <main className="min-h-screen">{children}</main>
           <Footer />

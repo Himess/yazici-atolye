@@ -5,7 +5,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { getProductById, formatPrice } from "@/lib/products";
+import { getProductById, formatPrice, GoldColor } from "@/lib/products";
+import { ColorSelector } from "@/components/color-selector";
 import { useCart } from "@/lib/cart-context";
 import { useFavorites } from "@/lib/favorites-context";
 import { useState, useEffect, useMemo } from "react";
@@ -22,6 +23,7 @@ export default function UrunDetayPage() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<GoldColor | null>(null);
   const { addToCart } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
 
@@ -42,7 +44,7 @@ export default function UrunDetayPage() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [product, allImages.length]);
+  }, [product, allImages]);
 
   const handleAddToCart = () => {
     if (product) {

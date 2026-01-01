@@ -7,6 +7,16 @@ export type Stone = {
   shape: string;
 };
 
+export type GoldColor = "white" | "gold" | "rose";
+
+export type ColorVariant = {
+  color: GoldColor;
+  label: string;
+  available: boolean;
+  images: string[];
+};
+
+
 export type Product = {
   id: string;
   code: string;
@@ -25,6 +35,8 @@ export type Product = {
   hoverImage?: string; // Swarovski tarzı - elde/boyunda/kulakta duruş görseli
   featured: boolean;
   inStock: boolean;
+  colorVariants: ColorVariant[];
+  defaultColor: GoldColor;
 };
 
 export const products: Product[] = [
@@ -46,6 +58,12 @@ export const products: Product[] = [
     ],
     images: ["/images/yuzuk-1-main.jpg", "/images/yuzuk-1-back.jpg", "/images/yuzuk-1-side.jpg"],
     hoverImage: "/images/yüzük1-1.png",
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: true,
     inStock: true,
   },
@@ -67,6 +85,12 @@ export const products: Product[] = [
     ],
     images: ["/images/kolye-1.png"],
     hoverImage: "/images/kolye1-1.png",
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: true,
     inStock: true,
   },
@@ -88,6 +112,12 @@ export const products: Product[] = [
     ],
     images: ["/images/kupe-1.png"],
     hoverImage: "/images/küpe1-1.png",
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: true,
     inStock: true,
   },
@@ -109,6 +139,12 @@ export const products: Product[] = [
       { type: "Pirlanta", count: 12, carat: 0.15, color: "F/G", clarity: "SI", shape: "Yuvarlak" }
     ],
     images: ["/images/ring-2.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: false,
     inStock: true,
   },
@@ -128,6 +164,12 @@ export const products: Product[] = [
       { type: "Tatli Su Incisi", count: 45, carat: 0, color: "Beyaz", clarity: "AAA", shape: "Yuvarlak" }
     ],
     images: ["/images/necklace-2.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: false,
     inStock: true,
   },
@@ -147,6 +189,12 @@ export const products: Product[] = [
     stones: [],
     images: ["/images/bileklik-1.png"],
     hoverImage: "/images/bileklik1-1.png",
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: true,
     inStock: true,
   },
@@ -167,6 +215,12 @@ export const products: Product[] = [
       { type: "Pirlanta", count: 2, carat: 0.40, color: "F/G", clarity: "VS1", shape: "Yuvarlak" }
     ],
     images: ["/images/earring-2.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: false,
     inStock: true,
   },
@@ -184,6 +238,12 @@ export const products: Product[] = [
     purity: "14 Ayar",
     stones: [],
     images: ["/images/ring-3.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: false,
     inStock: true,
   },
@@ -204,6 +264,12 @@ export const products: Product[] = [
       { type: "Pirlanta", count: 5, carat: 0.15, color: "F/G", clarity: "SI", shape: "Yuvarlak" }
     ],
     images: ["/images/ring-4.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: true,
     inStock: true,
   },
@@ -223,6 +289,12 @@ export const products: Product[] = [
     stones: [],
     images: ["/images/erkek-alyans-1.png", "/images/erkek-alyans-2.png", "/images/erkek-alyans-3.png"],
     hoverImage: "/images/erkek-alyans-hover.jpg",
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: true,
     inStock: true,
   },
@@ -242,6 +314,12 @@ export const products: Product[] = [
     stones: [],
     images: ["/images/kadin-alyans-1.png", "/images/kadin-alyans-2.png", "/images/kadin-alyans-3.jpg"],
     hoverImage: "/images/kadin-alyans-hover.jpg",
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: true,
     inStock: true,
   },
@@ -262,6 +340,12 @@ export const products: Product[] = [
       { type: "Pirlanta", count: 28, carat: 0.35, color: "F/G", clarity: "VS1", shape: "Yuvarlak" }
     ],
     images: ["/images/kolye-melek-kanadi-1.jpg", "/images/kolye-melek-kanadi-2.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: true, images: ["/images/kolye-melek-kanadi-1.jpg", "/images/kolye-melek-kanadi-2.jpg"] },
+      { color: "gold", label: "Sari Altin", available: true, images: ["/images/kolye-melek-kanadi-gold-1.jpg", "/images/kolye-melek-kanadi-gold-2.jpg"] },
+      { color: "rose", label: "Rose Gold", available: true, images: ["/images/kolye-melek-kanadi-rose-1.jpg", "/images/kolye-melek-kanadi-rose-2.jpg"] },
+    ],
+    defaultColor: "white",
     featured: true,
     inStock: true,
   },
@@ -282,6 +366,12 @@ export const products: Product[] = [
       { type: "Sedef", count: 3, carat: 0, color: "Beyaz", clarity: "AAA", shape: "Yonca" }
     ],
     images: ["/images/kolye-yonca-1.jpg", "/images/kolye-yonca-2.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: true,
     inStock: true,
   },
@@ -302,6 +392,12 @@ export const products: Product[] = [
       { type: "Pirlanta", count: 1, carat: 0.50, color: "F/G", clarity: "VS1", shape: "Armut" }
     ],
     images: ["/images/kolye-armut-1.jpg", "/images/kolye-armut-2.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: true,
     inStock: true,
   },
@@ -322,6 +418,12 @@ export const products: Product[] = [
       { type: "Pirlanta", count: 1, carat: 0.40, color: "F/G", clarity: "VS2", shape: "Baguette" }
     ],
     images: ["/images/kolye-baguette-1.jpg", "/images/kolye-baguette-2.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: false,
     inStock: true,
   },
@@ -340,6 +442,12 @@ export const products: Product[] = [
     purity: "14 Ayar",
     stones: [],
     images: ["/images/kolye-ucgen-1.jpg", "/images/kolye-ucgen-2.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: false,
     inStock: true,
   },
@@ -358,6 +466,12 @@ export const products: Product[] = [
     purity: "14 Ayar",
     stones: [],
     images: ["/images/kolye-damla-1.jpg", "/images/kolye-damla-2.jpg"],
+    colorVariants: [
+      { color: "white", label: "Beyaz Altin", available: false, images: [] },
+      { color: "gold", label: "Sari Altin", available: false, images: [] },
+      { color: "rose", label: "Rose Gold", available: false, images: [] },
+    ],
+    defaultColor: "gold",
     featured: false,
     inStock: true,
   },

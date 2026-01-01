@@ -27,10 +27,18 @@ export default function UrunDetayPage() {
   const { addToCart } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
 
-  // Tüm görseller (hover dahil)
-  const allImages = product
-    ? (product.hoverImage ? [...product.images, product.hoverImage] : product.images)
-    : [];
+  // Renk seçimi
+  const currentColor = selectedColor || (product?.defaultColor ?? "white");
+  const currentVariant = product?.colorVariants?.find(v => v.color === currentColor && v.available);
+
+  // Tüm görseller (renk varyantına göre veya varsayılan)
+  const allImages = useMemo(() => {
+    if (!product) return [];
+    if (currentVariant && currentVariant.images.length > 0) {
+      return currentVariant.images;
+    }
+    return product.hoverImage ? [...product.images, product.hoverImage] : product.images;
+  }, [product, currentVariant]);
 
   // Klavye sağ/sol ok desteği
   useEffect(() => {
@@ -298,6 +306,15 @@ export default function UrunDetayPage() {
 
             {/* Urun Adi */}
             <h1 className="font-playfair text-xl sm:text-2xl lg:text-3xl font-bold text-stone-900 mb-4">{product.name}</h1>
+
+            {/* Renk Seçimi */}
+            {product.colorVariants && product.colorVariants.length > 0 && (
+              <ColorSelector
+                variants={product.colorVariants}
+                selectedColor={currentColor}
+                onColorChange={setSelectedColor}
+              />
+            )}
 
             {/* Fiyat Alani */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-6">

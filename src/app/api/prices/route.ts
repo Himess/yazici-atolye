@@ -11,8 +11,26 @@ type PriceData = {
   direction: "up" | "down" | "stable";
 };
 
+type AltinItem = {
+  sembolkisa?: string;
+  aciklama?: string;
+  alis?: number;
+  satis?: number;
+  yuzdedegisim?: number;
+};
+
+type DovizItem = {
+  Sembol?: string;
+  Adi?: string;
+  Alis?: number;
+  Satis?: number;
+  Piysadeg?: number;
+};
+
 export async function GET() {
   try {
+    const prices: PriceData[] = [];
+
     // Altın verileri
     const altinResponse = await fetch(
       "https://bigpara.hurriyet.com.tr/altin/",
@@ -25,6 +43,30 @@ export async function GET() {
       }
     );
     const altinHtml = await altinResponse.text();
+
+    // $altinData değişkenini bul
+    const altinDataMatch = altinHtml.match(/\$altinData\s*=\s*(\[[\s\S]*?\]);/);
+    if (altinDataMatch) {
+      try {
+        const altinData: AltinItem[] = JSON.parse(altinDataMatch[1]);
+
+        // Gram Altın (sembolkisa: "GLDGR")
+        const gramAltin = altinData.find((item) => item.sembolkisa === "GLDGR");
+        if (gramAltin) {
+          const change = gramAltin.yuzdedegisim || 0;
+          prices.push({
+            name: "Gram Altin",
+            code: "GLDGR",
+            buy: gramAltin.alis || 0,
+            sell: gramAltin.satis || 0,
+            change: change,
+            direction: change > 0 ? "up" : change < 0 ? "down" : "stable",
+          });
+        }
+      } catch {
+        console.error("Altin JSON parse error");
+      }
+    }
 
     // Döviz verileri
     const dovizResponse = await fetch(
@@ -39,80 +81,41 @@ export async function GET() {
     );
     const dovizHtml = await dovizResponse.text();
 
-    const prices: PriceData[] = [];
-
-    // Gram Altın - regex ile çek
-    const gramAltinMatch = altinHtml.match(
-      /GLDGR[^}]*?"alis"\s*:\s*([\d.]+)[^}]*?"satis"\s*:\s*([\d.]+)[^}]*?"degisim"\s*:\s*([-\d.]+)/i
-    );
-    if (gramAltinMatch) {
-      const change = parseFloat(gramAltinMatch[3]);
-      prices.push({
-        name: "Gram Altın",
-        code: "GLDGR",
-        buy: parseFloat(gramAltinMatch[1]),
-        sell: parseFloat(gramAltinMatch[2]),
-        change: change,
-        direction: change > 0 ? "up" : change < 0 ? "down" : "stable",
-      });
-    }
-
-    // Alternatif: Tüm altın verilerini bul
-    const altinDataMatch = altinHtml.match(/\$altinData\s*=\s*(\[[\s\S]*?\]);/);
-    if (altinDataMatch) {
-      try {
-        const altinData = JSON.parse(altinDataMatch[1]);
-
-        // Gram Altın
-        const gramAltin = altinData.find((item: { kod?: string; Alis?: number; Satis?: number; Piysadeg?: number }) => item.kod === "GLDGR");
-        if (gramAltin && !prices.find(p => p.code === "GLDGR")) {
-          prices.push({
-            name: "Gram Altın",
-            code: "GLDGR",
-            buy: gramAltin.Alis || 0,
-            sell: gramAltin.Satis || 0,
-            change: gramAltin.Piysadeg || 0,
-            direction: (gramAltin.Piysadeg || 0) > 0 ? "up" : (gramAltin.Piysadeg || 0) < 0 ? "down" : "stable",
-          });
-        }
-      } catch {
-        // JSON parse hatası, devam et
-      }
-    }
-
-    // Döviz verilerini çek
+    // DovizData değişkenini bul
     const dovizDataMatch = dovizHtml.match(/var\s+DovizData\s*=\s*(\[[\s\S]*?\]);/);
     if (dovizDataMatch) {
       try {
-        const dovizData = JSON.parse(dovizDataMatch[1]);
+        const dovizData: DovizItem[] = JSON.parse(dovizDataMatch[1]);
 
         // Dolar
-        const dolar = dovizData.find((item: { Sembol?: string; Alis?: number; Satis?: number; Piysadeg?: number }) => item.Sembol === "USDTRY");
+        const dolar = dovizData.find((item) => item.Sembol === "USDTRY");
         if (dolar) {
+          const change = dolar.Piysadeg || 0;
           prices.push({
             name: "Dolar",
             code: "USD",
             buy: dolar.Alis || 0,
             sell: dolar.Satis || 0,
-            change: dolar.Piysadeg || 0,
-            direction: (dolar.Piysadeg || 0) > 0 ? "up" : (dolar.Piysadeg || 0) < 0 ? "down" : "stable",
+            change: change,
+            direction: change > 0 ? "up" : change < 0 ? "down" : "stable",
           });
         }
 
         // Euro
-        const euro = dovizData.find((item: { Sembol?: string; Alis?: number; Satis?: number; Piysadeg?: number }) => item.Sembol === "EURTRY");
+        const euro = dovizData.find((item) => item.Sembol === "EURTRY");
         if (euro) {
+          const change = euro.Piysadeg || 0;
           prices.push({
             name: "Euro",
             code: "EUR",
             buy: euro.Alis || 0,
             sell: euro.Satis || 0,
-            change: euro.Piysadeg || 0,
-            direction: (euro.Piysadeg || 0) > 0 ? "up" : (euro.Piysadeg || 0) < 0 ? "down" : "stable",
+            change: change,
+            direction: change > 0 ? "up" : change < 0 ? "down" : "stable",
           });
         }
       } catch {
-        // JSON parse hatası, devam et
+        console.error("Doviz JSON parse error");
       }
     }
 

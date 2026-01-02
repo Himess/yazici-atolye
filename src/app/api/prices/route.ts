@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export const revalidate = 300; // 5 dakikada bir yenile
+export const revalidate = 60; // 1 dakikada bir yenile (daha sık)
 
 type PriceData = {
   name: string;
@@ -9,22 +9,6 @@ type PriceData = {
   sell: number;
   change: number;
   direction: "up" | "down" | "stable";
-};
-
-type AltinItem = {
-  sembolkisa?: string;
-  aciklama?: string;
-  alis?: number;
-  satis?: number;
-  yuzdedegisim?: number;
-};
-
-type DovizItem = {
-  Sembol?: string;
-  Adi?: string;
-  Alis?: number;
-  Satis?: number;
-  Piysadeg?: number;
 };
 
 export async function GET() {
@@ -37,34 +21,72 @@ export async function GET() {
       {
         headers: {
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
         },
-        next: { revalidate: 300 },
+        cache: "no-store",
       }
     );
     const altinHtml = await altinResponse.text();
 
-    // $altinData değişkenini bul
-    const altinDataMatch = altinHtml.match(/\$altinData\s*=\s*(\[[\s\S]*?\]);/);
+    // Gram Altın için birden fazla pattern dene
+    // Pattern 1: $altinData array
+    let gramAltinFound = false;
+
+    const altinDataMatch = altinHtml.match(/\$altinData\s*=\s*(\[[\s\S]*?\])\s*;/);
     if (altinDataMatch) {
       try {
-        const altinData: AltinItem[] = JSON.parse(altinDataMatch[1]);
-
-        // Gram Altın (sembolkisa: "GLDGR")
-        const gramAltin = altinData.find((item) => item.sembolkisa === "GLDGR");
+        const altinData = JSON.parse(altinDataMatch[1]);
+        const gramAltin = altinData.find((item: Record<string, unknown>) =>
+          item.sembolkisa === "GLDGR" || item.kod === "GLDGR"
+        );
         if (gramAltin) {
-          const change = gramAltin.yuzdedegisim || 0;
+          const change = (gramAltin.yuzdedegisim || gramAltin.degisim || 0) as number;
           prices.push({
             name: "Gram Altin",
             code: "GLDGR",
-            buy: gramAltin.alis || 0,
-            sell: gramAltin.satis || 0,
+            buy: (gramAltin.alis || gramAltin.Alis || 0) as number,
+            sell: (gramAltin.satis || gramAltin.Satis || 0) as number,
             change: change,
             direction: change > 0 ? "up" : change < 0 ? "down" : "stable",
           });
+          gramAltinFound = true;
         }
       } catch {
-        console.error("Altin JSON parse error");
+        // JSON parse error
+      }
+    }
+
+    // Pattern 2: Doğrudan GLDGR araması
+    if (!gramAltinFound) {
+      const gldgrMatch = altinHtml.match(/"sembolkisa"\s*:\s*"GLDGR"[^}]*"alis"\s*:\s*([\d.]+)[^}]*"satis"\s*:\s*([\d.]+)[^}]*"yuzdedegisim"\s*:\s*([-\d.]+)/);
+      if (gldgrMatch) {
+        const change = parseFloat(gldgrMatch[3]);
+        prices.push({
+          name: "Gram Altin",
+          code: "GLDGR",
+          buy: parseFloat(gldgrMatch[1]),
+          sell: parseFloat(gldgrMatch[2]),
+          change: change,
+          direction: change > 0 ? "up" : change < 0 ? "down" : "stable",
+        });
+        gramAltinFound = true;
+      }
+    }
+
+    // Pattern 3: Farklı sıralama ile
+    if (!gramAltinFound) {
+      const altPattern = altinHtml.match(/GLDGR[\s\S]*?"alis"\s*:\s*([\d.]+)[\s\S]*?"satis"\s*:\s*([\d.]+)/i);
+      if (altPattern) {
+        prices.push({
+          name: "Gram Altin",
+          code: "GLDGR",
+          buy: parseFloat(altPattern[1]),
+          sell: parseFloat(altPattern[2]),
+          change: 0,
+          direction: "stable",
+        });
       }
     }
 
@@ -74,48 +96,49 @@ export async function GET() {
       {
         headers: {
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         },
-        next: { revalidate: 300 },
+        cache: "no-store",
       }
     );
     const dovizHtml = await dovizResponse.text();
 
     // DovizData değişkenini bul
-    const dovizDataMatch = dovizHtml.match(/var\s+DovizData\s*=\s*(\[[\s\S]*?\]);/);
+    const dovizDataMatch = dovizHtml.match(/var\s+DovizData\s*=\s*(\[[\s\S]*?\])\s*;/);
     if (dovizDataMatch) {
       try {
-        const dovizData: DovizItem[] = JSON.parse(dovizDataMatch[1]);
+        const dovizData = JSON.parse(dovizDataMatch[1]);
 
         // Dolar
-        const dolar = dovizData.find((item) => item.Sembol === "USDTRY");
+        const dolar = dovizData.find((item: Record<string, unknown>) => item.Sembol === "USDTRY");
         if (dolar) {
-          const change = dolar.Piysadeg || 0;
+          const change = (dolar.Piysadeg || 0) as number;
           prices.push({
             name: "Dolar",
             code: "USD",
-            buy: dolar.Alis || 0,
-            sell: dolar.Satis || 0,
+            buy: (dolar.Alis || 0) as number,
+            sell: (dolar.Satis || 0) as number,
             change: change,
             direction: change > 0 ? "up" : change < 0 ? "down" : "stable",
           });
         }
 
         // Euro
-        const euro = dovizData.find((item) => item.Sembol === "EURTRY");
+        const euro = dovizData.find((item: Record<string, unknown>) => item.Sembol === "EURTRY");
         if (euro) {
-          const change = euro.Piysadeg || 0;
+          const change = (euro.Piysadeg || 0) as number;
           prices.push({
             name: "Euro",
             code: "EUR",
-            buy: euro.Alis || 0,
-            sell: euro.Satis || 0,
+            buy: (euro.Alis || 0) as number,
+            sell: (euro.Satis || 0) as number,
             change: change,
             direction: change > 0 ? "up" : change < 0 ? "down" : "stable",
           });
         }
       } catch {
-        console.error("Doviz JSON parse error");
+        // JSON parse error
       }
     }
 

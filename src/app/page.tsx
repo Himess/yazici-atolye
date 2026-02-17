@@ -246,60 +246,20 @@ export default function Home() {
       {/* Hero Slider */}
       <HeroSlider />
 
-      {/* ADIM 4: ALIŞVERİŞ KATEGORİLERİ */}
-      <section className="py-16 bg-cream">
-        <div className="container mx-auto px-4">
-          <h2 className="section-title mb-12">ALIŞVERİŞ KATEGORİLERİ</h2>
+      {/* PARALLAX BÖLÜM 1 — Kuyumcu 1 */}
+      <section
+        className="relative h-[70vh] md:h-[85vh] bg-fixed bg-center bg-cover bg-no-repeat"
+        style={{ backgroundImage: "url('/images/kuyumcu-1.jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/20" />
+      </section>
 
-          {/* 4b. Üst Satır — 4'lü Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {loading ? (
-              <>
-                <SkeletonCategory />
-                <SkeletonCategory />
-                <SkeletonCategory />
-                <SkeletonCategory />
-              </>
-            ) : categoryImages.length > 0 ? (
-              categoryImages.map((cat) => (
-                <Link key={cat.id} href={`/urunler?kategori=${cat.slug}`} className="group relative aspect-square overflow-hidden bg-beige">
-                  <Image
-                    src={cat.image}
-                    alt={cat.name}
-                    fill
-                    className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
-                    <span className="font-script text-2xl md:text-3xl text-white drop-shadow-lg">
-                      {cat.name}
-                    </span>
-                  </div>
-                </Link>
-              ))
-            ) : null}
-          </div>
-
-          {/* 4c. Alt Satır — 2'li Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            {collectionImages.map((col) => (
-              <Link key={col.name} href={col.href} className="group relative aspect-[16/9] overflow-hidden bg-beige">
-                <Image
-                  src={col.image}
-                  alt={col.name}
-                  fill
-                  className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-white text-xl md:text-2xl font-serif font-bold tracking-wide uppercase drop-shadow-lg">
-                    {col.name}
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+      {/* PARALLAX BÖLÜM 2 — Kuyumcu 2 */}
+      <section
+        className="relative h-[70vh] md:h-[85vh] bg-fixed bg-center bg-cover bg-no-repeat"
+        style={{ backgroundImage: "url('/images/kuyumcu-2.jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/20" />
       </section>
 
       {/* Öne Çıkan Ürünler */}

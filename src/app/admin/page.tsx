@@ -19,9 +19,9 @@ export default async function AdminDashboard() {
     prisma.category.count().catch(() => 0),
     prisma.slide.count().catch(() => 0),
     prisma.testimonial.count().catch(() => 0),
-    prisma.contactForm.count().catch(() => 0),
-    prisma.contactForm.count({ where: { isRead: false } }).catch(() => 0),
-    prisma.contactForm.findMany({
+    prisma.formSubmission.count().catch(() => 0),
+    prisma.formSubmission.count({ where: { isRead: false } }).catch(() => 0),
+    prisma.formSubmission.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' },
     }).catch(() => []),
@@ -130,9 +130,9 @@ export default async function AdminDashboard() {
             {recentForms.map((form: {
               id: string;
               name: string;
-              email: string;
-              subject: string | null;
-              message: string;
+              email: string | null;
+              formType: string;
+              message: string | null;
               isRead: boolean;
               createdAt: Date;
             }) => (
@@ -161,7 +161,7 @@ export default async function AdminDashboard() {
                     )}
                   </div>
                   <p className="text-xs text-zinc-500 truncate">
-                    {form.subject || form.message.slice(0, 60)}
+                    {form.formType}: {(form.message || '').slice(0, 60)}
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-zinc-400 flex-shrink-0">

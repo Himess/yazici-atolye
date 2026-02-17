@@ -1,11 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowRight, Facebook, Instagram, Youtube } from "lucide-react";
+
+interface SiteSettings {
+  phone?: string;
+  phone2?: string;
+  whatsapp?: string;
+  email?: string;
+  address?: string;
+  workingHours?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
+  tiktokUrl?: string;
+  pinterestUrl?: string;
+}
 
 export function Footer() {
   const [email, setEmail] = useState("");
+  const [settings, setSettings] = useState<SiteSettings>({});
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => setSettings(data))
+      .catch((err) => console.error("Footer settings fetch error:", err));
+  }, []);
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,15 +64,21 @@ export function Footer() {
             </ul>
             {/* Sosyal Medya */}
             <div className="flex items-center gap-4 mt-6">
-              <a href="https://facebook.com/yaziciatolye" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-gold transition-colors" aria-label="Facebook">
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a href="https://instagram.com/yaziciatolye" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-gold transition-colors" aria-label="Instagram">
-                <Instagram className="w-4 h-4" />
-              </a>
-              <a href="https://youtube.com/@yaziciatolye" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-gold transition-colors" aria-label="YouTube">
-                <Youtube className="w-4 h-4" />
-              </a>
+              {settings.facebookUrl && (
+                <a href={settings.facebookUrl} target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-gold transition-colors" aria-label="Facebook">
+                  <Facebook className="w-4 h-4" />
+                </a>
+              )}
+              {settings.instagramUrl && (
+                <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-gold transition-colors" aria-label="Instagram">
+                  <Instagram className="w-4 h-4" />
+                </a>
+              )}
+              {settings.youtubeUrl && (
+                <a href={settings.youtubeUrl} target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-gold transition-colors" aria-label="YouTube">
+                  <Youtube className="w-4 h-4" />
+                </a>
+              )}
             </div>
           </div>
 

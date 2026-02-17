@@ -4,10 +4,19 @@ import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { products, categories } from "@/lib/products";
+import { Product } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
 import { ProductGridSkeleton } from "@/components/product-card-skeleton";
 import { ChevronRight, SlidersHorizontal } from "lucide-react";
+
+type ApiCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  image: string | null;
+  order: number;
+  isActive: boolean;
+};
 
 function UrunlerContent() {
   const searchParams = useSearchParams();
@@ -21,9 +30,59 @@ function UrunlerContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
 
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<ApiCategory[]>([]);
+  const [fetchError, setFetchError] = useState(false);
+
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 300);
-    return () => clearTimeout(timer);
+    async function fetchData() {
+      setIsLoading(true);
+      setFetchError(false);
+      try {
+        const [productsRes, categoriesRes] = await Promise.all([
+          fetch("/api/products"),
+          fetch("/api/categories"),
+        ]);
+
+        if (!productsRes.ok || !categoriesRes.ok) {
+          throw new Error("API error");
+        }
+
+        const productsData = await productsRes.json();
+        const categoriesData = await categoriesRes.json();
+
+        // Map API products to match Product type expected by ProductCard
+        const mappedProducts: Product[] = productsData.map((p: Record<string, unknown>) => ({
+          ...p,
+          id: String(p.id),
+          code: p.code || "",
+          description: p.description || "",
+          about: p.about || "",
+          category: p.category || "",
+          categoryLabel: p.categoryLabel || "",
+          material: p.material || "",
+          weight: p.weight || "",
+          purity: p.purity || "",
+          stones: Array.isArray(p.stones) ? p.stones : [],
+          images: Array.isArray(p.images) ? p.images : [],
+          hoverImage: p.hoverImage || undefined,
+          colorVariants: Array.isArray(p.colorVariants) ? p.colorVariants : [],
+          defaultColor: p.defaultColor || "gold",
+          featured: Boolean(p.featured),
+          inStock: p.inStock !== false,
+        }));
+
+        setProducts(mappedProducts);
+        setCategories(categoriesData);
+      } catch (err) {
+        console.error("Veri yüklenirken hata:", err);
+        setFetchError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
   }, []);
 
   let filteredProducts = selectedCategory === "all"
@@ -62,7 +121,7 @@ function UrunlerContent() {
 
   const categoryName = selectedCategory === "all"
     ? "Tüm Ürünler"
-    : categories.find(c => c.id === selectedCategory)?.name || "Takılar";
+    : categories.find(c => c.slug === selectedCategory)?.name || "Takılar";
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -84,9 +143,9 @@ function UrunlerContent() {
             {categories.map((cat) => (
               <li key={cat.id}>
                 <button
-                  onClick={() => setSelectedCategory(cat.id)}
+                  onClick={() => setSelectedCategory(cat.slug)}
                   className={`text-sm font-sans w-full text-left py-1.5 transition-colors ${
-                    selectedCategory === cat.id ? "text-gold font-semibold" : "text-foreground hover:text-gold"
+                    selectedCategory === cat.slug ? "text-gold font-semibold" : "text-foreground hover:text-gold"
                   }`}
                 >
                   {cat.name}
@@ -144,6 +203,19 @@ function UrunlerContent() {
 
           {isLoading ? (
             <ProductGridSkeleton count={8} />
+          ) : fetchError ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground mb-4 font-sans">
+                Ürünler yüklenirken bir hata oluştu.
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => window.location.reload()}
+                className="font-sans"
+              >
+                Tekrar Dene
+              </Button>
+            </div>
           ) : (
             <>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">

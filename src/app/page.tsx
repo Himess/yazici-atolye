@@ -2,54 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useRef } from "react";
-import { products, categories } from "@/lib/products";
+import { useState, useRef, useEffect } from "react";
+import { Product } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
 import { HeroSlider } from "@/components/hero-slider";
 import { ChevronDown, ChevronLeft, ChevronRight, Heart, Sparkles, Gem, Star, Facebook, Instagram, Youtube } from "lucide-react";
-
-const testimonials = [
-  {
-    name: "Ayşe K.",
-    rating: 5,
-    title: "Harika kalite!",
-    comment: "Nişanlımdan aldığı yüzük muhteşemdi. El işçiliği ve kalite gerçekten fark yaratıyor. Herkese tavsiye ederim.",
-    date: "2 gün önce",
-    verified: true,
-  },
-  {
-    name: "Mehmet Y.",
-    rating: 5,
-    title: "Çok beğendik",
-    comment: "Eşime aldım hediye, çok beğendi. Paketleme ve teslimat da çok özenli. Tekrar alışveriş yapacağım kesinlikle.",
-    date: "5 gün önce",
-    verified: true,
-  },
-  {
-    name: "Zeynep A.",
-    rating: 5,
-    title: "Tam benim tarzım",
-    comment: "Minimalist tasarımlar tam benim tarzım. Her gün takıyorum. Renk solması falan yok, kaliteli malzeme kullanılmış.",
-    date: "1 hafta önce",
-    verified: true,
-  },
-  {
-    name: "Can B.",
-    rating: 4,
-    title: "Müthiş işçilik",
-    comment: "Alyanslarımızı buradan aldık. Mükemmel işçilik, herkese tavsiye ederim. Fiyat performans oranı çok iyi.",
-    date: "2 hafta önce",
-    verified: false,
-  },
-  {
-    name: "Elif D.",
-    rating: 5,
-    title: "Hediye için ideal",
-    comment: "Anneme doğum günü hediyesi olarak kolye aldım. Kutusu bile çok şık. Anneme çok yakıştı, bayıldı.",
-    date: "3 hafta önce",
-    verified: true,
-  },
-];
 
 const faqs = [
   {
@@ -70,19 +27,94 @@ const faqs = [
   },
 ];
 
-// Kategoriler
-const categoryImages = [
-  { name: "Bileklikler", image: "/images/bileklik1-1.png", href: "/urunler?kategori=bileklik" },
-  { name: "Küpeler", image: "/images/küpe1-1.png", href: "/urunler?kategori=kupe" },
-  { name: "Kolyeler", image: "/images/kolye1-1.png", href: "/urunler?kategori=kolye" },
-  { name: "Yüzükler", image: "/images/yüzük1-1.png", href: "/urunler?kategori=yuzuk" },
-];
-
 // Alt satır (2'li grid)
 const collectionImages = [
   { name: "Yeni Gelenler", image: "/images/atolye-usta-1.png", href: "/urunler?siralama=yeni" },
   { name: "Çok Satanlar", image: "/images/atolye-3.png", href: "/urunler?siralama=cok-satan" },
 ];
+
+type Testimonial = {
+  id: string;
+  name: string;
+  rating: number;
+  title: string;
+  comment: string;
+  date: string;
+  verified: boolean;
+  order: number;
+  isActive: boolean;
+  createdAt: string;
+};
+
+type CategoryData = {
+  id: string;
+  name: string;
+  slug: string;
+  image: string;
+  order: number;
+  isActive: boolean;
+};
+
+type SettingsData = {
+  phone?: string;
+  email?: string;
+  address?: string;
+  workingHours?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
+  tiktokUrl?: string;
+  [key: string]: string | undefined;
+};
+
+type ApiProduct = {
+  id: string;
+  slug: string;
+  name: string;
+  code: string;
+  description: string;
+  about?: string;
+  price: number;
+  oldPrice?: number;
+  category: string;
+  categoryLabel: string;
+  material: string;
+  weight: string;
+  purity: string;
+  images: string | string[];
+  hoverImage?: string;
+  featured: boolean;
+  inStock: boolean;
+  [key: string]: unknown;
+};
+
+function mapApiProductToProduct(apiProduct: ApiProduct): Product {
+  const images = typeof apiProduct.images === "string"
+    ? JSON.parse(apiProduct.images)
+    : apiProduct.images;
+
+  return {
+    id: apiProduct.id,
+    code: apiProduct.code || "",
+    name: apiProduct.name,
+    description: apiProduct.description || "",
+    about: apiProduct.about || "",
+    price: apiProduct.price,
+    oldPrice: apiProduct.oldPrice || undefined,
+    category: apiProduct.category as Product["category"],
+    categoryLabel: apiProduct.categoryLabel || "",
+    material: apiProduct.material || "",
+    weight: apiProduct.weight || "",
+    purity: apiProduct.purity || "",
+    stones: [],
+    images: Array.isArray(images) ? images : [],
+    hoverImage: apiProduct.hoverImage || (Array.isArray(images) && images.length > 1 ? images[1] : undefined),
+    featured: apiProduct.featured,
+    inStock: apiProduct.inStock,
+    colorVariants: [],
+    defaultColor: "gold",
+  };
+}
 
 function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "lg" }) {
   const sizeClass = size === "lg" ? "w-5 h-5" : "w-4 h-4";
@@ -98,13 +130,100 @@ function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "lg
   );
 }
 
+function SkeletonCard() {
+  return (
+    <div className="animate-pulse">
+      <div className="aspect-square bg-gray-200" />
+      <div className="pt-4 pb-2 space-y-2">
+        <div className="h-4 bg-gray-200 rounded w-3/4" />
+        <div className="h-4 bg-gray-200 rounded w-1/2" />
+      </div>
+    </div>
+  );
+}
+
+function SkeletonCategory() {
+  return (
+    <div className="animate-pulse aspect-square bg-gray-200" />
+  );
+}
+
+function SkeletonTestimonial() {
+  return (
+    <div className="flex-shrink-0 w-72 snap-start bg-white border border-border p-5 animate-pulse">
+      <div className="flex items-center gap-1 mb-3">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div key={i} className="w-4 h-4 bg-gray-200 rounded" />
+        ))}
+      </div>
+      <div className="h-3 bg-gray-200 rounded w-1/3 mb-2" />
+      <div className="h-4 bg-gray-200 rounded w-2/3 mb-2" />
+      <div className="space-y-1">
+        <div className="h-3 bg-gray-200 rounded w-full" />
+        <div className="h-3 bg-gray-200 rounded w-5/6" />
+      </div>
+      <div className="h-3 bg-gray-200 rounded w-1/4 mt-3" />
+    </div>
+  );
+}
+
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const featuredProducts = products.filter(p => p.featured).slice(0, 4);
-  const ringProducts = products.filter(p => p.category === "yuzuk").slice(0, 4);
   const testimonialRef = useRef<HTMLDivElement>(null);
 
-  const avgRating = (testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length).toFixed(2);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [categoryImages, setCategoryImages] = useState<CategoryData[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [ringProducts, setRingProducts] = useState<Product[]>([]);
+  const [settings, setSettings] = useState<SettingsData>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [testimonialsRes, categoriesRes, featuredRes, ringsRes, settingsRes] = await Promise.all([
+          fetch("/api/testimonials").then((r) => r.ok ? r.json() : []),
+          fetch("/api/categories").then((r) => r.ok ? r.json() : []),
+          fetch("/api/products?featured=true&limit=4").then((r) => r.ok ? r.json() : []),
+          fetch("/api/products?category=yuzuk&limit=4").then((r) => r.ok ? r.json() : []),
+          fetch("/api/settings").then((r) => r.ok ? r.json() : {}),
+        ]);
+
+        // Testimonials - filter active and sort by order
+        const activeTestimonials = Array.isArray(testimonialsRes)
+          ? testimonialsRes.filter((t: Testimonial) => t.isActive).sort((a: Testimonial, b: Testimonial) => a.order - b.order)
+          : [];
+        setTestimonials(activeTestimonials);
+
+        // Categories - filter active and sort by order
+        const activeCategories = Array.isArray(categoriesRes)
+          ? categoriesRes.filter((c: CategoryData) => c.isActive).sort((a: CategoryData, b: CategoryData) => a.order - b.order)
+          : [];
+        setCategoryImages(activeCategories);
+
+        // Featured products
+        const featuredArray = Array.isArray(featuredRes) ? featuredRes : (featuredRes?.products || []);
+        setFeaturedProducts(featuredArray.map(mapApiProductToProduct));
+
+        // Ring products
+        const ringsArray = Array.isArray(ringsRes) ? ringsRes : (ringsRes?.products || []);
+        setRingProducts(ringsArray.map(mapApiProductToProduct));
+
+        // Settings
+        setSettings(settingsRes || {});
+      } catch (error) {
+        console.error("Failed to fetch homepage data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const avgRating = testimonials.length > 0
+    ? (testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length).toFixed(2)
+    : "5.00";
 
   const scrollTestimonials = (direction: "left" | "right") => {
     if (testimonialRef.current) {
@@ -115,6 +234,12 @@ export default function Home() {
       });
     }
   };
+
+  // Social media URLs from settings, with fallbacks
+  const facebookUrl = settings.facebookUrl || "https://facebook.com/yaziciatolye";
+  const instagramUrl = settings.instagramUrl || "https://instagram.com/yaziciatolye";
+  const youtubeUrl = settings.youtubeUrl || "https://youtube.com/@yaziciatolye";
+  const tiktokUrl = settings.tiktokUrl || "https://tiktok.com/@yaziciatolye";
 
   return (
     <div className="flex flex-col">
@@ -128,22 +253,31 @@ export default function Home() {
 
           {/* 4b. Üst Satır — 4'lü Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {categoryImages.map((cat) => (
-              <Link key={cat.name} href={cat.href} className="group relative aspect-square overflow-hidden bg-beige">
-                <Image
-                  src={cat.image}
-                  alt={cat.name}
-                  fill
-                  className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
-                  <span className="font-script text-2xl md:text-3xl text-white drop-shadow-lg">
-                    {cat.name}
-                  </span>
-                </div>
-              </Link>
-            ))}
+            {loading ? (
+              <>
+                <SkeletonCategory />
+                <SkeletonCategory />
+                <SkeletonCategory />
+                <SkeletonCategory />
+              </>
+            ) : categoryImages.length > 0 ? (
+              categoryImages.map((cat) => (
+                <Link key={cat.id} href={`/urunler?kategori=${cat.slug}`} className="group relative aspect-square overflow-hidden bg-beige">
+                  <Image
+                    src={cat.image}
+                    alt={cat.name}
+                    fill
+                    className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
+                    <span className="font-script text-2xl md:text-3xl text-white drop-shadow-lg">
+                      {cat.name}
+                    </span>
+                  </div>
+                </Link>
+              ))
+            ) : null}
           </div>
 
           {/* 4c. Alt Satır — 2'li Grid */}
@@ -174,9 +308,18 @@ export default function Home() {
           <h2 className="section-title mb-12">ÖNE ÇIKAN ÜRÜNLER</h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            {loading ? (
+              <>
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </>
+            ) : featuredProducts.length > 0 ? (
+              featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
+            ) : null}
           </div>
 
           <div className="text-center mt-10">
@@ -209,9 +352,18 @@ export default function Home() {
           <h2 className="section-title mb-12">YÜZÜKLER</h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {ringProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            {loading ? (
+              <>
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </>
+            ) : ringProducts.length > 0 ? (
+              ringProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
+            ) : null}
           </div>
 
           <div className="text-center mt-10">
@@ -305,22 +457,30 @@ export default function Home() {
               </div>
 
               {/* Yorum kartları */}
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="flex-shrink-0 w-72 snap-start bg-white border border-border p-5">
-                  <div className="flex items-center justify-between mb-3">
-                    <StarRating rating={testimonial.rating} />
-                    {testimonial.verified && (
-                      <span className="text-[10px] text-blue-500 font-sans flex items-center gap-1">
-                        ✓ Doğrulanmış
-                      </span>
-                    )}
+              {loading ? (
+                <>
+                  <SkeletonTestimonial />
+                  <SkeletonTestimonial />
+                  <SkeletonTestimonial />
+                </>
+              ) : (
+                testimonials.map((testimonial, index) => (
+                  <div key={testimonial.id || index} className="flex-shrink-0 w-72 snap-start bg-white border border-border p-5">
+                    <div className="flex items-center justify-between mb-3">
+                      <StarRating rating={testimonial.rating} />
+                      {testimonial.verified && (
+                        <span className="text-[10px] text-blue-500 font-sans flex items-center gap-1">
+                          ✓ Doğrulanmış
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-2 font-sans">{testimonial.date}</p>
+                    <h4 className="font-sans font-semibold text-sm mb-2">{testimonial.title}</h4>
+                    <p className="text-sm text-muted-foreground font-sans line-clamp-3">{testimonial.comment}</p>
+                    <p className="text-xs text-foreground font-sans font-medium mt-3">— {testimonial.name}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground mb-2 font-sans">{testimonial.date}</p>
-                  <h4 className="font-sans font-semibold text-sm mb-2">{testimonial.title}</h4>
-                  <p className="text-sm text-muted-foreground font-sans line-clamp-3">{testimonial.comment}</p>
-                  <p className="text-xs text-foreground font-sans font-medium mt-3">— {testimonial.name}</p>
-                </div>
-              ))}
+                ))
+              )}
             </div>
 
             <button
@@ -418,7 +578,7 @@ export default function Home() {
 
           <div className="flex items-center justify-center gap-6 mb-12">
             <a
-              href="https://facebook.com/yaziciatolye"
+              href={facebookUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="w-14 h-14 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
@@ -427,7 +587,7 @@ export default function Home() {
               <Facebook className="w-6 h-6" />
             </a>
             <a
-              href="https://instagram.com/yaziciatolye"
+              href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="w-14 h-14 rounded-full bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
@@ -436,7 +596,7 @@ export default function Home() {
               <Instagram className="w-6 h-6" />
             </a>
             <a
-              href="https://youtube.com/@yaziciatolye"
+              href={youtubeUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="w-14 h-14 rounded-full bg-[#FF0000] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
@@ -445,7 +605,7 @@ export default function Home() {
               <Youtube className="w-6 h-6" />
             </a>
             <a
-              href="https://tiktok.com/@yaziciatolye"
+              href={tiktokUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="w-14 h-14 rounded-full bg-black text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
@@ -462,7 +622,7 @@ export default function Home() {
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <a
                 key={i}
-                href="https://instagram.com/yaziciatolye"
+                href={instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="relative aspect-square bg-beige overflow-hidden group"

@@ -1,18 +1,35 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { Metadata } from "next";
+import { useState, useEffect } from "react";
 import { MapPin, Phone, Mail, Clock, Award, Shield, Gem, Heart } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Hakkimizda | Yazici Atolye",
-  description: "40 yili askin tecrubemiz ile buyuk kuyumculara toptan satis yapiyoruz. Simdi ayni kaliteyi, aracisiz fiyatlarla sizlere sunuyoruz.",
-  openGraph: {
-    title: "Hakkimizda | Yazici Atolye",
-    description: "40 yili askin tecrube, el isciligi ve atolyeden direkt size.",
-  },
-};
+interface SiteSettings {
+  phone?: string;
+  phone2?: string;
+  whatsapp?: string;
+  email?: string;
+  address?: string;
+  workingHours?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
+}
 
 export default function HakkimizdaPage() {
+  const [settings, setSettings] = useState<SiteSettings>({});
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => setSettings(data))
+      .catch((err) => console.error("Hakkimizda settings fetch error:", err));
+  }, []);
+
+  // Helper to strip non-digit characters for tel: and wa.me links
+  const phoneDigits = (val?: string) => val?.replace(/\D/g, "") || "";
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -189,8 +206,7 @@ export default function HakkimizdaPage() {
                   <div>
                     <h3 className="font-medium mb-1 text-white">Adres</h3>
                     <p className="text-white/70">
-                      Kapalıcarsı, Kuyumcular Caddesi No: 42<br />
-                      Fatih, Istanbul
+                      {settings.address || "Yukleniyor..."}
                     </p>
                   </div>
                 </div>
@@ -202,15 +218,17 @@ export default function HakkimizdaPage() {
                   <div>
                     <h3 className="font-medium mb-1 text-white">Telefon</h3>
                     <p className="text-white/70">
-                      <a href="tel:+902125551234" className="hover:text-[#C4A574] transition-colors">
-                        +90 (212) 555 12 34
+                      <a href={`tel:+${phoneDigits(settings.phone)}`} className="hover:text-[#C4A574] transition-colors">
+                        {settings.phone || "Yukleniyor..."}
                       </a>
                     </p>
-                    <p className="text-white/70">
-                      <a href="https://wa.me/905551234567" className="hover:text-[#C4A574] transition-colors">
-                        WhatsApp: +90 (555) 123 45 67
-                      </a>
-                    </p>
+                    {settings.whatsapp && (
+                      <p className="text-white/70">
+                        <a href={`https://wa.me/${phoneDigits(settings.whatsapp)}`} className="hover:text-[#C4A574] transition-colors">
+                          WhatsApp: {settings.whatsapp}
+                        </a>
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -221,8 +239,8 @@ export default function HakkimizdaPage() {
                   <div>
                     <h3 className="font-medium mb-1 text-white">E-posta</h3>
                     <p className="text-white/70">
-                      <a href="mailto:info@yaziciatolye.com" className="hover:text-[#C4A574] transition-colors">
-                        info@yaziciatolye.com
+                      <a href={`mailto:${settings.email || ""}`} className="hover:text-[#C4A574] transition-colors">
+                        {settings.email || "Yukleniyor..."}
                       </a>
                     </p>
                   </div>
@@ -235,8 +253,7 @@ export default function HakkimizdaPage() {
                   <div>
                     <h3 className="font-medium mb-1 text-white">Calisma Saatleri</h3>
                     <p className="text-white/70">
-                      Pazartesi - Cumartesi: 10:00 - 19:00<br />
-                      Pazar: Kapali
+                      {settings.workingHours || "Yukleniyor..."}
                     </p>
                   </div>
                 </div>

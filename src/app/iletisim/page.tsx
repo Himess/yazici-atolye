@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +13,19 @@ type FormErrors = {
   message?: string;
 };
 
+type SiteSettings = {
+  phone?: string;
+  phone2?: string;
+  whatsapp?: string;
+  email?: string;
+  address?: string;
+  workingHours?: string;
+  googleMapsUrl?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
+};
+
 export default function IletisimPage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -23,6 +36,28 @@ export default function IletisimPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [settingsLoading, setSettingsLoading] = useState(true);
+
+  // Fetch settings on mount
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const data = await res.json();
+          setSettings(data);
+        }
+      } catch (error) {
+        console.error('Ayarlar yuklenirken hata:', error);
+      } finally {
+        setSettingsLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -63,22 +98,55 @@ export default function IletisimPage() {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setSubmitError(null);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const res = await fetch('/api/forms', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          formType: 'iletisim',
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim() || null,
+          message: formData.message.trim(),
+        }),
+      });
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setFormData({ name: "", email: "", phone: "", message: "" });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Form gonderilemedi');
+      }
 
-    // Reset success message after 5 seconds
-    setTimeout(() => setIsSuccess(false), 5000);
+      setIsSuccess(true);
+      setFormData({ name: "", email: "", phone: "", message: "" });
+
+      // Reset success message after 5 seconds
+      setTimeout(() => setIsSuccess(false), 5000);
+    } catch (error) {
+      console.error('Form gonderme hatasi:', error);
+      setSubmitError(error instanceof Error ? error.message : 'Bir hata olustu. Lutfen tekrar deneyiniz.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const whatsappNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '902121234567';
 
   const handleWhatsApp = () => {
     const text = "Merhaba, Yazici Atolye ile iletisime gecmek istiyorum.";
-    window.open(`https://wa.me/902121234567?text=${encodeURIComponent(text)}`, "_blank");
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`, "_blank");
   };
+
+  // Display values with fallbacks
+  const displayPhone = settings?.phone || "+90 (212) 123 45 67";
+  const displayEmail = settings?.email || "info@yaziciatolye.com";
+  const displayAddress = settings?.address || "Istanbul, Turkiye";
+  const displayWorkingHours = settings?.workingHours || "Pazartesi - Cumartesi: 10:00 - 19:00";
+
+  // Build tel: href from phone (strip formatting for href)
+  const phoneHref = `tel:${(settings?.phone || "+902121234567").replace(/[^0-9+]/g, '')}`;
+  const emailHref = `mailto:${displayEmail}`;
 
   return (
     <div className="min-h-screen bg-muted">
@@ -106,6 +174,13 @@ export default function IletisimPage() {
                 <p className="text-green-800">
                   Mesajiniz alindi! En kisa surede size donecegiz.
                 </p>
+              </div>
+            )}
+
+            {submitError && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 text-red-600" />
+                <p className="text-red-800">{submitError}</p>
               </div>
             )}
 
@@ -230,7 +305,7 @@ export default function IletisimPage() {
                   <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-medium text-foreground">Adres</h4>
-                    <p className="text-muted-foreground">Istanbul, Turkiye</p>
+                    <p className="text-muted-foreground">{settingsLoading ? "Yukleniyor..." : displayAddress}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -238,10 +313,10 @@ export default function IletisimPage() {
                   <div>
                     <h4 className="font-medium text-foreground">Telefon</h4>
                     <a
-                      href="tel:+902121234567"
+                      href={phoneHref}
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      +90 (212) 123 45 67
+                      {settingsLoading ? "Yukleniyor..." : displayPhone}
                     </a>
                   </div>
                 </div>
@@ -250,10 +325,10 @@ export default function IletisimPage() {
                   <div>
                     <h4 className="font-medium text-foreground">E-posta</h4>
                     <a
-                      href="mailto:info@yaziciatolye.com"
+                      href={emailHref}
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      info@yaziciatolye.com
+                      {settingsLoading ? "Yukleniyor..." : displayEmail}
                     </a>
                   </div>
                 </div>
@@ -262,7 +337,7 @@ export default function IletisimPage() {
                   <div>
                     <h4 className="font-medium text-foreground">Calisma Saatleri</h4>
                     <p className="text-muted-foreground">
-                      Pazartesi - Cumartesi: 10:00 - 19:00
+                      {settingsLoading ? "Yukleniyor..." : displayWorkingHours}
                     </p>
                   </div>
                 </div>

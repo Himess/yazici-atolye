@@ -5,7 +5,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { getProductById, formatPrice, GoldColor } from "@/lib/products";
+import { formatPrice, GoldColor } from "@/lib/products";
 import { ColorSelector } from "@/components/color-selector";
 import { useCart } from "@/lib/cart-context";
 import { useFavorites } from "@/lib/favorites-context";
@@ -13,12 +13,66 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { Heart, Share2, ShoppingBag, ZoomIn, ChevronLeft, ChevronRight, X, Play, Shield, FileText, Package } from "lucide-react";
 
+type Stone = {
+  type: string;
+  count: number;
+  carat: number;
+  color: string;
+  clarity: string;
+  shape: string;
+};
+
+type ColorVariant = {
+  color: GoldColor;
+  label: string;
+  available: boolean;
+  images: string[];
+};
+
+type Product = {
+  id: string;
+  slug: string;
+  code: string;
+  name: string;
+  description: string;
+  about: string;
+  price: number;
+  oldPrice?: number;
+  category: string;
+  categoryLabel: string;
+  material: string;
+  weight: string;
+  purity: string;
+  stones: Stone[];
+  images: string[];
+  hoverImage?: string;
+  featured: boolean;
+  inStock: boolean;
+  colorVariants: ColorVariant[];
+  defaultColor: GoldColor;
+};
+
+type SiteSettings = {
+  phone?: string;
+  phone2?: string;
+  whatsapp?: string;
+  email?: string;
+  address?: string;
+  workingHours?: string;
+  googleMapsUrl?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
+};
+
 export default function UrunDetayPage() {
   const params = useParams();
   const id = params?.id as string;
 
-  // Get product synchronously using useMemo
-  const product = useMemo(() => getProductById(id), [id]);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFoundState, setNotFoundState] = useState(false);
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -27,11 +81,47 @@ export default function UrunDetayPage() {
   const { addToCart } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
 
-  // Renk seçimi
+  // Fetch product and settings
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [productRes, settingsRes] = await Promise.all([
+          fetch(`/api/products/${id}`),
+          fetch('/api/settings'),
+        ]);
+
+        if (!productRes.ok) {
+          setNotFoundState(true);
+          setLoading(false);
+          return;
+        }
+
+        const productData = await productRes.json();
+        setProduct(productData);
+
+        if (settingsRes.ok) {
+          const settingsData = await settingsRes.json();
+          setSettings(settingsData);
+        }
+      } catch (error) {
+        console.error('Veri yuklenirken hata:', error);
+        setNotFoundState(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  // Renk secimi
   const currentColor = selectedColor || (product?.defaultColor ?? "white");
   const currentVariant = product?.colorVariants?.find(v => v.color === currentColor && v.available);
 
-  // Tüm görseller (renk varyantına göre veya varsayılan)
+  // Tum gorseller (renk varyantina gore veya varsayilan)
   const allImages = useMemo(() => {
     if (!product) return [];
     if (currentVariant && currentVariant.images.length > 0) {
@@ -40,7 +130,7 @@ export default function UrunDetayPage() {
     return product.hoverImage ? [...product.images, product.hoverImage] : product.images;
   }, [product, currentVariant]);
 
-  // Klavye sağ/sol ok desteği
+  // Klavye sag/sol ok destegi
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!product || allImages.length === 0) return;
@@ -56,13 +146,25 @@ export default function UrunDetayPage() {
 
   const handleAddToCart = () => {
     if (product) {
-      addToCart(product, quantity);
+      addToCart(product as any, quantity);
     }
   };
 
   // Handle not found
-  if (!product) {
+  if (notFoundState) {
     notFound();
+  }
+
+  // Loading state
+  if (loading || !product) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">Urun yukleniyor...</p>
+        </div>
+      </div>
+    );
   }
 
   const favorite = isFavorite(product.id);
@@ -70,6 +172,8 @@ export default function UrunDetayPage() {
   const discountPercent = product.oldPrice
     ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
     : 0;
+
+  const whatsappNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '902121234567';
 
   const handleShare = () => {
     const text = `${product.name} - ${formatPrice(product.price)} | Yazici Atolye`;
@@ -80,7 +184,7 @@ export default function UrunDetayPage() {
 
   const handleWhatsApp = () => {
     const text = `Merhaba, "${product.name}" (Kod: ${product.code}) urunuyle ilgileniyorum. Detayli bilgi alabilir miyim?`;
-    const whatsappUrl = `https://wa.me/902121234567?text=${encodeURIComponent(text)}`;
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -101,7 +205,7 @@ export default function UrunDetayPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
           {/* Sol: Resim Galerisi */}
           <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4">
-            {/* Thumbnails - Mobilde altta, masaüstünde solda */}
+            {/* Thumbnails - Mobilde altta, masaustunde solda */}
             <div className="flex sm:flex-col gap-2 overflow-x-auto sm:overflow-visible pb-2 sm:pb-0 flex-shrink-0">
               {allImages.map((img, index) => {
                 const isHoverImage = product.hoverImage && img === product.hoverImage;
@@ -307,7 +411,7 @@ export default function UrunDetayPage() {
             {/* Urun Adi */}
             <h1 className="font-playfair text-xl sm:text-2xl lg:text-3xl font-bold text-stone-900 mb-4">{product.name}</h1>
 
-            {/* Renk Seçimi */}
+            {/* Renk Secimi */}
             {product.colorVariants && product.colorVariants.length > 0 && (
               <ColorSelector
                 variants={product.colorVariants}

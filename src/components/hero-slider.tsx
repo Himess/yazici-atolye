@@ -5,50 +5,50 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const slides = [
-  {
-    id: 1,
-    image: "/images/atolye-usta-1.png",
-    title: "40 Yıllık Tecrübe",
-    subtitle: "Atölyeden Size",
-    description: "40 yılı aşkın tecrübemiz ile atölyeden çıkan ürünlerimizi aracısız bir şekilde sizlere teslim ediyoruz.",
-    buttonText: "Koleksiyonu Keşfet",
-    buttonLink: "/urunler",
-    overlay: "dark",
-  },
-  {
-    id: 2,
-    image: "/images/yuzuk-2.png",
-    title: "Zarafetin ve Kalitenin",
-    subtitle: "Buluştuğu Yer",
-    description: "El yapımı, özenle tasarlanmış özel mücevherler",
-    buttonText: "Hemen Alışverişe Başla",
-    buttonLink: "/urunler",
-    overlay: "light",
-  },
-  {
-    id: 3,
-    image: "/images/kolye1-1.png",
-    title: "Eşsiz Tasarımlar",
-    subtitle: "Özel Anlarınız İçin",
-    description: "Her parça, uzman ustalarımız tarafından özenle el işçiliğiyle üretilir",
-    buttonText: "Kolyeleri İncele",
-    buttonLink: "/urunler?kategori=kolye",
-    overlay: "dark",
-  },
-];
+interface Slide {
+  id: number;
+  title: string;
+  subtitle: string;
+  image: string;
+  buttonText: string;
+  buttonUrl: string;
+  overlay: string;
+  order: number;
+  isActive: boolean;
+}
 
 export function HeroSlider() {
+  const [slides, setSlides] = useState<Slide[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  useEffect(() => {
+    async function fetchSlides() {
+      try {
+        const res = await fetch("/api/slides");
+        if (!res.ok) throw new Error("Failed to fetch slides");
+        const data: Slide[] = await res.json();
+        const activeSlides = data
+          .filter((s) => s.isActive)
+          .sort((a, b) => a.order - b.order);
+        setSlides(activeSlides);
+      } catch (error) {
+        console.error("Error fetching slides:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchSlides();
   }, []);
 
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % (slides.length || 1));
+  }, [slides.length]);
+
   const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  }, []);
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % (slides.length || 1));
+  }, [slides.length]);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -57,10 +57,10 @@ export function HeroSlider() {
   };
 
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    if (!isAutoPlaying || slides.length === 0) return;
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
-  }, [isAutoPlaying, nextSlide]);
+  }, [isAutoPlaying, nextSlide, slides.length]);
 
   // Touch/Swipe support
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -89,6 +89,27 @@ export function HeroSlider() {
       setTimeout(() => setIsAutoPlaying(true), 5000);
     }
   };
+
+  // Loading skeleton
+  if (loading) {
+    return (
+      <section className="relative w-full h-[50vh] md:h-[70vh] overflow-hidden bg-zinc-200 animate-pulse">
+        <div className="container mx-auto px-4 h-full flex items-center relative z-20">
+          <div className="max-w-xl space-y-4">
+            <div className="h-10 sm:h-14 bg-zinc-300 rounded w-3/4" />
+            <div className="h-10 sm:h-14 bg-zinc-300 rounded w-1/2" />
+            <div className="h-5 bg-zinc-300 rounded w-2/3 mt-4" />
+            <div className="h-12 bg-zinc-300 rounded w-48 mt-6" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // No slides available
+  if (slides.length === 0) {
+    return null;
+  }
 
   const slide = slides[currentSlide];
 
@@ -137,15 +158,8 @@ export function HeroSlider() {
             <br />
             {slide.subtitle}
           </h1>
-          <p
-            className={`text-sm sm:text-base mb-6 sm:mb-8 max-w-md tracking-wide font-sans ${
-              slide.overlay === "dark" ? "text-gray-200" : "text-muted-foreground"
-            }`}
-          >
-            {slide.description}
-          </p>
           <Link
-            href={slide.buttonLink}
+            href={slide.buttonUrl}
             className="inline-block bg-gold text-white px-8 py-3 text-sm tracking-wider uppercase font-sans font-medium hover:bg-dark transition-colors"
           >
             {slide.buttonText}

@@ -256,35 +256,39 @@ export default function Home() {
         </p>
       </section>
 
-      {/* KOLEKSİYON RESİM 1 — Tam Ekran */}
-      <section className="relative w-full h-screen overflow-hidden">
-        <Image
-          src="/images/kuyumcu-1.jpeg"
-          alt="Yazıcı Atölye Koleksiyon 1"
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
-        {/* Aşağı kaydırma oku */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce">
-          <span className="text-white/80 text-xs font-sans tracking-widest uppercase mb-2">Kaydır</span>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
-            <path d="M12 5v14M19 12l-7 7-7-7" />
-          </svg>
+      {/* KOLEKSİYON RESİM 1 — Sticky Scroll (2 ekran boyunca sabit kalır) */}
+      <div style={{ height: "250vh" }} className="relative">
+        <div className="sticky top-0 h-screen w-full overflow-hidden">
+          <Image
+            src="/images/kuyumcu-1.jpeg"
+            alt="Yazıcı Atölye Koleksiyon 1"
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
+          {/* Aşağı kaydırma oku */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce">
+            <span className="text-white/80 text-xs font-sans tracking-widest uppercase mb-2">Kaydır</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
+              <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* KOLEKSİYON RESİM 2 — Tam Ekran */}
-      <section className="relative w-full h-screen overflow-hidden">
-        <Image
-          src="/images/kuyumcu-2.jpeg"
-          alt="Yazıcı Atölye Koleksiyon 2"
-          fill
-          className="object-cover"
-          sizes="100vw"
-        />
-      </section>
+      {/* KOLEKSİYON RESİM 2 — Sticky Scroll (2 ekran boyunca sabit kalır) */}
+      <div style={{ height: "250vh" }} className="relative">
+        <div className="sticky top-0 h-screen w-full overflow-hidden">
+          <Image
+            src="/images/kuyumcu-2.jpeg"
+            alt="Yazıcı Atölye Koleksiyon 2"
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
+      </div>
 
       {/* Öne Çıkan Ürünler */}
       <section className="py-16 bg-white">

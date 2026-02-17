@@ -246,20 +246,44 @@ export default function Home() {
       {/* Hero Slider */}
       <HeroSlider />
 
-      {/* PARALLAX BÖLÜM 1 — Kuyumcu 1 */}
-      <section
-        className="relative h-[70vh] md:h-[85vh] bg-fixed bg-center bg-cover bg-no-repeat"
-        style={{ backgroundImage: "url('/images/kuyumcu-1.jpeg')" }}
-      >
-        <div className="absolute inset-0 bg-black/20" />
+      {/* ÖZEL KOLEKSİYON BAŞLIK */}
+      <section className="py-16 md:py-20 bg-cream text-center">
+        <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-wide text-dark uppercase">
+          ÖZEL KOLEKSİYONLARIMIZ
+        </h2>
+        <p className="mt-4 text-muted-foreground font-sans text-base md:text-lg max-w-2xl mx-auto px-4">
+          40 yıllık ustalıkla, atölyemizden sizlere özel tasarımlar
+        </p>
       </section>
 
-      {/* PARALLAX BÖLÜM 2 — Kuyumcu 2 */}
-      <section
-        className="relative h-[70vh] md:h-[85vh] bg-fixed bg-center bg-cover bg-no-repeat"
-        style={{ backgroundImage: "url('/images/kuyumcu-2.jpeg')" }}
-      >
-        <div className="absolute inset-0 bg-black/20" />
+      {/* KOLEKSİYON RESİM 1 — Tam Ekran */}
+      <section className="relative w-full h-screen overflow-hidden">
+        <Image
+          src="/images/kuyumcu-1.jpeg"
+          alt="Yazıcı Atölye Koleksiyon 1"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+        {/* Aşağı kaydırma oku */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce">
+          <span className="text-white/80 text-xs font-sans tracking-widest uppercase mb-2">Kaydır</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
+            <path d="M12 5v14M19 12l-7 7-7-7" />
+          </svg>
+        </div>
+      </section>
+
+      {/* KOLEKSİYON RESİM 2 — Tam Ekran */}
+      <section className="relative w-full h-screen overflow-hidden">
+        <Image
+          src="/images/kuyumcu-2.jpeg"
+          alt="Yazıcı Atölye Koleksiyon 2"
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
       </section>
 
       {/* Öne Çıkan Ürünler */}

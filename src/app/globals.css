@@ -3,58 +3,55 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Gen-Z Jewellery - Modern Minimalist Design */
+/* Yazici Atolye - newone-shop.com Inspired Design */
 :root {
-  /* Brand Colors - Clean & Minimal */
+  /* Brand Colors */
+  --cream-bg: #F5F1EA;
+  --beige-section: #E9E1D6;
+  --gold-accent: #C6A25A;
+  --dark-text: #2B2B2B;
   --pure-white: #FFFFFF;
-  --jet-black: #000000;
-  --soft-black: #1A1A1A;
-  --warm-gray: #4A4A4A;
-  --light-gray: #F5F5F5;
-  --border-gray: #E5E5E5;
-  --caramel: #C4A574;
-  --warm-beige: #D4B896;
 
   /* Theme Variables */
   --radius: 0.25rem;
-  --background: #FFFFFF;
-  --foreground: #000000;
+  --background: #F5F1EA;
+  --foreground: #2B2B2B;
   --card: #FFFFFF;
-  --card-foreground: #000000;
+  --card-foreground: #2B2B2B;
   --popover: #FFFFFF;
-  --popover-foreground: #000000;
-  --primary: #000000;
+  --popover-foreground: #2B2B2B;
+  --primary: #2B2B2B;
   --primary-foreground: #FFFFFF;
-  --secondary: #F5F5F5;
-  --secondary-foreground: #000000;
-  --muted: #F5F5F5;
-  --muted-foreground: #4A4A4A;
-  --accent: #C4A574;
-  --accent-foreground: #000000;
+  --secondary: #E9E1D6;
+  --secondary-foreground: #2B2B2B;
+  --muted: #E9E1D6;
+  --muted-foreground: #6B6B6B;
+  --accent: #C6A25A;
+  --accent-foreground: #FFFFFF;
   --destructive: #DC2626;
-  --border: #E5E5E5;
-  --input: #E5E5E5;
-  --ring: #000000;
-  --chart-1: #000000;
-  --chart-2: #C4A574;
-  --chart-3: #4A4A4A;
-  --chart-4: #1A1A1A;
-  --chart-5: #F5F5F5;
-  --sidebar: #F5F5F5;
-  --sidebar-foreground: #000000;
-  --sidebar-primary: #000000;
+  --border: #D4CFC7;
+  --input: #D4CFC7;
+  --ring: #C6A25A;
+  --chart-1: #2B2B2B;
+  --chart-2: #C6A25A;
+  --chart-3: #6B6B6B;
+  --chart-4: #E9E1D6;
+  --chart-5: #F5F1EA;
+  --sidebar: #F5F1EA;
+  --sidebar-foreground: #2B2B2B;
+  --sidebar-primary: #2B2B2B;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #C4A574;
-  --sidebar-accent-foreground: #000000;
-  --sidebar-border: #E5E5E5;
-  --sidebar-ring: #000000;
+  --sidebar-accent: #C6A25A;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #D4CFC7;
+  --sidebar-ring: #C6A25A;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-montserrat);
+  --font-serif: var(--font-cormorant);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -93,12 +90,12 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   /* Custom Brand Colors */
-  --color-jet: #000000;
-  --color-soft-black: #1A1A1A;
-  --color-warm-gray: #4A4A4A;
-  --color-caramel: #C4A574;
-  --color-beige: #D4B896;
-  --color-light: #F5F5F5;
+  --color-cream: #F5F1EA;
+  --color-beige: #E9E1D6;
+  --color-gold: #C6A25A;
+  --color-dark: #2B2B2B;
+  --color-light: #F5F1EA;
+  --color-warm-gray: #6B6B6B;
 }
 
 @layer base {
@@ -106,10 +103,10 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans font-medium antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif text-foreground tracking-tight;
+    @apply font-serif font-bold text-foreground tracking-wide;
   }
 }
 
@@ -128,22 +125,22 @@
 
 /* Custom Button Styles */
 .btn-primary {
-  @apply bg-black text-white px-8 py-3 text-sm tracking-wider uppercase transition-all duration-300;
+  @apply bg-gold text-white px-8 py-3 text-sm tracking-wider uppercase transition-all duration-300 font-sans font-medium;
 }
 .btn-primary:hover {
-  @apply bg-warm-gray;
+  @apply bg-dark;
 }
 
 .btn-outline {
-  @apply bg-transparent border border-black text-black px-8 py-3 text-sm tracking-wider uppercase transition-all duration-300;
+  @apply bg-transparent border border-dark text-dark px-8 py-3 text-sm tracking-wider uppercase transition-all duration-300 font-sans font-medium;
 }
 .btn-outline:hover {
-  @apply bg-black text-white;
+  @apply bg-dark text-white;
 }
 
 /* Section Titles */
 .section-title {
-  @apply text-center text-2xl md:text-3xl font-serif tracking-wide;
+  @apply text-center text-2xl md:text-3xl font-serif font-bold tracking-wide uppercase;
 }
 
 .section-line {
@@ -166,7 +163,7 @@
 
 /* Discount Badge */
 .discount-badge {
-  @apply absolute top-3 left-3 bg-black text-white text-xs px-2 py-1 font-medium;
+  @apply absolute top-3 left-3 bg-gold text-white text-xs px-2 py-1 font-medium;
 }
 
 /* Smooth transitions */
@@ -207,7 +204,7 @@
   @apply text-center p-4 transition-all duration-300 cursor-pointer;
 }
 .price-card:hover {
-  @apply bg-light;
+  @apply bg-beige;
 }
 
 /* Trust Icons */
@@ -216,7 +213,7 @@
 }
 
 .trust-icon svg {
-  @apply w-8 h-8 mb-3 text-caramel;
+  @apply w-8 h-8 mb-3 text-gold;
 }
 
 /* Clothesline effect for testimonials */

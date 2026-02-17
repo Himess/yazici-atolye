@@ -1,89 +1,145 @@
+"use client";
+
 import Link from "next/link";
-import Image from "next/image";
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, Facebook, Instagram, Youtube } from "lucide-react";
 
 export function Footer() {
+  const [email, setEmail] = useState("");
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim()) {
+      alert("Bültenimize kaydınız alındı!");
+      setEmail("");
+    }
+  };
+
   return (
-    <footer className="bg-[#1A1A1A] text-white">
+    <footer className="bg-cream text-dark">
+      {/* Üst Kısım — 4 Kolon */}
       <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          {/* Hakkimizda */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Kolon 1: HAKKIMIZDA */}
           <div>
-            <h4 className="text-sm font-medium uppercase tracking-wider mb-6 text-white">Hakkimizda</h4>
-            <p className="text-sm text-gray-400 leading-relaxed">
-              El yapimi takilar ve ozel tasarim mucevherat. Her parca ozenle ve sevgiyle uretilir.
-              Kalite ve zarafetin bulustugu adres.
-            </p>
+            <h4 className="text-xs font-sans font-bold uppercase tracking-[0.2em] mb-6">HAKKIMIZDA</h4>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/hakkimizda" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  Hakkımızda
+                </Link>
+              </li>
+              <li>
+                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  Mağazalar
+                </Link>
+              </li>
+              <li>
+                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  İletişim
+                </Link>
+              </li>
+            </ul>
+            {/* Sosyal Medya */}
             <div className="flex items-center gap-4 mt-6">
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Facebook">
+              <a href="https://facebook.com/yaziciatolye" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-gold transition-colors" aria-label="Facebook">
                 <Facebook className="w-4 h-4" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Twitter">
-                <Twitter className="w-4 h-4" />
-              </Link>
-              <Link href="https://instagram.com/yaziciatolye" className="text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
+              </a>
+              <a href="https://instagram.com/yaziciatolye" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-gold transition-colors" aria-label="Instagram">
                 <Instagram className="w-4 h-4" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn">
-                <Linkedin className="w-4 h-4" />
-              </Link>
+              </a>
+              <a href="https://youtube.com/@yaziciatolye" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-gold transition-colors" aria-label="YouTube">
+                <Youtube className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
-          {/* Menu */}
+          {/* Kolon 2: HİZMETLER */}
           <div>
-            <h4 className="text-sm font-medium uppercase tracking-wider mb-6 text-white">Menu</h4>
-            <ul className="space-y-3 text-sm">
-              <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Ana Sayfa</Link></li>
-              <li><Link href="/urunler?kategori=kolye" className="text-gray-400 hover:text-white transition-colors">Kolyeler</Link></li>
-              <li><Link href="/urunler?kategori=bileklik" className="text-gray-400 hover:text-white transition-colors">Bileklikler</Link></li>
-              <li><Link href="/urunler?kategori=yuzuk" className="text-gray-400 hover:text-white transition-colors">Yuzukler</Link></li>
-              <li><Link href="/urunler?kategori=kupe" className="text-gray-400 hover:text-white transition-colors">Kupeler</Link></li>
+            <h4 className="text-xs font-sans font-bold uppercase tracking-[0.2em] mb-6">HİZMETLER</h4>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  Kullanım Koşulları
+                </Link>
+              </li>
+              <li>
+                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  Kargo &amp; Teslimat
+                </Link>
+              </li>
+              <li>
+                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  İade &amp; Değişim
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Destek */}
+          {/* Kolon 3: BİLGİLER */}
           <div>
-            <h4 className="text-sm font-medium uppercase tracking-wider mb-6 text-white">Destek</h4>
-            <ul className="space-y-3 text-sm">
-              <li><Link href="/iletisim" className="text-gray-400 hover:text-white transition-colors">Sikca Sorulan Sorular</Link></li>
-              <li><Link href="/iletisim" className="text-gray-400 hover:text-white transition-colors">Iade ve Degisim</Link></li>
-              <li><Link href="/iletisim" className="text-gray-400 hover:text-white transition-colors">Gizlilik Politikasi</Link></li>
-              <li><Link href="/iletisim" className="text-gray-400 hover:text-white transition-colors">Kullanim Kosullari</Link></li>
-              <li><Link href="/iletisim" className="text-gray-400 hover:text-white transition-colors">Siparis Takibi</Link></li>
+            <h4 className="text-xs font-sans font-bold uppercase tracking-[0.2em] mb-6">BİLGİLER</h4>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  SSS
+                </Link>
+              </li>
+              <li>
+                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  Beden &amp; Ölçü Bilgisi
+                </Link>
+              </li>
+              <li>
+                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  Takı Bakımı
+                </Link>
+              </li>
+              <li>
+                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  Gizlilik Politikası
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Iletisim */}
+          {/* Kolon 4: BÜLTEN */}
           <div>
-            <h4 className="text-sm font-medium uppercase tracking-wider mb-6 text-white">7/24 Ulasim</h4>
-            <p className="text-sm text-gray-400 leading-relaxed mb-4">
-              Sorulariniz icin bize e-posta ile ulasabilirsiniz. Her turlu talebiniz icin yardimci olmaktan mutluluk duyariz.
+            <h4 className="text-xs font-sans font-bold uppercase tracking-[0.2em] mb-6">BÜLTEN</h4>
+            <p className="text-sm font-sans text-muted-foreground mb-4">
+              Topluluğumuza katılın, yeni ürünlerden ve kampanyalardan haberdar olun.
             </p>
-            <Link href="mailto:info@yaziciatolye.com" className="text-[#C4A574] hover:underline text-sm">
-              info@yaziciatolye.com
-            </Link>
-            <p className="text-sm text-gray-400 mt-4">
-              Tel: +90 (212) 123 45 67
-            </p>
+            <form onSubmit={handleNewsletterSubmit} className="flex items-center border-b border-foreground">
+              <input
+                type="email"
+                placeholder="E-posta adresiniz"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 py-2 text-sm bg-transparent focus:outline-none font-sans placeholder:text-muted-foreground"
+                required
+              />
+              <button type="submit" className="p-2 text-foreground hover:text-gold transition-colors" aria-label="Gönder">
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </form>
           </div>
         </div>
       </div>
 
       {/* Alt Bar */}
-      <div className="border-t border-gray-800">
+      <div className="border-t border-border">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-gray-500">
-              &copy; {new Date().getFullYear()} Yazici Atolye. Tum haklari saklidir.
+            <p className="text-xs text-muted-foreground font-sans">
+              &copy; {new Date().getFullYear()} Yazıcı Atölye. Tüm hakları saklıdır.
             </p>
 
-            {/* Odeme Ikonlari */}
-            <div className="flex items-center gap-3 text-gray-500 text-xs">
-              <span>Guvenli Odeme:</span>
-              <span className="bg-gray-700 px-2 py-1 rounded">VISA</span>
-              <span className="bg-gray-700 px-2 py-1 rounded">MC</span>
-              <span className="bg-gray-700 px-2 py-1 rounded">TROY</span>
+            {/* Ödeme İkonları */}
+            <div className="flex items-center gap-3 text-muted-foreground text-xs font-sans">
+              <span>Güvenli Ödeme:</span>
+              <span className="bg-white px-2 py-1 text-foreground font-medium">VISA</span>
+              <span className="bg-white px-2 py-1 text-foreground font-medium">MC</span>
+              <span className="bg-white px-2 py-1 text-foreground font-medium">TROY</span>
             </div>
           </div>
         </div>

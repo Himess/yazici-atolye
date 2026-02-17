@@ -23,15 +23,14 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link href={`/urun/${product.id}`}>
       <div
-        className="group cursor-pointer product-card"
+        className="group cursor-pointer product-card bg-white"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Image Container */}
-        <div className="aspect-square bg-[#F5F5F5] relative overflow-hidden">
+        <div className="aspect-square bg-cream relative overflow-hidden">
           {product.images[0]?.includes("/images/") ? (
             <>
-              {/* Main Image */}
               <Image
                 src={product.images[0]}
                 alt={product.name}
@@ -43,11 +42,10 @@ export function ProductCard({ product }: ProductCardProps) {
                     : "opacity-100 scale-100"
                 }`}
               />
-              {/* Hover Image */}
               {product.hoverImage && (
                 <Image
                   src={product.hoverImage}
-                  alt={`${product.name} - Detail`}
+                  alt={`${product.name} - Detay`}
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                   className={`object-cover transition-all duration-500 ${
@@ -58,66 +56,52 @@ export function ProductCard({ product }: ProductCardProps) {
             </>
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-24 h-24 rounded-full bg-gray-200" />
+              <div className="w-24 h-24 rounded-full bg-beige" />
             </div>
           )}
 
-          {/* Discount Badge - Top Left */}
-          {product.oldPrice && (
-            <div className="absolute top-3 left-3 z-10">
-              <span className="discount-badge">
-                {discountPercent}% off
+          {/* Badges - Sol Üst */}
+          <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
+            {product.oldPrice && (
+              <span className="bg-gold text-white text-xs px-2 py-1 font-sans font-medium">
+                %{discountPercent}
               </span>
-            </div>
-          )}
+            )}
+          </div>
 
-          {/* Favorite Button - Top Right */}
+          {/* Favorite Button - Sağ Üst */}
           <button
             className={`absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full transition-all ${
               favorite
-                ? "bg-black text-white"
-                : "bg-white/80 text-black hover:bg-white"
+                ? "bg-gold text-white"
+                : "bg-white/80 text-dark hover:bg-white"
             }`}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               toggleFavorite(product.id);
             }}
-            aria-label={favorite ? "Favorilerden cikar" : "Favorilere ekle"}
+            aria-label={favorite ? "Favorilerden çıkar" : "Favorilere ekle"}
           >
             <Heart
               className={`w-4 h-4 ${favorite ? "fill-current" : ""}`}
             />
           </button>
-
-          {/* Hizli Bakis - Hover */}
-          <div
-            className={`absolute bottom-0 left-0 right-0 bg-black text-white text-center py-2 text-xs tracking-wider uppercase transition-all duration-300 ${
-              isHovered ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
-            }`}
-          >
-            Hizli Bakis
-          </div>
         </div>
 
         {/* Product Info */}
         <div className="pt-4 pb-2">
-          <h3 className="text-sm font-medium text-foreground group-hover:text-muted-foreground transition-colors line-clamp-1">
+          <h3 className="text-[13px] font-sans font-medium text-foreground group-hover:text-gold transition-colors line-clamp-1">
             {product.name}
           </h3>
 
           <div className="flex items-center gap-2 mt-2">
-            <p className="text-sm font-medium text-foreground">
+            <p className="text-sm font-sans font-medium text-foreground">
               {formatPrice(product.price)}
             </p>
             {product.oldPrice && (
-              <span className="text-xs text-muted-foreground line-through">
+              <span className="text-xs font-sans text-muted-foreground line-through">
                 {formatPrice(product.oldPrice)}
-              </span>
-            )}
-            {product.oldPrice && (
-              <span className="text-xs text-red-500">
-                ({discountPercent}%)
               </span>
             )}
           </div>

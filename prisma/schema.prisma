@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model SiteSettings {
+  id            String  @id @default("settings")
+  phone         String?
+  phone2        String?
+  whatsapp      String?
+  email         String?
+  address       String?
+  workingHours  String?
+  googleMapsUrl String?
+  facebookUrl   String?
+  instagramUrl  String?
+  youtubeUrl    String?
+  tiktokUrl     String?
+  pinterestUrl  String?
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  code          String?
+  description   String?
+  about         String?
+  price         Float
+  oldPrice      Float?
+  category      String
+  categoryLabel String?
+  material      String?
+  weight        String?
+  purity        String?
+  stones        String?
+  images        String?
+  hoverImage    String?
+  colorVariants String?
+  defaultColor  String?
+  featured      Boolean  @default(false)
+  inStock       Boolean  @default(true)
+  order         Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Slide {
+  id         String  @id @default(cuid())
+  title      String?
+  subtitle   String?
+  image      String
+  buttonText String?
+  buttonUrl  String?
+  overlay    String  @default("dark")
+  order      Int     @default(0)
+  isActive   Boolean @default(true)
+}
+
+model Category {
+  id       String  @id @default(cuid())
+  name     String
+  slug     String  @unique
+  image    String?
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  rating    Int      @default(5)
+  title     String?
+  comment   String
+  date      String?
+  verified  Boolean  @default(false)
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model FormSubmission {
+  id        String   @id @default(cuid())
+  formType  String
+  name      String
+  phone     String?
+  email     String?
+  message   String?
+  productId String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model PageContent {
+  id        String   @id @default(cuid())
+  page      String
+  section   String
+  key       String
+  value     String
+  type      String   @default("text")
+  order     Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([page, section, key])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}

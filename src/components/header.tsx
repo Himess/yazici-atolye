@@ -24,37 +24,57 @@ import {
 
 const navItems = [
   {
-    name: "Takılar",
+    name: "YENİ ÜRÜNLER",
+    href: "/urunler?siralama=yeni",
+    hasDropdown: false,
+  },
+  {
+    name: "TAKILAR",
     href: "/urunler",
     hasDropdown: true,
     dropdownItems: [
-      { name: "Tum Urunler", href: "/urunler" },
-      { name: "Yuzukler", href: "/urunler?kategori=yuzuk" },
+      { name: "Yüzükler", href: "/urunler?kategori=yuzuk" },
       { name: "Kolyeler", href: "/urunler?kategori=kolye" },
-      { name: "Kupeler", href: "/urunler?kategori=kupe" },
+      { name: "Küpeler", href: "/urunler?kategori=kupe" },
       { name: "Bileklikler", href: "/urunler?kategori=bileklik" },
-    ]
+      { name: "Tümü", href: "/urunler" },
+    ],
   },
   {
-    name: "Koleksiyonlar",
+    name: "ÇOK SATANLAR",
+    href: "/urunler?siralama=cok-satan",
+    hasDropdown: false,
+  },
+  {
+    name: "ÖZEL TAKILAR",
+    href: "/urunler?tip=ozel",
+    hasDropdown: false,
+  },
+  {
+    name: "KOLEKSİYONLAR",
     href: "/urunler?koleksiyon=all",
     hasDropdown: true,
     dropdownItems: [
-      { name: "Yeni Gelenler", href: "/urunler?siralama=yeni" },
-      { name: "Cok Satanlar", href: "/urunler?siralama=cok-satan" },
-      { name: "Pirlanta Serisi", href: "/urunler?tip=pirlanta" },
+      { name: "Yeni Sezon", href: "/urunler?siralama=yeni" },
+      { name: "Pırlanta Serisi", href: "/urunler?tip=pirlanta" },
       { name: "Alyans Koleksiyonu", href: "/urunler?tip=alyans" },
-    ]
+    ],
   },
   {
-    name: "Hakkimizda",
+    name: "HAKKIMIZDA",
     href: "/hakkimizda",
-    hasDropdown: false
+    hasDropdown: false,
   },
   {
-    name: "Favoriler",
-    href: "/favoriler",
-    hasDropdown: false
+    name: "İLETİŞİM",
+    href: "/iletisim",
+    hasDropdown: false,
+  },
+  {
+    name: "İNDİRİM",
+    href: "/urunler?indirimli=true",
+    hasDropdown: false,
+    highlight: true,
   },
 ];
 
@@ -68,8 +88,9 @@ export function Header() {
   const { favorites } = useFavorites();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
+  const headerSearchRef = useRef<HTMLInputElement>(null);
+  const [headerSearchQuery, setHeaderSearchQuery] = useState("");
 
-  // Close search results when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -86,143 +107,34 @@ export function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [clearSearch]);
 
+  const handleHeaderSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (headerSearchQuery.trim()) {
+      setSearchQuery(headerSearchQuery);
+      setIsSearchOpen(true);
+    }
+  };
+
   return (
     <>
-      {/* Ust Bar - Kampanya */}
-      <div className="bg-black text-white text-xs tracking-wider">
-        <div className="container mx-auto px-4 py-2.5 flex items-center justify-center">
-          <span className="flex items-center gap-2">
-            <span className="hidden sm:inline">500 TL ustu siparislerde ucretsiz kargo</span>
-            <span className="sm:hidden">500 TL ustu ucretsiz kargo</span>
-            <span className="text-[#C4A574]">|</span>
-            <Link href="/urunler?indirimli=true" className="hover:text-[#C4A574] transition-colors underline underline-offset-2">
-              Hemen Alisverise Basla
-            </Link>
+      {/* 2a. Üst İnce Bar (Announcement Bar) */}
+      <div className="bg-beige text-dark">
+        <div className="container mx-auto px-4 py-2 flex items-center justify-between">
+          <span className="text-[11px] tracking-[0.15em] uppercase font-sans font-medium">
+            30 GÜN İADE GARANTİSİ
+          </span>
+          <span className="text-[11px] tracking-[0.15em] uppercase font-sans font-medium">
+            24 SAAT İÇİNDE KARGODA
           </span>
         </div>
       </div>
 
-      {/* Ana Header */}
-      <header className="sticky top-0 z-50 w-full bg-white border-b border-border">
+      {/* 2b. Ana Header */}
+      <div className="bg-white border-b border-border">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16 md:h-20">
-
-            {/* Sol - Navigasyon (Desktop) */}
-            <nav className="hidden lg:flex items-center gap-8">
-              {navItems.map((item) => (
-                <div
-                  key={item.name}
-                  className="relative"
-                  onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.name)}
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-1 text-sm tracking-wide text-foreground hover:text-muted-foreground transition-colors py-2"
-                  >
-                    {item.name}
-                    {item.hasDropdown && <ChevronDown className="w-3 h-3" />}
-                  </Link>
-
-                  {/* Dropdown */}
-                  {item.hasDropdown && activeDropdown === item.name && (
-                    <div className="absolute top-full left-0 pt-2 w-48">
-                      <div className="bg-white border border-border shadow-lg py-2">
-                        {item.dropdownItems?.map((dropItem) => (
-                          <Link
-                            key={dropItem.name}
-                            href={dropItem.href}
-                            className="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
-                          >
-                            {dropItem.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </nav>
-
-            {/* Mobil Menu Butonu */}
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild className="lg:hidden">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-foreground hover:text-muted-foreground"
-                  aria-label="Menu"
-                >
-                  <Menu className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent
-                side="left"
-                className="w-[300px] bg-white p-0"
-              >
-                <div className="flex flex-col h-full">
-                  <div className="p-6 border-b border-border">
-                    <Link href="/" onClick={() => setIsOpen(false)}>
-                      <Image
-                        src="/images/logo-dark.png"
-                        alt="Yazici Atolye"
-                        width={120}
-                        height={48}
-                        className="h-10 w-auto"
-                      />
-                    </Link>
-                  </div>
-
-                  <nav className="flex-1 overflow-y-auto py-6">
-                    {navItems.map((item) => (
-                      <div key={item.name} className="px-6">
-                        <Link
-                          href={item.href}
-                          onClick={() => setIsOpen(false)}
-                          className="block py-3 text-lg font-medium text-foreground hover:text-muted-foreground border-b border-border"
-                        >
-                          {item.name}
-                        </Link>
-                        {item.hasDropdown && (
-                          <div className="pl-4 py-2">
-                            {item.dropdownItems?.map((dropItem) => (
-                              <Link
-                                key={dropItem.name}
-                                href={dropItem.href}
-                                onClick={() => setIsOpen(false)}
-                                className="block py-2 text-sm text-muted-foreground hover:text-foreground"
-                              >
-                                {dropItem.name}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-
-                    <div className="px-6 pt-6 border-t border-border mt-6">
-                      <Link
-                        href="/hakkimizda"
-                        onClick={() => setIsOpen(false)}
-                        className="block py-3 text-foreground hover:text-muted-foreground"
-                      >
-                        Hakkimizda
-                      </Link>
-                      <Link
-                        href="/iletisim"
-                        onClick={() => setIsOpen(false)}
-                        className="block py-3 text-foreground hover:text-muted-foreground"
-                      >
-                        Iletisim
-                      </Link>
-                    </div>
-                  </nav>
-                </div>
-              </SheetContent>
-            </Sheet>
-
-            {/* Orta - Logo */}
-            <Link href="/" className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 lg:mx-auto">
+            {/* Sol - Logo */}
+            <Link href="/" className="flex-shrink-0">
               <Image
                 src="/images/logo-dark.png"
                 alt="Yazici Atolye"
@@ -233,26 +145,53 @@ export function Header() {
               />
             </Link>
 
-            {/* Sag - Ikonlar */}
-            <div className="flex items-center gap-1 sm:gap-2">
-              {/* Arama */}
+            {/* Orta - Search Bar (Desktop) */}
+            <form onSubmit={handleHeaderSearch} className="hidden lg:flex items-center flex-1 max-w-xl mx-8">
+              <div className="flex items-center w-full border border-border rounded-none">
+                <div className="flex items-center px-3 border-r border-border">
+                  <Search className="w-4 h-4 text-muted-foreground" />
+                </div>
+                <input
+                  ref={headerSearchRef}
+                  type="text"
+                  placeholder="Tüm Mağazada Ara..."
+                  value={headerSearchQuery}
+                  onChange={(e) => {
+                    setHeaderSearchQuery(e.target.value);
+                    if (e.target.value.length > 2) {
+                      setSearchQuery(e.target.value);
+                    }
+                  }}
+                  onFocus={() => {
+                    if (headerSearchQuery.length > 2) {
+                      setIsSearchOpen(true);
+                    }
+                  }}
+                  className="w-full px-4 py-2.5 text-sm bg-transparent focus:outline-none placeholder:text-muted-foreground font-sans"
+                />
+              </div>
+            </form>
+
+            {/* Sağ - İkonlar */}
+            <div className="flex items-center gap-1 sm:gap-4">
+              {/* Mobil Arama */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="p-2 text-foreground hover:text-muted-foreground transition-colors"
+                className="lg:hidden p-2 text-foreground hover:text-gold transition-colors"
                 aria-label="Ara"
               >
                 <Search className="w-5 h-5" />
               </button>
 
-              {/* Kullanici */}
+              {/* Giriş Yap */}
               <button
                 onClick={() => setIsLoginOpen(true)}
-                className="p-2 text-foreground hover:text-muted-foreground transition-colors"
+                className="hidden sm:flex items-center gap-1.5 p-2 text-foreground hover:text-gold transition-colors"
                 title={user ? user.name : "Giris Yap"}
                 aria-label={user ? `Hesabim: ${user.name}` : "Giris Yap"}
               >
                 {user ? (
-                  <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center">
+                  <div className="w-5 h-5 bg-gold rounded-full flex items-center justify-center">
                     <span className="text-[10px] font-medium text-white">
                       {user.name.charAt(0).toUpperCase()}
                     </span>
@@ -260,31 +199,40 @@ export function Header() {
                 ) : (
                   <User className="w-5 h-5" />
                 )}
+                <span className="text-[11px] tracking-[0.1em] uppercase font-sans font-medium hidden md:inline">
+                  {user ? user.name : "GİRİŞ YAP"}
+                </span>
               </button>
 
               {/* Favoriler */}
               <Link
                 href="/favoriler"
-                className="hidden sm:block p-2 text-foreground hover:text-muted-foreground transition-colors relative"
+                className="hidden sm:flex items-center gap-1.5 p-2 text-foreground hover:text-gold transition-colors relative"
                 aria-label={`Favoriler (${favorites.length} urun)`}
               >
                 <Heart className="w-5 h-5" />
+                <span className="text-[11px] tracking-[0.1em] uppercase font-sans font-medium hidden md:inline">
+                  FAVORİLER
+                </span>
                 {favorites.length > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-black text-white text-[10px] font-medium rounded-full flex items-center justify-center">
+                  <span className="absolute -top-0.5 left-4 md:left-auto md:-top-0.5 md:-right-1 w-4 h-4 bg-gold text-white text-[10px] font-medium rounded-full flex items-center justify-center">
                     {favorites.length}
                   </span>
                 )}
               </Link>
 
-              {/* Sepet */}
+              {/* Sepetim */}
               <button
                 onClick={() => setIsCartOpen(true)}
-                className="p-2 text-foreground hover:text-muted-foreground transition-colors relative"
+                className="flex items-center gap-1.5 p-2 text-foreground hover:text-gold transition-colors relative"
                 aria-label={`Sepet (${totalItems} urun)`}
               >
                 <ShoppingBag className="w-5 h-5" />
+                <span className="text-[11px] tracking-[0.1em] uppercase font-sans font-medium hidden md:inline">
+                  SEPETİM
+                </span>
                 {totalItems > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-black text-white text-[10px] font-medium rounded-full flex items-center justify-center">
+                  <span className="absolute -top-0.5 left-4 md:left-auto md:-top-0.5 md:-right-1 w-4 h-4 bg-gold text-white text-[10px] font-medium rounded-full flex items-center justify-center">
                     {totalItems}
                   </span>
                 )}
@@ -292,25 +240,206 @@ export function Header() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Arama Overlay */}
-        {isSearchOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white border-b border-border shadow-lg">
+      {/* 2c. Navigation Bar (Desktop) */}
+      <nav className="hidden lg:block bg-white border-b border-border sticky top-0 z-50">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-0">
+            {navItems.map((item) => (
+              <div
+                key={item.name}
+                className="relative"
+                onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.name)}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <Link
+                  href={item.href}
+                  className={`flex items-center gap-1 px-4 py-4 text-[13px] tracking-[0.15em] uppercase font-sans font-medium transition-colors relative group
+                    ${item.highlight ? "text-gold" : "text-foreground hover:text-gold"}`}
+                >
+                  {item.name}
+                  {item.hasDropdown && <ChevronDown className="w-3 h-3" />}
+                  {/* Hover underline */}
+                  <span className={`absolute bottom-0 left-4 right-4 h-0.5 transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100 ${item.highlight ? "bg-gold" : "bg-gold"}`} />
+                </Link>
+
+                {/* Dropdown */}
+                {item.hasDropdown && activeDropdown === item.name && (
+                  <div className="absolute top-full left-0 pt-0 w-52 z-50">
+                    <div className="bg-white border border-border shadow-lg py-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                      {item.dropdownItems?.map((dropItem) => (
+                        <Link
+                          key={dropItem.name}
+                          href={dropItem.href}
+                          className="block px-5 py-2.5 text-sm font-sans text-foreground hover:text-gold hover:bg-cream transition-colors"
+                        >
+                          {dropItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </nav>
+
+      {/* 2d. Mobil Header - Hamburger + Logo + Sepet */}
+      <div className="lg:hidden sticky top-0 z-50 bg-white border-b border-border">
+        <div className="flex items-center justify-between px-4 h-12">
+          {/* Hamburger */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-foreground hover:text-gold -ml-2"
+                aria-label="Menu"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="left"
+              className="w-[300px] bg-white p-0"
+            >
+              <div className="flex flex-col h-full">
+                <div className="p-6 border-b border-border">
+                  <Link href="/" onClick={() => setIsOpen(false)}>
+                    <Image
+                      src="/images/logo-dark.png"
+                      alt="Yazici Atolye"
+                      width={120}
+                      height={48}
+                      className="h-10 w-auto"
+                    />
+                  </Link>
+                </div>
+
+                {/* Mobil Arama */}
+                <div className="px-6 py-4 border-b border-border">
+                  <form onSubmit={(e) => {
+                    e.preventDefault();
+                    setIsOpen(false);
+                    if (headerSearchQuery.trim()) {
+                      setSearchQuery(headerSearchQuery);
+                      setIsSearchOpen(true);
+                    }
+                  }}>
+                    <div className="flex items-center border border-border">
+                      <input
+                        type="text"
+                        placeholder="Ara..."
+                        value={headerSearchQuery}
+                        onChange={(e) => setHeaderSearchQuery(e.target.value)}
+                        className="w-full px-3 py-2 text-sm bg-transparent focus:outline-none font-sans"
+                      />
+                      <button type="submit" className="px-3 text-muted-foreground">
+                        <Search className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                <nav className="flex-1 overflow-y-auto py-4">
+                  {navItems.map((item) => (
+                    <div key={item.name} className="px-6">
+                      <Link
+                        href={item.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`block py-3 text-sm tracking-[0.1em] uppercase font-sans font-medium border-b border-border
+                          ${item.highlight ? "text-gold" : "text-foreground hover:text-gold"}`}
+                      >
+                        {item.name}
+                      </Link>
+                      {item.hasDropdown && (
+                        <div className="pl-4 py-1">
+                          {item.dropdownItems?.map((dropItem) => (
+                            <Link
+                              key={dropItem.name}
+                              href={dropItem.href}
+                              onClick={() => setIsOpen(false)}
+                              className="block py-2 text-sm text-muted-foreground hover:text-gold font-sans"
+                            >
+                              {dropItem.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+
+                  {/* Mobil Alt İşlemler */}
+                  <div className="px-6 pt-4 border-t border-border mt-4">
+                    <button
+                      onClick={() => { setIsOpen(false); setIsLoginOpen(true); }}
+                      className="flex items-center gap-2 py-3 text-sm font-sans text-foreground hover:text-gold w-full"
+                    >
+                      <User className="w-4 h-4" />
+                      {user ? user.name : "Giriş Yap"}
+                    </button>
+                    <Link
+                      href="/favoriler"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center gap-2 py-3 text-sm font-sans text-foreground hover:text-gold"
+                    >
+                      <Heart className="w-4 h-4" />
+                      Favoriler {favorites.length > 0 && `(${favorites.length})`}
+                    </Link>
+                  </div>
+                </nav>
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          {/* Logo (orta) */}
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2">
+            <Image
+              src="/images/logo-dark.png"
+              alt="Yazici Atolye"
+              width={100}
+              height={40}
+              className="h-8 w-auto"
+            />
+          </Link>
+
+          {/* Sepet (sağ) */}
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="p-2 text-foreground hover:text-gold transition-colors relative -mr-2"
+            aria-label={`Sepet (${totalItems} urun)`}
+          >
+            <ShoppingBag className="w-5 h-5" />
+            {totalItems > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-gold text-white text-[10px] font-medium rounded-full flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Arama Overlay */}
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-[60] bg-black/30" onClick={() => { clearSearch(); setIsSearchOpen(false); }}>
+          <div className="bg-white border-b border-border shadow-lg" onClick={(e) => e.stopPropagation()}>
             <div className="container mx-auto px-4 py-6">
               <div className="relative max-w-2xl mx-auto">
                 <input
                   ref={searchInputRef}
                   type="text"
-                  placeholder="Urun kodu ya da urun adi yaziniz..."
+                  placeholder="Ürün kodu ya da ürün adı yazınız..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 pr-20 border-b-2 border-black text-base focus:outline-none bg-transparent"
+                  className="w-full px-4 py-3 pr-20 border-b-2 border-gold text-base focus:outline-none bg-transparent font-sans"
                   autoFocus
                   aria-label="Urun ara"
                 />
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
                   <button
-                    className="p-2 text-foreground hover:text-muted-foreground"
+                    className="p-2 text-foreground hover:text-gold"
                     aria-label="Ara"
                   >
                     <Search className="w-5 h-5" />
@@ -319,6 +448,7 @@ export function Header() {
                     onClick={() => {
                       clearSearch();
                       setIsSearchOpen(false);
+                      setHeaderSearchQuery("");
                     }}
                     className="p-2 text-muted-foreground hover:text-foreground"
                     aria-label="Kapat"
@@ -334,8 +464,8 @@ export function Header() {
                   ref={searchResultsRef}
                   className="max-w-2xl mx-auto mt-6 max-h-80 overflow-y-auto"
                 >
-                  <p className="text-xs text-muted-foreground mb-4">
-                    {searchResults.length} urun bulundu
+                  <p className="text-xs text-muted-foreground mb-4 font-sans">
+                    {searchResults.length} ürün bulundu
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {searchResults.slice(0, 6).map((product) => (
@@ -345,10 +475,11 @@ export function Header() {
                         onClick={() => {
                           clearSearch();
                           setIsSearchOpen(false);
+                          setHeaderSearchQuery("");
                         }}
-                        className="flex items-center gap-4 p-3 hover:bg-muted transition-colors"
+                        className="flex items-center gap-4 p-3 hover:bg-cream transition-colors"
                       >
-                        <div className="w-16 h-16 bg-muted overflow-hidden flex-shrink-0">
+                        <div className="w-16 h-16 bg-beige overflow-hidden flex-shrink-0">
                           {product.images[0] && (
                             <Image
                               src={product.images[0]}
@@ -360,10 +491,10 @@ export function Header() {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-foreground truncate">
+                          <p className="text-sm font-medium text-foreground truncate font-sans">
                             {product.name}
                           </p>
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <p className="text-xs text-muted-foreground mt-1 font-sans">
                             {formatPrice(product.price)}
                           </p>
                         </div>
@@ -376,10 +507,11 @@ export function Header() {
                       onClick={() => {
                         clearSearch();
                         setIsSearchOpen(false);
+                        setHeaderSearchQuery("");
                       }}
-                      className="block text-center text-sm text-foreground hover:text-muted-foreground mt-6 py-3 border-t border-border"
+                      className="block text-center text-sm text-foreground hover:text-gold mt-6 py-3 border-t border-border font-sans"
                     >
-                      Tum sonuclari gor ({searchResults.length})
+                      Tüm sonuçları gör ({searchResults.length})
                     </Link>
                   )}
                 </div>
@@ -387,15 +519,15 @@ export function Header() {
 
               {isSearching && searchResults.length === 0 && searchQuery.length > 2 && (
                 <div className="max-w-2xl mx-auto mt-6 text-center py-8">
-                  <p className="text-muted-foreground">
-                    &quot;{searchQuery}&quot; icin sonuc bulunamadi
+                  <p className="text-muted-foreground font-sans">
+                    &quot;{searchQuery}&quot; için sonuç bulunamadı
                   </p>
                 </div>
               )}
             </div>
           </div>
-        )}
-      </header>
+        </div>
+      )}
 
       {/* Modals */}
       <CartDrawer />

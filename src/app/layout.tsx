@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Montserrat } from "next/font/google";
+import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/components/providers";
 import { PriceTicker } from "@/components/price-ticker";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -66,7 +68,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body
-        className={`${playfair.variable} ${montserrat.variable} font-sans antialiased`}
+        className={`${cormorant.variable} ${montserrat.variable} font-sans font-medium antialiased`}
       >
         <Providers>
           <PriceTicker />

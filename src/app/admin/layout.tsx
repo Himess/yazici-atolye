@@ -37,14 +37,11 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  // Login sayfasinda layout gosterme
-  if (pathname === '/admin/login') {
-    return <>{children}</>;
-  }
+  const isLoginPage = pathname === '/admin/login';
 
   // Ekran boyutu degistiginde sidebar'i kapat
   useEffect(() => {
+    if (isLoginPage) return;
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         setSidebarOpen(false);
@@ -52,7 +49,12 @@ export default function AdminLayout({
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [isLoginPage]);
+
+  // Login sayfasinda layout gosterme
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
 
   const handleLogout = async () => {
     try {

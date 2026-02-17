@@ -27,6 +27,12 @@ export default async function AdminDashboard() {
     }).catch(() => []),
   ]);
 
+  // Date nesnelerini string'e cevir (client component'e serialize icin)
+  const serializedForms = recentForms.map((f) => ({
+    ...f,
+    createdAt: f.createdAt.toISOString(),
+  }));
+
   const stats = [
     {
       label: 'Urunler',
@@ -125,16 +131,16 @@ export default async function AdminDashboard() {
           </Link>
         </div>
 
-        {recentForms.length > 0 ? (
+        {serializedForms.length > 0 ? (
           <div className="divide-y divide-zinc-100">
-            {recentForms.map((form: {
+            {serializedForms.map((form: {
               id: string;
               name: string;
               email: string | null;
               formType: string;
               message: string | null;
               isRead: boolean;
-              createdAt: Date;
+              createdAt: string;
             }) => (
               <div
                 key={form.id}

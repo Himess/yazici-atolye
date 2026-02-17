@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Save, Loader2, ImagePlus, X } from "lucide-react";
 import Link from "next/link";
@@ -67,6 +67,14 @@ function generateSlug(name: string): string {
 }
 
 export default function AdminProductFormPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 animate-spin text-[#C6A25A]" /></div>}>
+      <ProductFormContent />
+    </Suspense>
+  );
+}
+
+function ProductFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit");

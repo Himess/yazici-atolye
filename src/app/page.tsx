@@ -119,7 +119,7 @@ function mapApiProductToProduct(apiProduct: ApiProduct): Product {
 function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "lg" }) {
   const sizeClass = size === "lg" ? "w-5 h-5" : "w-4 h-4";
   return (
-    <div className="flex items-center gap-0.5">
+    <div className="flex items-center justify-center gap-0.5">
       {[1, 2, 3, 4, 5].map((i) => (
         <Star
           key={i}

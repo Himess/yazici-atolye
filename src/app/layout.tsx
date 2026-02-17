@@ -4,7 +4,6 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/components/providers";
-import { PriceTicker } from "@/components/price-ticker";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -71,7 +70,6 @@ export default function RootLayout({
         className={`${cormorant.variable} ${montserrat.variable} font-sans font-medium antialiased`}
       >
         <Providers>
-          <PriceTicker />
           <Header />
           <main className="min-h-screen">{children}</main>
           <Footer />

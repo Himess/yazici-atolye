@@ -256,8 +256,8 @@ export default function Home() {
         </p>
       </section>
 
-      {/* KOLEKSİYON RESİM 1 — Sticky Scroll (2 ekran boyunca sabit kalır) */}
-      <div style={{ height: "250vh" }} className="relative">
+      {/* KOLEKSİYON RESİM 1 — Sticky Scroll */}
+      <div style={{ height: "250vh" }} className="relative z-[1]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <Image
             src="/images/kuyumcu-1.jpeg"
@@ -277,8 +277,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* KOLEKSİYON RESİM 2 — Sticky Scroll (2 ekran boyunca sabit kalır) */}
-      <div style={{ height: "250vh" }} className="relative">
+      {/* KOLEKSİYON RESİM 2 — Sticky Scroll (birincinin üzerine kayar) */}
+      <div style={{ height: "250vh" }} className="relative z-[2]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <Image
             src="/images/kuyumcu-2.jpeg"

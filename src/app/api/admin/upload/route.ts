@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir, readdir, stat } from 'fs/promises';
-import path from 'path';
+import { supabaseAdmin } from '@/lib/supabase';
 
 const ALLOWED_TYPES = [
   'image/jpeg',
@@ -10,33 +9,32 @@ const ALLOWED_TYPES = [
   'image/svg+xml',
 ];
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB (Vercel limit 4.5MB)
+const BUCKET = 'images';
 
 function sanitizeFilename(filename: string): string {
-  // Uzantiyi ayir
-  const ext = path.extname(filename).toLowerCase();
-  const name = path.basename(filename, ext);
+  const ext = filename.split('.').pop()?.toLowerCase() || 'jpg';
+  const name = filename.replace(/\.[^/.]+$/, '');
 
-  // Ozel karakterleri temizle
   const sanitized = name
     .replace(/[^a-zA-Z0-9_-]/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')
     .toLowerCase();
 
-  // Timestamp ekle
   const timestamp = Date.now();
-
-  return `${sanitized}-${timestamp}${ext}`;
+  return `${sanitized}-${timestamp}.${ext}`;
 }
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const file = formData.get('file') as File | null;
+
+    // "file" (tekil) veya "files" (cogul) key'ini kabul et
+    const file = (formData.get('file') as File) || (formData.get('files') as File);
     const folder = (formData.get('folder') as string) || 'genel';
 
-    if (!file) {
+    if (!file || !(file instanceof File)) {
       return NextResponse.json(
         { success: false, error: 'Dosya bulunamadi' },
         { status: 400 }
@@ -57,30 +55,46 @@ export async function POST(request: NextRequest) {
     // Dosya boyutunu kontrol et
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, error: 'Dosya boyutu 5MB\'dan buyuk olamaz' },
+        { success: false, error: 'Dosya boyutu 4MB\'dan buyuk olamaz' },
         { status: 400 }
       );
     }
 
     // Dosya adi olustur
     const sanitizedName = sanitizeFilename(file.name);
+    const storagePath = `${folder}/${sanitizedName}`;
 
-    // Hedef klasoru olustur
-    const uploadDir = path.join(process.cwd(), 'public', 'images', folder);
-    await mkdir(uploadDir, { recursive: true });
+    // Supabase Storage'a yukle
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    // Dosyayi kaydet
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const filePath = path.join(uploadDir, sanitizedName);
-    await writeFile(filePath, buffer);
+    const { error: uploadError } = await supabaseAdmin.storage
+      .from(BUCKET)
+      .upload(storagePath, buffer, {
+        contentType: file.type,
+        upsert: true,
+      });
 
-    // Public URL'i olustur
-    const url = `/images/${folder}/${sanitizedName}`;
+    if (uploadError) {
+      console.error('Supabase upload error:', uploadError);
+      return NextResponse.json(
+        { success: false, error: `Yukleme hatasi: ${uploadError.message}` },
+        { status: 500 }
+      );
+    }
 
+    // Public URL olustur
+    const { data: publicUrlData } = supabaseAdmin.storage
+      .from(BUCKET)
+      .getPublicUrl(storagePath);
+
+    const url = publicUrlData.publicUrl;
+
+    // Hem "url" (tekil) hem "urls" (array) dondur — tum client'lar icin uyumlu
     return NextResponse.json({
       success: true,
       url,
+      urls: [url],
       filename: sanitizedName,
       size: file.size,
       type: file.type,
@@ -99,38 +113,28 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const folder = searchParams.get('folder') || 'genel';
 
-    const uploadDir = path.join(process.cwd(), 'public', 'images', folder);
+    const { data: files, error } = await supabaseAdmin.storage
+      .from(BUCKET)
+      .list(folder, { limit: 100, sortBy: { column: 'created_at', order: 'desc' } });
 
-    // Klasor var mi kontrol et
-    try {
-      await stat(uploadDir);
-    } catch {
+    if (error) {
+      console.error('Supabase list error:', error);
       return NextResponse.json({ success: true, images: [] });
     }
 
-    // Dosyalari listele
-    const files = await readdir(uploadDir);
-
-    const images = [];
-    for (const file of files) {
-      const ext = path.extname(file).toLowerCase();
-      if (['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'].includes(ext)) {
-        const filePath = path.join(uploadDir, file);
-        const fileStat = await stat(filePath);
-        images.push({
-          name: file,
-          url: `/images/${folder}/${file}`,
-          size: fileStat.size,
-          createdAt: fileStat.birthtime.toISOString(),
-        });
-      }
-    }
-
-    // En yeniden eskiye sirala
-    images.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+    const images = (files || [])
+      .filter((f) => !f.name.startsWith('.'))
+      .map((f) => {
+        const { data } = supabaseAdmin.storage
+          .from(BUCKET)
+          .getPublicUrl(`${folder}/${f.name}`);
+        return {
+          name: f.name,
+          url: data.publicUrl,
+          size: f.metadata?.size || 0,
+          createdAt: f.created_at || '',
+        };
+      });
 
     return NextResponse.json({ success: true, images });
   } catch (error) {

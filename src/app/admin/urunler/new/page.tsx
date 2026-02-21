@@ -162,26 +162,39 @@ function ProductFormContent() {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const formData = new FormData();
-    Array.from(files).forEach((file) => formData.append("files", file));
+    const uploadedUrls: string[] = [];
 
-    try {
-      const res = await fetch("/api/admin/upload", {
-        method: "POST",
-        body: formData,
-      });
-      if (!res.ok) throw new Error("Yuklenemedi");
-      const data = await res.json();
-      const urls: string[] = data.urls || [];
+    // Her dosyayi tek tek yukle
+    for (const file of Array.from(files)) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "urunler");
 
+      try {
+        const res = await fetch("/api/admin/upload", {
+          method: "POST",
+          body: formData,
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || "Yuklenemedi");
+        }
+        const data = await res.json();
+        if (data.url) {
+          uploadedUrls.push(data.url);
+        }
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "Gorsel yuklenirken hata olustu");
+      }
+    }
+
+    if (uploadedUrls.length > 0) {
       setForm((prev) => {
         const existing = prev.images ? prev.images.split(",").map((s) => s.trim()).filter(Boolean) : [];
-        const all = [...existing, ...urls];
+        const all = [...existing, ...uploadedUrls];
         return { ...prev, images: all.join(", ") };
       });
-      setImagePreview((prev) => [...prev, ...urls]);
-    } catch {
-      alert("Gorsel yuklenirken hata olustu");
+      setImagePreview((prev) => [...prev, ...uploadedUrls]);
     }
 
     e.target.value = "";

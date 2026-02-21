@@ -93,20 +93,24 @@ export default function AdminSliderPage() {
     if (!files || files.length === 0) return;
 
     const formData = new FormData();
-    formData.append("files", files[0]);
+    formData.append("file", files[0]);
+    formData.append("folder", "slider");
 
     try {
       const res = await fetch("/api/admin/upload", {
         method: "POST",
         body: formData,
       });
-      if (!res.ok) throw new Error("Yuklenemedi");
-      const data = await res.json();
-      if (data.urls && data.urls.length > 0) {
-        setForm((prev) => ({ ...prev, image: data.urls[0] }));
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Yuklenemedi");
       }
-    } catch {
-      alert("Gorsel yuklenirken hata olustu");
+      const data = await res.json();
+      if (data.url) {
+        setForm((prev) => ({ ...prev, image: data.url }));
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Gorsel yuklenirken hata olustu");
     }
 
     e.target.value = "";

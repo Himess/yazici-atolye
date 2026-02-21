@@ -29,7 +29,7 @@ export function ProductCard({ product }: ProductCardProps) {
       >
         {/* Image Container */}
         <div className="aspect-square bg-cream relative overflow-hidden">
-          {product.images[0]?.includes("/images/") ? (
+          {product.images[0] && (product.images[0].includes("/images/") || product.images[0].startsWith("http")) ? (
             <>
               <Image
                 src={product.images[0]}

@@ -42,7 +42,7 @@ export function CartDrawer() {
                   <div key={item.product.id} className="flex gap-4 p-3 bg-muted rounded-lg">
                     {/* Urun Gorseli */}
                     <div className="w-20 h-20 bg-background rounded-lg overflow-hidden flex-shrink-0 relative">
-                      {item.product.images[0]?.includes("/images/") ? (
+                      {item.product.images[0] && (item.product.images[0].includes("/images/") || item.product.images[0].startsWith("http")) ? (
                         <Image
                           src={item.product.images[0]}
                           alt={item.product.name}

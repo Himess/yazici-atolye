@@ -112,7 +112,19 @@ function ProductFormContent() {
         inStock: product.inStock !== false,
       });
       if (product.images) {
-        setImagePreview(product.images.split(",").map((s: string) => s.trim()).filter(Boolean));
+        let imgs: string[] = [];
+        if (typeof product.images === 'string') {
+          try {
+            const parsed = JSON.parse(product.images);
+            imgs = Array.isArray(parsed) ? parsed : product.images.split(",").map((s: string) => s.trim()).filter(Boolean);
+          } catch {
+            imgs = product.images.split(",").map((s: string) => s.trim()).filter(Boolean);
+          }
+        } else if (Array.isArray(product.images)) {
+          imgs = product.images;
+        }
+        setImagePreview(imgs);
+        setForm(prev => ({ ...prev, images: imgs.join(", ") }));
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Urun yuklenemedi");

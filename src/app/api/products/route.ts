@@ -18,12 +18,22 @@ export async function GET(request: NextRequest) {
       take: limit ? parseInt(limit) : undefined,
     });
 
-    // Parse JSON fields
+    // Parse JSON fields — handle both JSON arrays and comma-separated strings
+    const parseField = (val: string | null): string[] => {
+      if (!val) return [];
+      try {
+        const parsed = JSON.parse(val);
+        return Array.isArray(parsed) ? parsed : [val];
+      } catch {
+        return val.split(',').map(s => s.trim()).filter(Boolean);
+      }
+    };
+
     const parsed = products.map(p => ({
       ...p,
-      images: p.images ? JSON.parse(p.images) : [],
-      stones: p.stones ? JSON.parse(p.stones) : [],
-      colorVariants: p.colorVariants ? JSON.parse(p.colorVariants) : [],
+      images: parseField(p.images),
+      stones: parseField(p.stones),
+      colorVariants: parseField(p.colorVariants),
     }));
 
     return NextResponse.json(parsed);

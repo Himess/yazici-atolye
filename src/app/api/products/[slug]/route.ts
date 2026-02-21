@@ -10,11 +10,21 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: 'Ürün bulunamadı' }, { status: 404 });
     }
 
+    const parseField = (val: string | null): string[] => {
+      if (!val) return [];
+      try {
+        const parsed = JSON.parse(val);
+        return Array.isArray(parsed) ? parsed : [val];
+      } catch {
+        return val.split(',').map(s => s.trim()).filter(Boolean);
+      }
+    };
+
     const parsed = {
       ...product,
-      images: product.images ? JSON.parse(product.images) : [],
-      stones: product.stones ? JSON.parse(product.stones) : [],
-      colorVariants: product.colorVariants ? JSON.parse(product.colorVariants) : [],
+      images: parseField(product.images),
+      stones: parseField(product.stones),
+      colorVariants: parseField(product.colorVariants),
     };
 
     return NextResponse.json(parsed);

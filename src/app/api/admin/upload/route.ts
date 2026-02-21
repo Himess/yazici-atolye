@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { uploadToSupabase, listSupabaseImages } from '@/lib/supabase';
 
 const ALLOWED_TYPES = [
   'image/jpeg',
@@ -9,8 +9,7 @@ const ALLOWED_TYPES = [
   'image/svg+xml',
 ];
 
-const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB (Vercel limit 4.5MB)
-const BUCKET = 'images';
+const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 
 function sanitizeFilename(filename: string): string {
   const ext = filename.split('.').pop()?.toLowerCase() || 'jpg';
@@ -30,7 +29,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
 
-    // "file" (tekil) veya "files" (cogul) key'ini kabul et
+    // "file" veya "files" key'ini kabul et
     const file = (formData.get('file') as File) || (formData.get('files') as File);
     const folder = (formData.get('folder') as string) || 'genel';
 
@@ -41,60 +40,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Dosya tipini kontrol et
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Gecersiz dosya tipi. Sadece JPG, PNG, WebP, GIF ve SVG kabul edilir.',
-        },
+        { success: false, error: 'Gecersiz dosya tipi. Sadece JPG, PNG, WebP, GIF ve SVG kabul edilir.' },
         { status: 400 }
       );
     }
 
-    // Dosya boyutunu kontrol et
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, error: 'Dosya boyutu 4MB\'dan buyuk olamaz' },
+        { success: false, error: 'Dosya boyutu 4MB\'dan buyuk olamaz. Lutfen daha kucuk bir dosya secin.' },
         { status: 400 }
       );
     }
 
-    // Dosya adi olustur
     const sanitizedName = sanitizeFilename(file.name);
     const storagePath = `${folder}/${sanitizedName}`;
 
-    // Supabase Storage'a yukle
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const { error: uploadError } = await supabaseAdmin.storage
-      .from(BUCKET)
-      .upload(storagePath, buffer, {
-        contentType: file.type,
-        upsert: true,
-      });
+    const result = await uploadToSupabase(buffer, storagePath, file.type);
 
-    if (uploadError) {
-      console.error('Supabase upload error:', uploadError);
+    if ('error' in result) {
       return NextResponse.json(
-        { success: false, error: `Yukleme hatasi: ${uploadError.message}` },
+        { success: false, error: result.error },
         { status: 500 }
       );
     }
 
-    // Public URL olustur
-    const { data: publicUrlData } = supabaseAdmin.storage
-      .from(BUCKET)
-      .getPublicUrl(storagePath);
-
-    const url = publicUrlData.publicUrl;
-
-    // Hem "url" (tekil) hem "urls" (array) dondur — tum client'lar icin uyumlu
     return NextResponse.json({
       success: true,
-      url,
-      urls: [url],
+      url: result.url,
+      urls: [result.url],
       filename: sanitizedName,
       size: file.size,
       type: file.type,
@@ -113,29 +91,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const folder = searchParams.get('folder') || 'genel';
 
-    const { data: files, error } = await supabaseAdmin.storage
-      .from(BUCKET)
-      .list(folder, { limit: 100, sortBy: { column: 'created_at', order: 'desc' } });
-
-    if (error) {
-      console.error('Supabase list error:', error);
-      return NextResponse.json({ success: true, images: [] });
-    }
-
-    const images = (files || [])
-      .filter((f) => !f.name.startsWith('.'))
-      .map((f) => {
-        const { data } = supabaseAdmin.storage
-          .from(BUCKET)
-          .getPublicUrl(`${folder}/${f.name}`);
-        return {
-          name: f.name,
-          url: data.publicUrl,
-          size: f.metadata?.size || 0,
-          createdAt: f.created_at || '',
-        };
-      });
-
+    const images = await listSupabaseImages(folder);
     return NextResponse.json({ success: true, images });
   } catch (error) {
     console.error('Gallery list error:', error);

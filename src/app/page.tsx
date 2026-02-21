@@ -325,6 +325,50 @@ export default function Home() {
         </p>
       </section>
 
+      {/* ALIŞVERİŞ KATEGORİLERİ */}
+      <section className="py-16 bg-cream">
+        <div className="container mx-auto px-4">
+          <h2 className="section-title mb-12">ALIŞVERİŞ KATEGORİLERİ</h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {loading ? (
+              <>
+                <SkeletonCategory />
+                <SkeletonCategory />
+                <SkeletonCategory />
+                <SkeletonCategory />
+              </>
+            ) : categoryImages.length > 0 ? (
+              categoryImages.map((cat) => (
+                <Link key={cat.id} href={`/urunler?kategori=${cat.slug}`} className="group relative aspect-square overflow-hidden bg-beige">
+                  {cat.image && (cat.image.startsWith("http") ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={cat.image}
+                      alt={cat.name}
+                      className="object-cover w-full h-full group-hover:scale-[1.02] transition-transform duration-500"
+                    />
+                  ) : (
+                    <Image
+                      src={cat.image}
+                      alt={cat.name}
+                      fill
+                      className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                    />
+                  ))}
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
+                    <span className="font-script text-2xl md:text-3xl text-white drop-shadow-lg">
+                      {cat.name}
+                    </span>
+                  </div>
+                </Link>
+              ))
+            ) : null}
+          </div>
+        </div>
+      </section>
+
       {/* KOLEKSİYON RESİM — Sticky Scroll */}
       <div style={{ height: "200vh" }} className="relative">
         <div className="sticky top-0 h-screen w-full overflow-hidden">

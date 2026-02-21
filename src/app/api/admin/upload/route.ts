@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import sharp from 'sharp';
 import { uploadToSupabase, listSupabaseImages } from '@/lib/supabase';
 
 const ALLOWED_TYPES = [
@@ -9,10 +10,33 @@ const ALLOWED_TYPES = [
   'image/svg+xml',
 ];
 
+// GIF ve SVG islenmez — GIF animasyonlu olabilir, SVG vektör
+const SKIP_PROCESSING = ['image/gif', 'image/svg+xml'];
+
 const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 
+// Folder bazli max boyutlar — orijinalden kucukse buyutmez
+const FOLDER_LIMITS: Record<string, { width: number; height: number; quality: number }> = {
+  slider:      { width: 1920, height: 1080, quality: 85 },
+  urunler:     { width: 1200, height: 1200, quality: 85 },
+  kategoriler: { width: 800,  height: 800,  quality: 80 },
+  genel:       { width: 1600, height: 1600, quality: 85 },
+};
+
 function sanitizeFilename(filename: string): string {
-  const ext = filename.split('.').pop()?.toLowerCase() || 'jpg';
+  const name = filename.replace(/\.[^/.]+$/, '');
+
+  const sanitized = name
+    .replace(/[^a-zA-Z0-9_-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase();
+
+  const timestamp = Date.now();
+  return `${sanitized}-${timestamp}.webp`;
+}
+
+function sanitizeFilenameRaw(filename: string, ext: string): string {
   const name = filename.replace(/\.[^/.]+$/, '');
 
   const sanitized = name
@@ -23,6 +47,33 @@ function sanitizeFilename(filename: string): string {
 
   const timestamp = Date.now();
   return `${sanitized}-${timestamp}.${ext}`;
+}
+
+async function optimizeImage(
+  buffer: Buffer,
+  folder: string
+): Promise<{ data: Buffer; contentType: string }> {
+  const limits = FOLDER_LIMITS[folder] || FOLDER_LIMITS.genel;
+
+  const meta = await sharp(buffer).metadata();
+  const origW = meta.width || 0;
+  const origH = meta.height || 0;
+
+  let pipeline = sharp(buffer);
+
+  // Sadece orijinalden buyukse kucult, asla buyutme
+  if (origW > limits.width || origH > limits.height) {
+    pipeline = pipeline.resize(limits.width, limits.height, {
+      fit: 'inside',
+      withoutEnlargement: true,
+    });
+  }
+
+  const optimized = await pipeline
+    .webp({ quality: limits.quality })
+    .toBuffer();
+
+  return { data: optimized, contentType: 'image/webp' };
 }
 
 export async function POST(request: NextRequest) {
@@ -54,13 +105,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const sanitizedName = sanitizeFilename(file.name);
-    const storagePath = `${folder}/${sanitizedName}`;
-
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const rawBuffer = Buffer.from(arrayBuffer);
 
-    const result = await uploadToSupabase(buffer, storagePath, file.type);
+    let finalBuffer: Buffer;
+    let finalContentType: string;
+    let finalFilename: string;
+
+    if (SKIP_PROCESSING.includes(file.type)) {
+      // GIF ve SVG olduğu gibi yukle
+      const ext = file.type === 'image/gif' ? 'gif' : 'svg';
+      finalBuffer = rawBuffer;
+      finalContentType = file.type;
+      finalFilename = sanitizeFilenameRaw(file.name, ext);
+    } else {
+      // JPG, PNG, WebP → optimize et, WebP'ye donustur
+      const { data, contentType } = await optimizeImage(rawBuffer, folder);
+      finalBuffer = data;
+      finalContentType = contentType;
+      finalFilename = sanitizeFilename(file.name);
+    }
+
+    const storagePath = `${folder}/${finalFilename}`;
+    const result = await uploadToSupabase(finalBuffer, storagePath, finalContentType);
 
     if ('error' in result) {
       return NextResponse.json(
@@ -73,9 +140,10 @@ export async function POST(request: NextRequest) {
       success: true,
       url: result.url,
       urls: [result.url],
-      filename: sanitizedName,
-      size: file.size,
-      type: file.type,
+      filename: finalFilename,
+      originalSize: file.size,
+      optimizedSize: finalBuffer.length,
+      type: finalContentType,
     });
   } catch (error) {
     console.error('Upload error:', error);

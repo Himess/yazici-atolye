@@ -4,7 +4,9 @@ import prisma from '@/lib/prisma';
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
     const { slug } = await params;
-    const product = await prisma.product.findUnique({ where: { slug } });
+    const product = await prisma.product.findFirst({
+      where: { OR: [{ slug }, { id: slug }] },
+    });
 
     if (!product) {
       return NextResponse.json({ error: 'Ürün bulunamadı' }, { status: 404 });

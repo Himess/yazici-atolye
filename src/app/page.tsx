@@ -256,12 +256,12 @@ export default function Home() {
         </p>
       </section>
 
-      {/* KOLEKSİYON RESİM 1 — Sticky Scroll */}
-      <div style={{ height: "250vh" }} className="relative z-[1]">
+      {/* KOLEKSİYON RESİM — Sticky Scroll */}
+      <div style={{ height: "200vh" }} className="relative">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <Image
             src="/images/kuyumcu-1.jpeg"
-            alt="Yazıcı Atölye Koleksiyon 1"
+            alt="Yazıcı Atölye Koleksiyon"
             fill
             className="object-cover"
             priority
@@ -274,19 +274,6 @@ export default function Home() {
               <path d="M12 5v14M19 12l-7 7-7-7" />
             </svg>
           </div>
-        </div>
-      </div>
-
-      {/* KOLEKSİYON RESİM 2 — Sticky Scroll (birincinin üzerine kayar) */}
-      <div style={{ height: "250vh" }} className="relative z-[2]">
-        <div className="sticky top-0 h-screen w-full overflow-hidden">
-          <Image
-            src="/images/kuyumcu-2.jpeg"
-            alt="Yazıcı Atölye Koleksiyon 2"
-            fill
-            className="object-cover"
-            sizes="100vw"
-          />
         </div>
       </div>
 

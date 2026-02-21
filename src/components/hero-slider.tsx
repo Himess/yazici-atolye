@@ -30,7 +30,7 @@ export function HeroSlider() {
         if (!res.ok) throw new Error("Failed to fetch slides");
         const data: Slide[] = await res.json();
         const activeSlides = data
-          .filter((s) => s.isActive)
+          .filter((s) => s.isActive && s.image)
           .sort((a, b) => a.order - b.order);
         setSlides(activeSlides);
       } catch (error) {
@@ -128,13 +128,17 @@ export function HeroSlider() {
             index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
           }`}
         >
-          <Image
-            src={s.image}
-            alt={s.title}
-            fill
-            className="object-cover"
-            priority={index === 0}
-          />
+          {s.image ? (
+            <Image
+              src={s.image}
+              alt={s.title || "Slider"}
+              fill
+              className="object-cover"
+              priority={index === 0}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-zinc-200" />
+          )}
           {/* Overlay */}
           <div
             className={`absolute inset-0 ${
@@ -158,12 +162,14 @@ export function HeroSlider() {
             <br />
             {slide.subtitle}
           </h1>
-          <Link
-            href={slide.buttonUrl}
-            className="inline-block bg-gold text-white px-8 py-3 text-sm tracking-wider uppercase font-sans font-medium hover:bg-dark transition-colors"
-          >
-            {slide.buttonText}
-          </Link>
+          {slide.buttonText && slide.buttonUrl && (
+            <Link
+              href={slide.buttonUrl}
+              className="inline-block bg-gold text-white px-8 py-3 text-sm tracking-wider uppercase font-sans font-medium hover:bg-dark transition-colors"
+            >
+              {slide.buttonText}
+            </Link>
+          )}
         </div>
       </div>
 

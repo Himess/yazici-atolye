@@ -2,36 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { Product } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
 import { HeroSlider } from "@/components/hero-slider";
 import { ChevronDown, ChevronLeft, ChevronRight, Heart, Sparkles, Gem, Star, Facebook, Instagram, Youtube } from "lucide-react";
-
-const faqs = [
-  {
-    question: "Ürünlerinizde hangi malzemeler kullanılıyor?",
-    answer: "Tüm ürünlerimizde 14K ve 18K saf altın, 925 ayar gümüş ve GIA sertifikalı pırlantalar kullanıyoruz. Her parçamız kalite garantilidir.",
-  },
-  {
-    question: "Kargo ve teslimat ne kadar sürüyor?",
-    answer: "Siparişleriniz 1-2 iş günü içinde kargoya verilir. İstanbul içi 1 gün, Türkiye geneli 2-3 gün içerisinde teslim edilir. 500 TL üstü siparişlerde kargo ücretsizdir.",
-  },
-  {
-    question: "İade ve değişim politikanız nedir?",
-    answer: "14 gün içerisinde koşulsuz iade veya değişim yapabilirsiniz. Ürün orijinal kutusunda ve kullanılmamış olmalıdır.",
-  },
-  {
-    question: "Özel tasarım sipariş verebilir miyim?",
-    answer: "Evet! Özel tasarım talepleriniz için bizimle iletişime geçebilirsiniz. Size özel, tek ve benzersiz parçalar tasarlıyoruz.",
-  },
-];
-
-// Alt satır (2'li grid)
-const collectionImages = [
-  { name: "Yeni Gelenler", image: "/images/atolye-usta-1.png", href: "/urunler?siralama=yeni" },
-  { name: "Çok Satanlar", image: "/images/atolye-3.png", href: "/urunler?siralama=cok-satan" },
-];
 
 type Testimonial = {
   id: string;
@@ -167,6 +142,52 @@ function SkeletonTestimonial() {
   );
 }
 
+const iconMap: Record<string, React.ReactNode> = {
+  Heart: <Heart className="w-8 h-8 text-gold" />,
+  Sparkles: <Sparkles className="w-8 h-8 text-gold" />,
+  Gem: <Gem className="w-8 h-8 text-gold" />,
+};
+
+const defaultFaqs = [
+  {
+    question: "Ürünlerinizde hangi malzemeler kullanılıyor?",
+    answer: "Tüm ürünlerimizde 14K ve 18K saf altın, 925 ayar gümüş ve GIA sertifikalı pırlantalar kullanıyoruz. Her parçamız kalite garantilidir.",
+  },
+  {
+    question: "Kargo ve teslimat ne kadar sürüyor?",
+    answer: "Siparişleriniz 1-2 iş günü içinde kargoya verilir. İstanbul içi 1 gün, Türkiye geneli 2-3 gün içerisinde teslim edilir. 500 TL üstü siparişlerde kargo ücretsizdir.",
+  },
+  {
+    question: "İade ve değişim politikanız nedir?",
+    answer: "14 gün içerisinde koşulsuz iade veya değişim yapabilirsiniz. Ürün orijinal kutusunda ve kullanılmamış olmalıdır.",
+  },
+  {
+    question: "Özel tasarım sipariş verebilir miyim?",
+    answer: "Evet! Özel tasarım talepleriniz için bizimle iletişime geçebilirsiniz. Size özel, tek ve benzersiz parçalar tasarlıyoruz.",
+  },
+];
+
+const defaultGuvenItems = [
+  { icon: "Heart", title: "Sevgiyle El Yapımı", description: "Her parça, uzman ustalarımız tarafından özenle el işçiliğiyle üretilir." },
+  { icon: "Sparkles", title: "Alerjik Değil ve Hafif", description: "Cildinize zarar vermez, gün boyu rahatlıkla takabilirsiniz." },
+  { icon: "Gem", title: "Doğal Taşlar", description: "Sertifikalı doğal taşlar ve pırlantalar kullanıyoruz." },
+];
+
+const defaultUretimItems = [
+  { image: "/images/atolye-usta-1.png", title: "40 Yıllık Tecrübe", description: "Usta ellerden, özenle işlenen parçalar" },
+  { image: "/images/atolye-3.png", title: "El İşçiliği", description: "Her parça, tek tek elle üretilir" },
+  { image: "/images/atolye-4.png", title: "Kalite Garantisi", description: "Sertifikalı malzeme, titiz işçilik" },
+];
+
+const defaultInstagramImages = [
+  "/images/instagram-1.jpg",
+  "/images/instagram-2.jpg",
+  "/images/instagram-3.jpg",
+  "/images/instagram-4.jpg",
+  "/images/instagram-5.jpg",
+  "/images/instagram-6.jpg",
+];
+
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const testimonialRef = useRef<HTMLDivElement>(null);
@@ -176,17 +197,19 @@ export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [ringProducts, setRingProducts] = useState<Product[]>([]);
   const [settings, setSettings] = useState<SettingsData>({});
+  const [content, setContent] = useState<Record<string, Record<string, string>>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [testimonialsRes, categoriesRes, featuredRes, ringsRes, settingsRes] = await Promise.all([
+        const [testimonialsRes, categoriesRes, featuredRes, ringsRes, settingsRes, contentRes] = await Promise.all([
           fetch("/api/testimonials").then((r) => r.ok ? r.json() : []),
           fetch("/api/categories").then((r) => r.ok ? r.json() : []),
           fetch("/api/products?featured=true&limit=4").then((r) => r.ok ? r.json() : []),
           fetch("/api/products?category=yuzuk&limit=4").then((r) => r.ok ? r.json() : []),
           fetch("/api/settings").then((r) => r.ok ? r.json() : {}),
+          fetch("/api/content?page=anasayfa").then((r) => r.ok ? r.json() : {}),
         ]);
 
         // Testimonials - filter active and sort by order
@@ -211,6 +234,9 @@ export default function Home() {
 
         // Settings
         setSettings(settingsRes || {});
+
+        // Content
+        setContent(contentRes || {});
       } catch (error) {
         console.error("Failed to fetch homepage data:", error);
       } finally {
@@ -220,6 +246,43 @@ export default function Home() {
 
     fetchData();
   }, []);
+
+  // Parse JSON content sections with useMemo to avoid re-parsing on every render
+  const faqItems = useMemo(() => {
+    try {
+      const parsed = JSON.parse(content.faq?.items || "[]");
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultFaqs;
+    } catch {
+      return defaultFaqs;
+    }
+  }, [content.faq?.items]);
+
+  const guvenItems = useMemo(() => {
+    try {
+      const parsed = JSON.parse(content.guven?.items || "[]");
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultGuvenItems;
+    } catch {
+      return defaultGuvenItems;
+    }
+  }, [content.guven?.items]);
+
+  const uretimItems = useMemo(() => {
+    try {
+      const parsed = JSON.parse(content.uretim?.items || "[]");
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultUretimItems;
+    } catch {
+      return defaultUretimItems;
+    }
+  }, [content.uretim?.items]);
+
+  const instagramImages = useMemo(() => {
+    try {
+      const parsed = JSON.parse(content.instagram?.items || "[]");
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultInstagramImages;
+    } catch {
+      return defaultInstagramImages;
+    }
+  }, [content.instagram?.items]);
 
   const avgRating = testimonials.length > 0
     ? (testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length).toFixed(2)
@@ -241,6 +304,12 @@ export default function Home() {
   const youtubeUrl = settings.youtubeUrl || "https://youtube.com/@yaziciatolye";
   const tiktokUrl = settings.tiktokUrl || "https://tiktok.com/@yaziciatolye";
 
+  // Dynamic content values with fallbacks
+  const stickyImage = content.sticky?.image || "/images/kuyumcu-1.jpeg";
+  const bannerImage = content.banner?.image || "/images/kolye1-1.png";
+  const uretimTitle = content.uretim?.title || "ÜRETİMDEN SİZLERE";
+  const uretimSubtitle = content.uretim?.subtitle || "40 yılı aşkın tecrübemiz ile büyük kuyumculara toptan satış yapıyoruz. Şimdi aynı kaliteyi, aracısız fiyatlarla sizlere sunuyoruz.";
+
   return (
     <div className="flex flex-col">
       {/* Hero Slider */}
@@ -249,24 +318,33 @@ export default function Home() {
       {/* ÖZEL KOLEKSİYON BAŞLIK */}
       <section className="py-16 md:py-20 bg-cream text-center">
         <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-wide text-dark uppercase">
-          ÖZEL KOLEKSİYONLARIMIZ
+          {content.koleksiyon_baslik?.title || "ÖZEL KOLEKSİYONLARIMIZ"}
         </h2>
         <p className="mt-4 text-muted-foreground font-sans text-base md:text-lg max-w-2xl mx-auto px-4">
-          40 yıllık ustalıkla, atölyemizden sizlere özel tasarımlar
+          {content.koleksiyon_baslik?.subtitle || "40 yıllık ustalıkla, atölyemizden sizlere özel tasarımlar"}
         </p>
       </section>
 
       {/* KOLEKSİYON RESİM — Sticky Scroll */}
       <div style={{ height: "200vh" }} className="relative">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
-          <Image
-            src="/images/kuyumcu-1.jpeg"
-            alt="Yazıcı Atölye Koleksiyon"
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
+          {stickyImage.startsWith("http") ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={stickyImage}
+              alt="Yazıcı Atölye Koleksiyon"
+              className="object-cover w-full h-full"
+            />
+          ) : (
+            <Image
+              src={stickyImage}
+              alt="Yazıcı Atölye Koleksiyon"
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+          )}
           {/* Aşağı kaydırma oku */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce">
             <span className="text-white/80 text-xs font-sans tracking-widest uppercase mb-2">Kaydır</span>
@@ -310,13 +388,11 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-3xl text-center">
           <div className="w-16 h-px bg-gold mx-auto mb-8" />
           <p className="font-serif italic text-lg md:text-xl text-foreground leading-relaxed">
-            &ldquo;Her parça bir hikaye anlatır. 40 yılı aşkın tecrübemizle, atölyemizden
-            çıkan her mücevher, sevgiyle işlenmiş bir sanat eseridir. Kaliteyi hissedin,
-            zarafeti yaşayın.&rdquo;
+            &ldquo;{content.marka?.quote || "Her parça bir hikaye anlatır. 40 yılı aşkın tecrübemizle, atölyemizden çıkan her mücevher, sevgiyle işlenmiş bir sanat eseridir. Kaliteyi hissedin, zarafeti yaşayın."}&rdquo;
           </p>
           <div className="w-16 h-px bg-gold mx-auto mt-8" />
           <p className="mt-6 text-sm text-muted-foreground font-sans tracking-wider uppercase">
-            — Yazıcı Atölye
+            {content.marka?.author || "— Yazıcı Atölye"}
           </p>
         </div>
       </section>
@@ -353,16 +429,16 @@ export default function Home() {
       <section className="relative h-[400px] md:h-[500px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/images/kolye1-1.png')" }}
+          style={{ backgroundImage: `url('${bannerImage}')` }}
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white px-4">
-          <p className="font-script text-4xl md:text-6xl mb-4">Her Gün Işılda</p>
+          <p className="font-script text-4xl md:text-6xl mb-4">{content.banner?.title || "Her Gün Işılda"}</p>
           <p className="text-sm tracking-wider mb-6 max-w-md font-sans">
-            Eşsiz koleksiyonumuzu keşfedin
+            {content.banner?.subtitle || "Eşsiz koleksiyonumuzu keşfedin"}
           </p>
-          <Link href="/urunler" className="btn-primary inline-block">
-            Hemen Alışverişe Başla
+          <Link href={content.banner?.buttonUrl || "/urunler"} className="btn-primary inline-block">
+            {content.banner?.buttonText || "Hemen Alışverişe Başla"}
           </Link>
         </div>
       </section>
@@ -371,27 +447,15 @@ export default function Home() {
       <section className="py-12 bg-beige">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="trust-icon">
-              <Heart className="w-8 h-8 text-gold" />
-              <h3 className="font-serif text-lg mb-2">Sevgiyle El Yapımı</h3>
-              <p className="text-sm text-muted-foreground font-sans">
-                Her parça, uzman ustalarımız tarafından özenle el işçiliğiyle üretilir.
-              </p>
-            </div>
-            <div className="trust-icon">
-              <Sparkles className="w-8 h-8 text-gold" />
-              <h3 className="font-serif text-lg mb-2">Alerjik Değil ve Hafif</h3>
-              <p className="text-sm text-muted-foreground font-sans">
-                Cildinize zarar vermez, gün boyu rahatlıkla takabilirsiniz.
-              </p>
-            </div>
-            <div className="trust-icon">
-              <Gem className="w-8 h-8 text-gold" />
-              <h3 className="font-serif text-lg mb-2">Doğal Taşlar</h3>
-              <p className="text-sm text-muted-foreground font-sans">
-                Sertifikalı doğal taşlar ve pırlantalar kullanıyoruz.
-              </p>
-            </div>
+            {guvenItems.map((item: { icon: string; title: string; description: string }, index: number) => (
+              <div key={index} className="trust-icon">
+                {iconMap[item.icon] || <Heart className="w-8 h-8 text-gold" />}
+                <h3 className="font-serif text-lg mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground font-sans">
+                  {item.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -478,7 +542,7 @@ export default function Home() {
           </p>
 
           <div className="space-y-0">
-            {faqs.map((faq, index) => (
+            {faqItems.map((faq: { question: string; answer: string }, index: number) => (
               <div key={index} className="faq-item">
                 <button
                   className="faq-question"
@@ -505,37 +569,36 @@ export default function Home() {
       {/* Üretimden Sizlere */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="section-title mb-4">ÜRETİMDEN SİZLERE</h2>
+          <h2 className="section-title mb-4">{uretimTitle}</h2>
           <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto font-sans">
-            40 yılı aşkın tecrübemiz ile büyük kuyumculara toptan satış yapıyoruz.
-            Şimdi aynı kaliteyi, aracısız fiyatlarla sizlere sunuyoruz.
+            {uretimSubtitle}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="relative aspect-[4/3] overflow-hidden group">
-              <Image src="/images/atolye-usta-1.png" alt="Atölye Ustamız" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="font-serif text-lg mb-1">40 Yıllık Tecrübe</h3>
-                <p className="text-sm text-white/80 font-sans">Usta ellerden, özenle işlenen parçalar</p>
+            {uretimItems.map((item: { image: string; title: string; description: string }, index: number) => (
+              <div key={index} className="relative aspect-[4/3] overflow-hidden group">
+                {item.image.startsWith("http") ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <h3 className="font-serif text-lg mb-1">{item.title}</h3>
+                  <p className="text-sm text-white/80 font-sans">{item.description}</p>
+                </div>
               </div>
-            </div>
-            <div className="relative aspect-[4/3] overflow-hidden group">
-              <Image src="/images/atolye-3.png" alt="El İşçiliği" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="font-serif text-lg mb-1">El İşçiliği</h3>
-                <p className="text-sm text-white/80 font-sans">Her parça, tek tek elle üretilir</p>
-              </div>
-            </div>
-            <div className="relative aspect-[4/3] overflow-hidden group">
-              <Image src="/images/atolye-4.png" alt="Kalite Kontrol" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="font-serif text-lg mb-1">Kalite Garantisi</h3>
-                <p className="text-sm text-white/80 font-sans">Sertifikalı malzeme, titiz işçilik</p>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className="text-center mt-10">
@@ -594,7 +657,7 @@ export default function Home() {
 
           {/* Instagram Grid */}
           <div className="grid grid-cols-3 md:grid-cols-6 gap-1">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
+            {instagramImages.map((imgSrc: string, i: number) => (
               <a
                 key={i}
                 href={instagramUrl}
@@ -602,12 +665,21 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="relative aspect-square bg-beige overflow-hidden group"
               >
-                <Image
-                  src={`/images/instagram-${i}.jpg`}
-                  alt={`Instagram ${i}`}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                />
+                {imgSrc.startsWith("http") ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={imgSrc}
+                    alt={`Instagram ${i + 1}`}
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  />
+                ) : (
+                  <Image
+                    src={imgSrc}
+                    alt={`Instagram ${i + 1}`}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                )}
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                   <Instagram className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>

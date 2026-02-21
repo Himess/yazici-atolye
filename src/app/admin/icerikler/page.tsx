@@ -49,6 +49,40 @@ const contentTypes = [
   { value: "url", label: "Link" },
 ];
 
+const sectionLabels: Record<string, string> = {
+  "anasayfa:koleksiyon_baslik": "Koleksiyon Basligi",
+  "anasayfa:sticky": "Sticky Scroll Resmi",
+  "anasayfa:marka": "Marka Mesaji",
+  "anasayfa:banner": "Banner (Her Gun Isilta)",
+  "anasayfa:guven": "Guven Ikonlari (3 kart)",
+  "anasayfa:faq": "Sikca Sorulan Sorular",
+  "anasayfa:uretim": "Uretimden Sizlere",
+  "anasayfa:instagram": "Instagram Grid (6 resim)",
+  "hakkimizda:hero": "Hakkimizda - Hero",
+  "hakkimizda:hikaye": "Hakkimizda - Hikayemiz",
+  "hakkimizda:atolye_gorselleri": "Hakkimizda - Atolye Gorselleri",
+  "hakkimizda:neden_biz": "Hakkimizda - Neden Biz",
+};
+
+const keyLabels: Record<string, string> = {
+  title: "Baslik",
+  subtitle: "Alt Baslik",
+  image: "Gorsel URL",
+  quote: "Alinti Metin",
+  author: "Yazar",
+  buttonText: "Buton Metni",
+  buttonUrl: "Buton Linki",
+  items: "Icerik Listesi (JSON)",
+  p1: "Paragraf 1",
+  p2: "Paragraf 2",
+  p3: "Paragraf 3",
+};
+
+const pageLabels: Record<string, string> = {
+  anasayfa: "Ana Sayfa",
+  hakkimizda: "Hakkimizda",
+};
+
 export default function AdminContentPage() {
   const [contents, setContents] = useState<PageContent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -379,7 +413,7 @@ export default function AdminContentPage() {
               {/* Page Header */}
               <div className="px-6 py-3 bg-gray-50 border-b border-gray-200">
                 <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
-                  Sayfa: {page}
+                  {pageLabels[page] || page}
                 </h3>
               </div>
 
@@ -399,7 +433,7 @@ export default function AdminContentPage() {
                       ) : (
                         <ChevronRight className="w-4 h-4 text-gray-400" />
                       )}
-                      <span className="text-sm font-medium text-[#C6A25A]">{section}</span>
+                      <span className="text-sm font-medium text-[#C6A25A]">{sectionLabels[`${page}:${section}`] || section}</span>
                       <span className="text-xs text-gray-400 ml-1">({items.length})</span>
                     </button>
 
@@ -414,7 +448,7 @@ export default function AdminContentPage() {
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
                                 <code className="text-xs font-medium text-gray-600 bg-white px-2 py-0.5 rounded border">
-                                  {content.key}
+                                  {keyLabels[content.key] || content.key}
                                 </code>
                                 <span className="text-[10px] text-gray-400 uppercase">
                                   {content.type}

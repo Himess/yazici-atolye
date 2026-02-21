@@ -19,23 +19,69 @@ interface SiteSettings {
 
 export default function HakkimizdaPage() {
   const [settings, setSettings] = useState<SiteSettings>({});
+  const [content, setContent] = useState<Record<string, Record<string, string>>>({});
 
   useEffect(() => {
-    fetch("/api/settings")
-      .then((res) => res.json())
-      .then((data) => setSettings(data))
-      .catch((err) => console.error("Hakkimizda settings fetch error:", err));
+    Promise.all([
+      fetch("/api/settings"),
+      fetch("/api/content?page=hakkimizda"),
+    ])
+      .then(async ([settingsRes, contentRes]) => {
+        const settingsData = await settingsRes.json();
+        const contentData = await contentRes.json();
+        setSettings(settingsData);
+        setContent(contentData);
+      })
+      .catch((err) => console.error("Hakkimizda fetch error:", err));
   }, []);
 
   // Helper to strip non-digit characters for tel: and wa.me links
   const phoneDigits = (val?: string) => val?.replace(/\D/g, "") || "";
+
+  // Parse atolye gorselleri from API or use defaults
+  const atolyeImages = (() => {
+    try {
+      return JSON.parse(content.atolye_gorselleri?.items || "[]");
+    } catch {
+      return [];
+    }
+  })();
+  const defaultAtolyeImages = [
+    { image: "/images/atolye-usta-1.png", alt: "Usta Calismasi" },
+    { image: "/images/atolye-3.png", alt: "Atolye Detay" },
+    { image: "/images/atolye-4.png", alt: "El Isciligi" },
+    { image: "/images/atolye-kutu-1.png", alt: "Ozel Paketleme" },
+  ];
+  const finalAtolyeImages = atolyeImages.length > 0 ? atolyeImages : defaultAtolyeImages;
+
+  // Parse neden biz items from API or use defaults
+  const iconMap: Record<string, React.ReactNode> = {
+    Award: <Award className="w-8 h-8 text-[#C4A574]" />,
+    Shield: <Shield className="w-8 h-8 text-[#C4A574]" />,
+    Gem: <Gem className="w-8 h-8 text-[#C4A574]" />,
+    Heart: <Heart className="w-8 h-8 text-[#C4A574]" />,
+  };
+  const nedenBizItems = (() => {
+    try {
+      return JSON.parse(content.neden_biz?.items || "[]");
+    } catch {
+      return [];
+    }
+  })();
+  const defaultNedenBizItems = [
+    { icon: "Award", title: "40 Yillik Tecrube", description: "Nesiller boyu aktarilan usta isciligi" },
+    { icon: "Shield", title: "Sertifikali Urunler", description: "Tum taslar ve metaller sertifikali" },
+    { icon: "Gem", title: "Uygun Fiyat", description: "Aracisiz, dogrudan atolyeden size" },
+    { icon: "Heart", title: "El Yapimi", description: "Her parca ozenle el isciligi ile uretilir" },
+  ];
+  const finalNedenBizItems = nedenBizItems.length > 0 ? nedenBizItems : defaultNedenBizItems;
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative h-[400px] md:h-[500px] overflow-hidden">
         <Image
-          src="/images/atolye-usta-1.png"
+          src={content.hero?.image || "/images/atolye-usta-1.png"}
           alt="Yazici Atolye - 40 Yillik Tecrube"
           fill
           className="object-cover"
@@ -45,11 +91,10 @@ export default function HakkimizdaPage() {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-4">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl mb-4 text-white">
-              Uretimden Sizlere
+              {content.hero?.title || "Uretimden Sizlere"}
             </h1>
             <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
-              40 yili askin tecrubemiz ile buyuk kuyumculara toptan satis yapiyoruz.
-              Simdi ayni kaliteyi, aracisiz fiyatlarla sizlere sunuyoruz.
+              {content.hero?.subtitle || "40 yili askin tecrubemiz ile buyuk kuyumculara toptan satis yapiyoruz. Simdi ayni kaliteyi, aracisiz fiyatlarla sizlere sunuyoruz."}
             </p>
           </div>
         </div>
@@ -66,23 +111,18 @@ export default function HakkimizdaPage() {
             <div className="grid md:grid-cols-2 gap-12 mt-12 items-center">
               <div>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Yazici Atolye, 40 yili askin suredir Turkiye&apos;nin onde gelen kuyumcu
-                  markalalarina toptan uretim yapmaktadir. Nesiller boyu aktarilan
-                  kuyumculuk sanatini, modern tasarimlarla bulusturuyoruz.
+                  {content.hikaye?.p1 || "Yazici Atolye, 40 yili askin suredir Turkiye'nin onde gelen kuyumcu markalalarina toptan uretim yapmaktadir. Nesiller boyu aktarilan kuyumculuk sanatini, modern tasarimlarla bulusturuyoruz."}
                 </p>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Yillardir buyuk magazalara tedarik ettigimiz ayni kalitedeki urunleri,
-                  artik aracisiz olarak sizlere ulastiriyoruz. Boylece piyasa fiyatinin
-                  cok altinda, ustun kaliteli takılara sahip olabilirsiniz.
+                  {content.hikaye?.p2 || "Yillardir buyuk magazalara tedarik ettigimiz ayni kalitedeki urunleri, artik aracisiz olarak sizlere ulastiriyoruz. Boylece piyasa fiyatinin cok altinda, ustun kaliteli takilara sahip olabilirsiniz."}
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Her parcamiz, usta ellerden cikar ve sizin icin ozel olarak hazirlanir.
-                  El yapimi takilarimiz, sizin ozel anlariniza anlam katar.
+                  {content.hikaye?.p3 || "Her parcamiz, usta ellerden cikar ve sizin icin ozel olarak hazirlanir. El yapimi takilarimiz, sizin ozel anlariniza anlam katar."}
                 </p>
               </div>
               <div className="relative aspect-square">
                 <Image
-                  src="/images/atolye.png"
+                  src={content.hikaye?.image || "/images/atolye.png"}
                   alt="Yazici Atolye"
                   fill
                   className="object-cover"
@@ -101,38 +141,16 @@ export default function HakkimizdaPage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
-            <div className="relative aspect-square overflow-hidden group">
-              <Image
-                src="/images/atolye-usta-1.png"
-                alt="Usta Calismasi"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div className="relative aspect-square overflow-hidden group">
-              <Image
-                src="/images/atolye-3.png"
-                alt="Atolye Detay"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div className="relative aspect-square overflow-hidden group">
-              <Image
-                src="/images/atolye-4.png"
-                alt="El Isciligi"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div className="relative aspect-square overflow-hidden group">
-              <Image
-                src="/images/atolye-kutu-1.png"
-                alt="Ozel Paketleme"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
+            {finalAtolyeImages.map((item: { image: string; alt: string }, index: number) => (
+              <div key={index} className="relative aspect-square overflow-hidden group">
+                <Image
+                  src={item.image || "/images/atolye.png"}
+                  alt={item.alt || "Atolye"}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -145,45 +163,17 @@ export default function HakkimizdaPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-[#F5F5F5] rounded-full flex items-center justify-center">
-                <Award className="w-8 h-8 text-[#C4A574]" />
+            {finalNedenBizItems.map((item: { icon: string; title: string; description: string }, index: number) => (
+              <div key={index} className="text-center">
+                <div className="w-16 h-16 mx-auto mb-4 bg-[#F5F5F5] rounded-full flex items-center justify-center">
+                  {iconMap[item.icon] || <Award className="w-8 h-8 text-[#C4A574]" />}
+                </div>
+                <h3 className="font-serif text-lg mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {item.description}
+                </p>
               </div>
-              <h3 className="font-serif text-lg mb-2">40 Yillik Tecrube</h3>
-              <p className="text-sm text-muted-foreground">
-                Nesiller boyu aktarilan usta isciligi
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-[#F5F5F5] rounded-full flex items-center justify-center">
-                <Shield className="w-8 h-8 text-[#C4A574]" />
-              </div>
-              <h3 className="font-serif text-lg mb-2">Sertifikali Urunler</h3>
-              <p className="text-sm text-muted-foreground">
-                Tum taslar ve metaller sertifikali
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-[#F5F5F5] rounded-full flex items-center justify-center">
-                <Gem className="w-8 h-8 text-[#C4A574]" />
-              </div>
-              <h3 className="font-serif text-lg mb-2">Uygun Fiyat</h3>
-              <p className="text-sm text-muted-foreground">
-                Aracisiz, dogrudan atolyeden size
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-[#F5F5F5] rounded-full flex items-center justify-center">
-                <Heart className="w-8 h-8 text-[#C4A574]" />
-              </div>
-              <h3 className="font-serif text-lg mb-2">El Yapimi</h3>
-              <p className="text-sm text-muted-foreground">
-                Her parca ozenle el isciligi ile uretilir
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>

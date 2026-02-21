@@ -363,12 +363,17 @@ export default function AdminSliderPage() {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
               />
-              {form.title && (
-                <div className={`absolute inset-0 flex flex-col items-center justify-center text-center p-4 ${form.overlay === "dark" ? "bg-black/40 text-white" : "bg-white/40 text-gray-900"}`}>
-                  <p className="text-lg font-bold">{form.title}</p>
-                  {form.subtitle && <p className="text-sm mt-1">{form.subtitle}</p>}
-                </div>
-              )}
+              <div className={`absolute inset-0 flex flex-col items-start justify-center p-6 ${form.overlay === "dark" ? "bg-gradient-to-t from-black/60 via-black/30 to-black/10" : "bg-gradient-to-r from-white/90 via-white/60 to-transparent"}`}>
+                {form.title && (
+                  <p className={`text-xl font-bold tracking-wide ${form.overlay === "dark" ? "text-white" : "text-gray-900"}`}>{form.title}</p>
+                )}
+                {form.subtitle && (
+                  <p className={`text-xs tracking-wider mt-1 ${form.overlay === "dark" ? "text-white/80" : "text-gray-600"}`}>{form.subtitle}</p>
+                )}
+                {form.buttonText && (
+                  <span className="inline-block bg-[#C6A25A] text-white px-4 py-1.5 text-xs tracking-wider uppercase mt-3">{form.buttonText}</span>
+                )}
+              </div>
             </div>
           )}
 

@@ -153,19 +153,28 @@ export function HeroSlider() {
       {/* Content */}
       <div className="container mx-auto px-4 h-full flex items-center relative z-20">
         <div className="max-w-xl">
-          <h1
-            className={`font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight tracking-wide ${
-              slide.overlay === "dark" ? "text-white" : "text-dark"
-            }`}
-          >
-            {slide.title}
-            <br />
-            {slide.subtitle}
-          </h1>
+          {slide.title && (
+            <h1
+              className={`font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-wide ${
+                slide.overlay === "dark" ? "text-white" : "text-dark"
+              }`}
+            >
+              {slide.title}
+            </h1>
+          )}
+          {slide.subtitle && (
+            <p
+              className={`font-sans text-sm sm:text-base md:text-lg tracking-wider mt-3 sm:mt-4 ${
+                slide.overlay === "dark" ? "text-white/80" : "text-dark/70"
+              }`}
+            >
+              {slide.subtitle}
+            </p>
+          )}
           {slide.buttonText && slide.buttonUrl && (
             <Link
               href={slide.buttonUrl}
-              className="inline-block bg-gold text-white px-8 py-3 text-sm tracking-wider uppercase font-sans font-medium hover:bg-dark transition-colors"
+              className="inline-block bg-gold text-white px-8 py-3 text-sm tracking-wider uppercase font-sans font-medium hover:bg-dark transition-colors mt-6 sm:mt-8"
             >
               {slide.buttonText}
             </Link>

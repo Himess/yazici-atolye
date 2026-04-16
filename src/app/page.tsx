@@ -397,7 +397,7 @@ export default function Home() {
           <div className="absolute inset-0 flex items-center justify-center px-4">
             <Link
               href="/urunler?kategori=kolye"
-              className="bg-gold text-white px-10 py-4 text-sm md:text-base tracking-[0.2em] uppercase font-sans font-bold shadow-lg hover:bg-dark transition-colors"
+              className="bg-gold text-white px-10 py-4 text-sm md:text-base tracking-[0.2em] uppercase font-sans font-bold shadow-lg hover:bg-dark transition-colors md:translate-x-32 lg:translate-x-48"
             >
               Koleksiyonları Keşfet
             </Link>

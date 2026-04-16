@@ -312,7 +312,6 @@ export default function Home() {
   const stickyImage = content.sticky?.image || "/images/kuyumcu-1.jpeg";
   const bannerImage = content.banner?.image || "/images/kolye1-1.png";
   const uretimTitle = content.uretim?.title || "ÜRETİMDEN SİZLERE";
-  const uretimSubtitle = content.uretim?.subtitle || "40 yılı aşkın tecrübemiz ile büyük kuyumculara toptan satış yapıyoruz. Şimdi aynı kaliteyi, aracısız fiyatlarla sizlere sunuyoruz.";
 
   return (
     <div className="flex flex-col">
@@ -397,7 +396,7 @@ export default function Home() {
           <div className="absolute inset-0 flex items-center justify-center px-4">
             <Link
               href="/urunler?kategori=kolye"
-              className="bg-gold text-white px-10 py-4 text-sm md:text-base tracking-[0.2em] uppercase font-sans font-bold shadow-lg hover:bg-dark transition-colors md:translate-x-56 lg:translate-x-80 xl:translate-x-96"
+              className="bg-gold text-white px-10 py-4 text-sm md:text-base tracking-[0.2em] uppercase font-sans font-bold shadow-lg hover:bg-dark transition-colors md:translate-x-80 lg:translate-x-[28rem] xl:translate-x-[40rem]"
             >
               Koleksiyonları Keşfet
             </Link>
@@ -626,10 +625,7 @@ export default function Home() {
       {/* Üretimden Sizlere */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="section-title mb-4">{uretimTitle}</h2>
-          <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto font-sans">
-            {uretimSubtitle}
-          </p>
+          <h2 className="section-title mb-10">{uretimTitle}</h2>
 
           <div className={`grid grid-cols-1 gap-6 ${uretimItems.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 max-w-4xl mx-auto'}`}>
             {uretimItems.map((item: { image: string; title: string; description: string }, index: number) => (

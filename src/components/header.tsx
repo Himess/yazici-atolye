@@ -132,15 +132,15 @@ export function Header() {
       {/* 2b. Ana Header */}
       <div className="bg-white border-b border-border">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16 md:h-20">
+          <div className="flex items-center justify-between h-28 md:h-36">
             {/* Sol - Logo */}
             <Link href="/" className="flex-shrink-0">
               <Image
                 src="/images/yazici_pirlanta_clean.png"
                 alt="Yazici Atolye"
-                width={140}
-                height={56}
-                className="h-10 md:h-12 w-auto"
+                width={350}
+                height={140}
+                className="h-[100px] md:h-[120px] w-auto"
                 priority
               />
             </Link>
@@ -288,7 +288,7 @@ export function Header() {
 
       {/* 2d. Mobil Header - Hamburger + Logo + Sepet */}
       <div className="lg:hidden sticky top-0 z-50 bg-white border-b border-border">
-        <div className="flex items-center justify-between px-4 h-12">
+        <div className="flex items-center justify-between px-4 h-24">
           {/* Hamburger */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
@@ -311,9 +311,9 @@ export function Header() {
                     <Image
                       src="/images/yazici_pirlanta_clean.png"
                       alt="Yazici Atolye"
-                      width={120}
-                      height={48}
-                      className="h-10 w-auto"
+                      width={300}
+                      height={120}
+                      className="h-[100px] w-auto"
                     />
                   </Link>
                 </div>
@@ -399,9 +399,9 @@ export function Header() {
             <Image
               src="/images/yazici_pirlanta_clean.png"
               alt="Yazici Atolye"
-              width={100}
-              height={40}
-              className="h-8 w-auto"
+              width={250}
+              height={100}
+              className="h-[80px] w-auto"
             />
           </Link>
 

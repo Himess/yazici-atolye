@@ -327,11 +327,6 @@ export default function Home() {
         <p className="mt-4 text-muted-foreground font-sans text-base md:text-lg max-w-2xl mx-auto px-4">
           {content.koleksiyon_baslik?.subtitle || "40 yıllık ustalıkla, atölyemizden sizlere özel tasarımlar"}
         </p>
-        <div className="mt-8">
-          <Link href="/urunler?kategori=kolye" className="btn-primary inline-block">
-            Koleksiyonları Keşfet
-          </Link>
-        </div>
       </section>
 
       {/* ALIŞVERİŞ KATEGORİLERİ */}
@@ -398,6 +393,15 @@ export default function Home() {
               sizes="100vw"
             />
           )}
+          {/* CTA Butonu */}
+          <div className="absolute inset-0 flex items-center justify-center px-4">
+            <Link
+              href="/urunler?kategori=kolye"
+              className="bg-gold text-white px-10 py-4 text-sm md:text-base tracking-[0.2em] uppercase font-sans font-bold shadow-lg hover:bg-dark transition-colors"
+            >
+              Koleksiyonları Keşfet
+            </Link>
+          </div>
           {/* Aşağı kaydırma oku */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce">
             <span className="text-white/80 text-xs font-sans tracking-widest uppercase mb-2">Kaydır</span>
@@ -645,10 +649,10 @@ export default function Home() {
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h3 className="font-serif text-lg mb-1">{item.title}</h3>
-                  <p className="text-sm text-white/80 font-sans">{item.description}</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="font-serif text-lg mb-1 text-white drop-shadow-md">{item.title}</h3>
+                  <p className="text-sm text-white/90 font-sans drop-shadow-md">{item.description}</p>
                 </div>
               </div>
             ))}

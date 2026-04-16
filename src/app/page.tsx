@@ -174,7 +174,6 @@ const defaultGuvenItems = [
 ];
 
 const defaultUretimItems = [
-  { image: "/images/atolye-usta-1.png", title: "40 Yıllık Tecrübe", description: "Usta ellerden, özenle işlenen parçalar" },
   { image: "/images/atolye-3.png", title: "El İşçiliği", description: "Her parça, tek tek elle üretilir" },
   { image: "/images/atolye-4.png", title: "Kalite Garantisi", description: "Sertifikalı malzeme, titiz işçilik" },
 ];
@@ -269,7 +268,12 @@ export default function Home() {
   const uretimItems = useMemo(() => {
     try {
       const parsed = JSON.parse(content.uretim?.items || "[]");
-      return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultUretimItems;
+      const items = Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultUretimItems;
+      return items.filter(
+        (item: { image?: string; description?: string }) =>
+          item.image !== "/images/atolye-usta-1.png" &&
+          !(item.description || "").includes("Usta ellerden")
+      );
     } catch {
       return defaultUretimItems;
     }
@@ -317,12 +321,17 @@ export default function Home() {
 
       {/* ÖZEL KOLEKSİYON BAŞLIK */}
       <section className="py-16 md:py-20 bg-cream text-center">
-        <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-wide text-dark uppercase">
+        <h2 className="font-sans text-3xl md:text-4xl font-bold tracking-wide text-dark uppercase">
           {content.koleksiyon_baslik?.title || "ÖZEL KOLEKSİYONLARIMIZ"}
         </h2>
         <p className="mt-4 text-muted-foreground font-sans text-base md:text-lg max-w-2xl mx-auto px-4">
           {content.koleksiyon_baslik?.subtitle || "40 yıllık ustalıkla, atölyemizden sizlere özel tasarımlar"}
         </p>
+        <div className="mt-8">
+          <Link href="/urunler?kategori=kolye" className="btn-primary inline-block">
+            Koleksiyonları Keşfet
+          </Link>
+        </div>
       </section>
 
       {/* ALIŞVERİŞ KATEGORİLERİ */}
@@ -618,7 +627,7 @@ export default function Home() {
             {uretimSubtitle}
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className={`grid grid-cols-1 gap-6 ${uretimItems.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 max-w-4xl mx-auto'}`}>
             {uretimItems.map((item: { image: string; title: string; description: string }, index: number) => (
               <div key={index} className="relative aspect-[4/3] overflow-hidden group">
                 {item.image.startsWith("http") ? (

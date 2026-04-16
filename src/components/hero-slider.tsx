@@ -155,7 +155,7 @@ export function HeroSlider() {
         <div className="max-w-xl">
           {slide.title && (
             <h1
-              className={`font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-wide ${
+              className={`font-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-wide ${
                 slide.overlay === "dark" ? "text-white" : "text-dark"
               }`}
             >

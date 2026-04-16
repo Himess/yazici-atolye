@@ -136,7 +136,7 @@ export function Header() {
             {/* Sol - Logo */}
             <Link href="/" className="flex-shrink-0">
               <Image
-                src="/images/logo-dark.png"
+                src="/images/yazici_pirlanta_clean.png"
                 alt="Yazici Atolye"
                 width={140}
                 height={56}
@@ -309,7 +309,7 @@ export function Header() {
                 <div className="p-6 border-b border-border">
                   <Link href="/" onClick={() => setIsOpen(false)}>
                     <Image
-                      src="/images/logo-dark.png"
+                      src="/images/yazici_pirlanta_clean.png"
                       alt="Yazici Atolye"
                       width={120}
                       height={48}
@@ -397,7 +397,7 @@ export function Header() {
           {/* Logo (orta) */}
           <Link href="/" className="absolute left-1/2 -translate-x-1/2">
             <Image
-              src="/images/logo-dark.png"
+              src="/images/yazici_pirlanta_clean.png"
               alt="Yazici Atolye"
               width={100}
               height={40}

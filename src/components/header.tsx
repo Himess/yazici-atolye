@@ -129,8 +129,8 @@ export function Header() {
         </div>
       </div>
 
-      {/* 2b. Ana Header */}
-      <div className="bg-white border-b border-border">
+      {/* 2b. Ana Header (sadece desktop) */}
+      <div className="hidden lg:block bg-white border-b border-border">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-28 md:h-36">
             {/* Sol - Logo */}

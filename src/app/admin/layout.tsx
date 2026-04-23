@@ -90,10 +90,10 @@ export default function AdminLayout({
         <div className="flex items-center justify-between px-6 py-5 border-b border-zinc-700">
           <Link href="/admin" className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#C6A25A] to-[#A8862E] flex items-center justify-center font-bold text-sm">
-              YA
+              F
             </div>
             <div>
-              <h1 className="text-sm font-semibold text-white">Yazici Atolye</h1>
+              <h1 className="text-sm font-semibold text-white">Favian Jewellery</h1>
               <p className="text-[11px] text-zinc-400">Yonetim Paneli</p>
             </div>
           </Link>

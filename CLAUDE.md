@@ -1,10 +1,20 @@
-# Yazici Atolye - Proje Hafizasi
+# Favian Jewellery - Proje Hafizasi
 
 Bu dosya proje hakkindaki tum kararlari ve bilgileri saklar.
 
+## Rebrand Notu (2026-04-24)
+
+- **Eski:** Yazici Atolye → **Yeni:** Favian Jewellery
+- Logo: `/images/favian-logo.png` (placeholder olarak eski logo kopyalandi, gercek FAVIAN logo dosyasi konulacak)
+- Hero: VideoHero (background video) — `public/videos/hero.mp4`
+- Hero slider eski component'i (`hero-slider.tsx`) hala duruyor, kullanilmiyor
+- Email/social handle placeholder'lari: `favianjewellery.com` (gercek mail/domain alinmadi)
+- Repo adi: `yazici-atolye` (GitHub'da degismedi, kod icinde `favian-jewellery`)
+- localStorage key'leri: `yazici-*` olarak kalmaya devam ediyor (mevcut kullanici sessionlarini bozmamak icin)
+
 ## Proje Bilgileri
 
-- **Proje Adi:** Yazici Atolye
+- **Proje Adi:** Favian Jewellery
 - **Tur:** Kuyumcu E-Ticaret Sitesi
 - **Framework:** Next.js 14 (App Router)
 - **Styling:** Tailwind CSS + shadcn/ui

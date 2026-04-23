@@ -134,13 +134,13 @@ export default function IletisimPage() {
   const whatsappNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '902121234567';
 
   const handleWhatsApp = () => {
-    const text = "Merhaba, Yazici Atolye ile iletisime gecmek istiyorum.";
+    const text = "Merhaba, Favian Jewellery ile iletisime gecmek istiyorum.";
     window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`, "_blank");
   };
 
   // Display values with fallbacks
   const displayPhone = settings?.phone || "+90 (212) 123 45 67";
-  const displayEmail = settings?.email || "info@yaziciatolye.com";
+  const displayEmail = settings?.email || "info@favianjewellery.com";
   const displayAddress = settings?.address || "Istanbul, Turkiye";
   const displayWorkingHours = settings?.workingHours || "Pazartesi - Cumartesi: 10:00 - 19:00";
 

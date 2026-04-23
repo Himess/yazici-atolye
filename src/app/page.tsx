@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { Product } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
-import { HeroSlider } from "@/components/hero-slider";
+import { VideoHero } from "@/components/video-hero";
 import { ChevronDown, ChevronLeft, ChevronRight, Heart, Sparkles, Gem, Star, Facebook, Instagram, Youtube } from "lucide-react";
 
 type Testimonial = {
@@ -303,10 +303,10 @@ export default function Home() {
   };
 
   // Social media URLs from settings, with fallbacks
-  const facebookUrl = settings.facebookUrl || "https://facebook.com/yaziciatolye";
-  const instagramUrl = settings.instagramUrl || "https://instagram.com/yaziciatolye";
-  const youtubeUrl = settings.youtubeUrl || "https://youtube.com/@yaziciatolye";
-  const tiktokUrl = settings.tiktokUrl || "https://tiktok.com/@yaziciatolye";
+  const facebookUrl = settings.facebookUrl || "https://facebook.com/favianjewellery";
+  const instagramUrl = settings.instagramUrl || "https://instagram.com/favianjewellery";
+  const youtubeUrl = settings.youtubeUrl || "https://youtube.com/@favianjewellery";
+  const tiktokUrl = settings.tiktokUrl || "https://tiktok.com/@favianjewellery";
 
   // Dynamic content values with fallbacks
   const stickyImage = content.sticky?.image || "/images/kuyumcu-1.jpeg";
@@ -315,8 +315,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Slider */}
-      <HeroSlider />
+      {/* Hero Video */}
+      <VideoHero />
 
       {/* ÖZEL KOLEKSİYON BAŞLIK */}
       <section className="py-16 md:py-20 bg-cream text-center">
@@ -379,13 +379,13 @@ export default function Home() {
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={stickyImage}
-              alt="Yazıcı Atölye Koleksiyon"
+              alt="Favian Jewellery Koleksiyon"
               className="object-cover w-full h-full"
             />
           ) : (
             <Image
               src={stickyImage}
-              alt="Yazıcı Atölye Koleksiyon"
+              alt="Favian Jewellery Koleksiyon"
               fill
               className="object-cover"
               priority
@@ -448,7 +448,7 @@ export default function Home() {
           </p>
           <div className="w-16 h-px bg-gold mx-auto mt-8" />
           <p className="mt-6 text-sm text-muted-foreground font-sans tracking-wider uppercase">
-            {content.marka?.author || "— Yazıcı Atölye"}
+            {content.marka?.author || "— Favian Jewellery"}
           </p>
         </div>
       </section>

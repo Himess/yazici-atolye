@@ -176,7 +176,7 @@ export default function UrunDetayPage() {
   const whatsappNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '902121234567';
 
   const handleShare = () => {
-    const text = `${product.name} - ${formatPrice(product.price)} | Yazici Atolye`;
+    const text = `${product.name} - ${formatPrice(product.price)} | Favian Jewellery`;
     const url = typeof window !== 'undefined' ? window.location.href : '';
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
     window.open(whatsappUrl, '_blank');

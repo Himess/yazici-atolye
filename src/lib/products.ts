@@ -45,7 +45,7 @@ export const products: Product[] = [
     code: "YA-TK-001",
     name: "0,50 Karat Pirlanta Tektas Yuzuk",
     description: "14 ayar sari altin uzerine 0.50 karat pirlanta tasli zarif tektas yuzuk.",
-    about: "0,50 Karat Pirlanta Tektas Yuzuk, pirlantalarin en saf halini yansitan ozel bir tasarimdir. Nisan ve soz torenleri icin ideal olan bu yuzuk, Yazici Atolye kalitesini uzerinde tasir.",
+    about: "0,50 Karat Pirlanta Tektas Yuzuk, pirlantalarin en saf halini yansitan ozel bir tasarimdir. Nisan ve soz torenleri icin ideal olan bu yuzuk, Favian Jewellery kalitesini uzerinde tasir.",
     price: 45000,
     oldPrice: 52000,
     category: "yuzuk",

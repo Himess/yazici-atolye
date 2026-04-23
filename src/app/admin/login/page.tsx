@@ -51,9 +51,9 @@ export default function AdminLoginPage() {
         {/* Logo / Marka */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#C6A25A] to-[#A8862E] shadow-xl shadow-[#C6A25A]/20 mb-4">
-            <span className="text-white text-2xl font-bold">YA</span>
+            <span className="text-white text-2xl font-bold">F</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Yazici Atolye</h1>
+          <h1 className="text-2xl font-bold text-white">Favian Jewellery</h1>
           <p className="text-zinc-400 text-sm mt-1">Yonetim Paneli</p>
         </div>
 
@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="admin@yaziciatolye.com"
+                  placeholder="admin@favianjewellery.com"
                   className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#C6A25A]/50 focus:border-[#C6A25A]/50 transition-all"
                 />
               </div>
@@ -145,7 +145,7 @@ export default function AdminLoginPage() {
 
         {/* Alt bilgi */}
         <p className="text-center text-zinc-600 text-xs mt-6">
-          Yazici Atolye &copy; {new Date().getFullYear()} - Tum haklari saklidir.
+          Favian Jewellery &copy; {new Date().getFullYear()} - Tum haklari saklidir.
         </p>
       </div>
     </div>

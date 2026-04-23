@@ -21,12 +21,14 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: "Yazici Atolye | El Yapimi Takilar & Mucevherat",
-    template: "%s | Yazici Atolye",
+    default: "Favian Jewellery | El Yapimi Takilar & Mucevherat",
+    template: "%s | Favian Jewellery",
   },
   description:
-    "Yazici Atolye - Ozel tasarim el yapimi takilar, nisan yuzukleri, alyanslar ve mucevherat. Kalite ve zarafetin bulustugu adres.",
+    "Favian Jewellery - Ozel tasarim el yapimi takilar, nisan yuzukleri, alyanslar ve mucevherat. Kalite ve zarafetin bulustugu adres.",
   keywords: [
+    "favian",
+    "favian jewellery",
     "kuyumcu",
     "mucevher",
     "altin",
@@ -38,19 +40,19 @@ export const metadata: Metadata = {
     "nisan yuzugu",
     "alyans",
   ],
-  authors: [{ name: "Yazici Atolye" }],
-  creator: "Yazici Atolye",
+  authors: [{ name: "Favian Jewellery" }],
+  creator: "Favian Jewellery",
   openGraph: {
     type: "website",
     locale: "tr_TR",
-    siteName: "Yazici Atolye",
-    title: "Yazici Atolye | El Yapimi Takilar & Mucevherat",
+    siteName: "Favian Jewellery",
+    title: "Favian Jewellery | El Yapimi Takilar & Mucevherat",
     description:
       "Ozel tasarim el yapimi takilar, nisan yuzukleri, alyanslar ve mucevherat.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yazici Atolye | El Yapimi Takilar",
+    title: "Favian Jewellery | El Yapimi Takilar",
     description: "Ozel tasarim el yapimi takilar ve mucevherat.",
   },
   robots: {

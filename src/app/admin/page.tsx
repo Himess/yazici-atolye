@@ -78,7 +78,7 @@ export default async function AdminDashboard() {
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">Dashboard</h1>
         <p className="text-zinc-500 text-sm mt-1">
-          Yazici Atolye yonetim paneline hos geldiniz.
+          Favian Jewellery yonetim paneline hos geldiniz.
         </p>
       </div>
 

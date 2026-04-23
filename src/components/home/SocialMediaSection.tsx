@@ -39,7 +39,7 @@ export default function SocialMediaSection() {
         <div className={`flex justify-center mb-10 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           <div className="bg-white rounded-lg shadow-lg border border-border p-4 md:p-6 inline-block">
             <iframe
-              src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fyaziciatolye&tabs=timeline&width=500&height=400&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true"
+              src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ffavianjewellery&tabs=timeline&width=500&height=400&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true"
               width="500"
               height="400"
               className="max-w-full rounded"
@@ -59,7 +59,7 @@ export default function SocialMediaSection() {
           style={{ transitionDelay: "200ms" }}
         >
           <a
-            href="https://facebook.com/yaziciatolye"
+            href="https://facebook.com/favianjewellery"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 px-6 py-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#1664d9] transition-colors shadow-md font-sans font-semibold"
@@ -69,7 +69,7 @@ export default function SocialMediaSection() {
           </a>
 
           <a
-            href="https://instagram.com/yaziciatolye"
+            href="https://instagram.com/favianjewellery"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white rounded-lg hover:opacity-90 transition-opacity shadow-md font-sans font-semibold"
@@ -79,7 +79,7 @@ export default function SocialMediaSection() {
           </a>
 
           <a
-            href="https://youtube.com/@yaziciatolye"
+            href="https://youtube.com/@favianjewellery"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 px-6 py-3 bg-[#FF0000] text-white rounded-lg hover:bg-[#cc0000] transition-colors shadow-md font-sans font-semibold"

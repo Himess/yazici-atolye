@@ -201,7 +201,7 @@ export default function AdminSettingsPage() {
                 value={form.email}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="info@yaziciatolye.com"
+                placeholder="info@favianjewellery.com"
               />
             </div>
             <div className="md:col-span-2">
@@ -267,7 +267,7 @@ export default function AdminSettingsPage() {
                 value={form.facebookUrl}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="https://facebook.com/yaziciatolye"
+                placeholder="https://facebook.com/favianjewellery"
               />
             </div>
             <div>
@@ -281,7 +281,7 @@ export default function AdminSettingsPage() {
                 value={form.instagramUrl}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="https://instagram.com/yaziciatolye"
+                placeholder="https://instagram.com/favianjewellery"
               />
             </div>
             <div>
@@ -295,7 +295,7 @@ export default function AdminSettingsPage() {
                 value={form.youtubeUrl}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="https://youtube.com/@yaziciatolye"
+                placeholder="https://youtube.com/@favianjewellery"
               />
             </div>
             <div>
@@ -308,7 +308,7 @@ export default function AdminSettingsPage() {
                 value={form.tiktokUrl}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="https://tiktok.com/@yaziciatolye"
+                placeholder="https://tiktok.com/@favianjewellery"
               />
             </div>
             <div>
@@ -321,7 +321,7 @@ export default function AdminSettingsPage() {
                 value={form.pinterestUrl}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="https://pinterest.com/yaziciatolye"
+                placeholder="https://pinterest.com/favianjewellery"
               />
             </div>
           </div>

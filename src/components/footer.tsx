@@ -159,7 +159,7 @@ export function Footer() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-xs text-muted-foreground font-sans">
-              &copy; {new Date().getFullYear()} Yazıcı Atölye. Tüm hakları saklıdır.
+              &copy; {new Date().getFullYear()} Favian Jewellery. Tüm hakları saklıdır.
             </p>
 
             {/* Ödeme İkonları */}

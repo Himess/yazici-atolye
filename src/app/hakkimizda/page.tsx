@@ -82,7 +82,7 @@ export default function HakkimizdaPage() {
       <section className="relative h-[400px] md:h-[500px] overflow-hidden">
         <Image
           src={content.hero?.image || "/images/atolye-usta-1.png"}
-          alt="Yazici Atolye - 40 Yillik Tecrube"
+          alt="Favian Jewellery - 40 Yillik Tecrube"
           fill
           className="object-cover"
           priority
@@ -111,7 +111,7 @@ export default function HakkimizdaPage() {
             <div className="grid md:grid-cols-2 gap-12 mt-12 items-center">
               <div>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  {content.hikaye?.p1 || "Yazici Atolye, 40 yili askin suredir Turkiye'nin onde gelen kuyumcu markalalarina toptan uretim yapmaktadir. Nesiller boyu aktarilan kuyumculuk sanatini, modern tasarimlarla bulusturuyoruz."}
+                  {content.hikaye?.p1 || "Favian Jewellery, 40 yili askin suredir Turkiye'nin onde gelen kuyumcu markalalarina toptan uretim yapmaktadir. Nesiller boyu aktarilan kuyumculuk sanatini, modern tasarimlarla bulusturuyoruz."}
                 </p>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
                   {content.hikaye?.p2 || "Yillardir buyuk magazalara tedarik ettigimiz ayni kalitedeki urunleri, artik aracisiz olarak sizlere ulastiriyoruz. Boylece piyasa fiyatinin cok altinda, ustun kaliteli takilara sahip olabilirsiniz."}
@@ -123,7 +123,7 @@ export default function HakkimizdaPage() {
               <div className="relative aspect-square">
                 <Image
                   src={content.hikaye?.image || "/images/atolye.png"}
-                  alt="Yazici Atolye"
+                  alt="Favian Jewellery"
                   fill
                   className="object-cover"
                 />

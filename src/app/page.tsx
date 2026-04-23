@@ -318,16 +318,6 @@ export default function Home() {
       {/* Hero Video */}
       <VideoHero />
 
-      {/* ÖZEL KOLEKSİYON BAŞLIK */}
-      <section className="py-16 md:py-20 bg-cream text-center">
-        <h2 className="font-sans text-3xl md:text-4xl font-bold tracking-wide text-dark uppercase">
-          {content.koleksiyon_baslik?.title || "ÖZEL KOLEKSİYONLARIMIZ"}
-        </h2>
-        <p className="mt-4 text-muted-foreground font-sans text-base md:text-lg max-w-2xl mx-auto px-4">
-          {content.koleksiyon_baslik?.subtitle || "40 yıllık ustalıkla, atölyemizden sizlere özel tasarımlar"}
-        </p>
-      </section>
-
       {/* ALIŞVERİŞ KATEGORİLERİ */}
       <section className="py-16 bg-cream">
         <div className="container mx-auto px-4">

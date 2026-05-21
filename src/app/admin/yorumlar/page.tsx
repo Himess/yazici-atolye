@@ -76,11 +76,11 @@ export default function AdminTestimonialsPage() {
     try {
       setLoading(true);
       const res = await fetch("/api/admin/testimonials");
-      if (!res.ok) throw new Error("Yorumlar yuklenemedi");
+      if (!res.ok) throw new Error("Yorumlar yüklenemedi");
       const data = await res.json();
       setTestimonials(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Bir hata olustu");
+      setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
       setLoading(false);
     }
@@ -124,7 +124,7 @@ export default function AdminTestimonialsPage() {
 
   const handleSave = async () => {
     if (!form.name.trim() || !form.comment.trim()) {
-      alert("Isim ve yorum alanlari zorunludur");
+      alert("İsim ve yorum alanları zorunludur");
       return;
     }
 
@@ -147,7 +147,7 @@ export default function AdminTestimonialsPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error("Guncellenemedi");
+        if (!res.ok) throw new Error("Güncellenemedi");
         const updated = await res.json();
         setTestimonials((prev) => prev.map((t) => (t.id === editingId ? updated : t)));
       } else {
@@ -156,20 +156,20 @@ export default function AdminTestimonialsPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error("Olusturulamadi");
+        if (!res.ok) throw new Error("Oluşturulamadı");
         const created = await res.json();
         setTestimonials((prev) => [...prev, created]);
       }
       cancelEdit();
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Islem basarisiz");
+      alert(err instanceof Error ? err.message : "İşlem başarısız");
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`"${name}" yorumunu silmek istediginize emin misiniz?`)) return;
+    if (!confirm(`"${name}" yorumunu silmek istediğinize emin misiniz?`)) return;
 
     try {
       setDeleting(id);
@@ -177,7 +177,7 @@ export default function AdminTestimonialsPage() {
       if (!res.ok) throw new Error("Silinemedi");
       setTestimonials((prev) => prev.filter((t) => t.id !== id));
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Silme basarisiz");
+      alert(err instanceof Error ? err.message : "Silme başarısız");
     } finally {
       setDeleting(null);
     }
@@ -187,7 +187,7 @@ export default function AdminTestimonialsPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 animate-spin text-[#C6A25A]" />
-        <span className="ml-3 text-lg text-gray-600">Yorumlar yukleniyor...</span>
+        <span className="ml-3 text-lg text-gray-600">Yorumlar yükleniyor...</span>
       </div>
     );
   }
@@ -209,7 +209,7 @@ export default function AdminTestimonialsPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <MessageSquare className="w-7 h-7 text-[#C6A25A]" />
-            Yorum Yonetimi
+            Yorum Yönetimi
           </h1>
           <p className="text-sm text-gray-500 mt-1">{testimonials.length} yorum</p>
         </div>
@@ -230,18 +230,18 @@ export default function AdminTestimonialsPage() {
       {(showAddForm || editingId) && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            {editingId ? "Yorum Duzenle" : "Yeni Yorum Ekle"}
+            {editingId ? "Yorum Düzenle" : "Yeni Yorum Ekle"}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Isim *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">İsim *</label>
               <input
                 type="text"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: Ayse K."
+                placeholder="örnek: Ayşe K."
               />
             </div>
             <div>
@@ -252,22 +252,22 @@ export default function AdminTestimonialsPage() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
               >
-                <option value="5">5 Yildiz</option>
-                <option value="4">4 Yildiz</option>
-                <option value="3">3 Yildiz</option>
-                <option value="2">2 Yildiz</option>
-                <option value="1">1 Yildiz</option>
+                <option value="5">5 Yıldız</option>
+                <option value="4">4 Yıldız</option>
+                <option value="3">3 Yıldız</option>
+                <option value="2">2 Yıldız</option>
+                <option value="1">1 Yıldız</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Baslik</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Başlık</label>
               <input
                 type="text"
                 name="title"
                 value={form.title}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: Harika kalite!"
+                placeholder="örnek: Harika kalite!"
               />
             </div>
             <div>
@@ -278,7 +278,7 @@ export default function AdminTestimonialsPage() {
                 value={form.date}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: 2 gun once"
+                placeholder="örnek: 2 gün önce"
               />
             </div>
             <div className="md:col-span-2">
@@ -289,11 +289,11 @@ export default function AdminTestimonialsPage() {
                 onChange={handleChange}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm resize-y"
-                placeholder="Musteri yorumu"
+                placeholder="Müşteri yorumu"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sira</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
               <input
                 type="number"
                 name="order"
@@ -312,7 +312,7 @@ export default function AdminTestimonialsPage() {
                   onChange={handleChange}
                   className="w-4 h-4 rounded border-gray-300 text-[#C6A25A] focus:ring-[#C6A25A]"
                 />
-                <span className="text-sm text-gray-700">Dogrulanmis</span>
+                <span className="text-sm text-gray-700">Doğrulanmış</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -333,14 +333,14 @@ export default function AdminTestimonialsPage() {
               className="inline-flex items-center gap-2 bg-[#C6A25A] text-white px-4 py-2 rounded-lg hover:bg-[#b08d47] transition-colors font-medium text-sm disabled:opacity-50"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {editingId ? "Guncelle" : "Kaydet"}
+              {editingId ? "Güncelle" : "Kaydet"}
             </button>
             <button
               onClick={cancelEdit}
               className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm"
             >
               <X className="w-4 h-4" />
-              Iptal
+              İptal
             </button>
           </div>
         </div>
@@ -353,25 +353,25 @@ export default function AdminTestimonialsPage() {
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Isim
+                  İsim
                 </th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Puan
                 </th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Baslik
+                  Başlık
                 </th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Yorum
                 </th>
                 <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Dogrulanmis
+                  Doğrulanmış
                 </th>
                 <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Durum
                 </th>
                 <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Islemler
+                  İşlemler
                 </th>
               </tr>
             </thead>
@@ -411,7 +411,7 @@ export default function AdminTestimonialsPage() {
                       <button
                         onClick={() => startEdit(t)}
                         className="p-2 text-gray-400 hover:text-[#C6A25A] hover:bg-[#C6A25A]/10 rounded-lg transition-colors"
-                        title="Duzenle"
+                        title="Düzenle"
                       >
                         <Pencil className="w-4 h-4" />
                       </button>
@@ -434,7 +434,7 @@ export default function AdminTestimonialsPage() {
               {testimonials.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
-                    Henuz yorum eklenmemis.
+                    Henüz yorum eklenmemiş.
                   </td>
                 </tr>
               )}

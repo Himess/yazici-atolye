@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Hakkimizda | Favian Jewellery",
-  description: "40 yili askin tecrubemiz ile buyuk kuyumculara toptan satis yapiyoruz. Simdi ayni kaliteyi, aracisiz fiyatlarla sizlere sunuyoruz.",
+  title: "Hakkımızda | Favian Jewellery",
+  description: "40 yılı aşkın tecrübemiz ile büyük kuyumculara toptan satış yapıyoruz. Şimdi aynı kaliteyi, aracısız fiyatlarla sizlere sunuyoruz.",
   openGraph: {
-    title: "Hakkimizda | Favian Jewellery",
-    description: "40 yili askin tecrube, el isciligi ve atolyeden direkt size.",
+    title: "Hakkımızda | Favian Jewellery",
+    description: "40 yılı aşkın tecrübe, el işçiliği ve atölyeden direkt size.",
   },
 };
 

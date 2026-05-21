@@ -17,7 +17,7 @@ const Product360Viewer = dynamic(
 );
 
 const models = [
-  { id: "diamond", name: "Pirlanta Yuzuk", url: "/models/diamond_engagement_ring.glb" },
+  { id: "diamond", name: "Pırlanta Yüzük", url: "/models/diamond_engagement_ring.glb" },
   { id: "nenya", name: "Nenya (LOTR)", url: "/models/nenya_galadriels_ring.glb" },
   { id: "tripo", name: "Tripo3D Model", url: "/models/yuzuk-3d.glb" },
   { id: "demo", name: "Demo Model", url: undefined },
@@ -41,10 +41,10 @@ export default function Demo360Page() {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <h1 className="font-playfair text-3xl font-bold text-foreground mb-2 text-center">
-            360° Urun Goruntuleyici
+            360° Ürün Görüntüleyici
           </h1>
           <p className="text-muted-foreground text-center mb-8">
-            Mouse ile surukleyerek yuzugu her acidan inceleyebilirsiniz
+            Mouse ile sürükleyerek yüzüğü her açıdan inceleyebilirsiniz
           </p>
 
           {/* Model Seçici */}
@@ -95,18 +95,18 @@ export default function Demo360Page() {
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 bg-muted rounded-lg text-center">
               <div className="text-2xl mb-2">🖱️</div>
-              <h3 className="font-medium text-foreground mb-1">Surukle</h3>
-              <p className="text-sm text-muted-foreground">Mouse ile surukleyerek dondur</p>
+              <h3 className="font-medium text-foreground mb-1">Sürükle</h3>
+              <p className="text-sm text-muted-foreground">Mouse ile sürükleyerek döndür</p>
             </div>
             <div className="p-4 bg-muted rounded-lg text-center">
               <div className="text-2xl mb-2">🔍</div>
-              <h3 className="font-medium text-foreground mb-1">Yakinlastir</h3>
+              <h3 className="font-medium text-foreground mb-1">Yakınlaştır</h3>
               <p className="text-sm text-muted-foreground">Mouse tekerleği ile zoom yap</p>
             </div>
             <div className="p-4 bg-muted rounded-lg text-center">
               <div className="text-2xl mb-2">📱</div>
               <h3 className="font-medium text-foreground mb-1">Dokunmatik</h3>
-              <p className="text-sm text-muted-foreground">Telefonda parmakla dondur</p>
+              <p className="text-sm text-muted-foreground">Telefonda parmakla döndür</p>
             </div>
           </div>
 
@@ -114,8 +114,8 @@ export default function Demo360Page() {
           <div className="mt-8 p-6 bg-primary/5 border border-primary/20 rounded-lg">
             <h3 className="font-semibold text-foreground mb-3">Teknik Bilgi</h3>
             <ul className="text-sm text-muted-foreground space-y-2">
-              <li>• Bu demo basit bir 3D geometri kullanıyor (Three.js ile olusturuldu)</li>
-              <li>• Gercek urunler icin .glb/.gltf formatinda 3D model dosyasi gerekli</li>
+              <li>• Bu demo basit bir 3D geometri kullanıyor (Three.js ile oluşturuldu)</li>
+              <li>• Gerçek ürünler için .glb/.gltf formatında 3D model dosyası gerekli</li>
               <li>• Modeller Blender, Sketchfab veya CGTrader'dan edinilebilir</li>
               <li>• React Three Fiber ile Next.js'e entegre edildi</li>
             </ul>

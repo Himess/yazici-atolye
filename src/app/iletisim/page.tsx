@@ -66,26 +66,26 @@ export default function IletisimPage() {
     if (!formData.name.trim()) {
       newErrors.name = "Ad Soyad gereklidir";
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = "Ad Soyad en az 2 karakter olmalidir";
+      newErrors.name = "Ad Soyad en az 2 karakter olmalıdır";
     }
 
     // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "E-posta gereklidir";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Gecerli bir e-posta adresi giriniz";
+      newErrors.email = "Geçerli bir e-posta adresi giriniz";
     }
 
     // Phone validation (optional but if provided, must be valid)
     if (formData.phone.trim() && !/^[0-9\s\-\+\(\)]{10,}$/.test(formData.phone)) {
-      newErrors.phone = "Gecerli bir telefon numarasi giriniz";
+      newErrors.phone = "Geçerli bir telefon numarası giriniz";
     }
 
     // Message validation
     if (!formData.message.trim()) {
       newErrors.message = "Mesaj gereklidir";
     } else if (formData.message.trim().length < 10) {
-      newErrors.message = "Mesaj en az 10 karakter olmalidir";
+      newErrors.message = "Mesaj en az 10 karakter olmalıdır";
     }
 
     setErrors(newErrors);
@@ -115,7 +115,7 @@ export default function IletisimPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || 'Form gonderilemedi');
+        throw new Error(data.error || 'Form gönderilemedi');
       }
 
       setIsSuccess(true);
@@ -125,7 +125,7 @@ export default function IletisimPage() {
       setTimeout(() => setIsSuccess(false), 5000);
     } catch (error) {
       console.error('Form gonderme hatasi:', error);
-      setSubmitError(error instanceof Error ? error.message : 'Bir hata olustu. Lutfen tekrar deneyiniz.');
+      setSubmitError(error instanceof Error ? error.message : 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
     } finally {
       setIsSubmitting(false);
     }
@@ -134,14 +134,14 @@ export default function IletisimPage() {
   const whatsappNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '902121234567';
 
   const handleWhatsApp = () => {
-    const text = "Merhaba, Favian Jewellery ile iletisime gecmek istiyorum.";
+    const text = "Merhaba, Favian Jewellery ile iletişime geçmek istiyorum.";
     window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`, "_blank");
   };
 
   // Display values with fallbacks
   const displayPhone = settings?.phone || "+90 (212) 123 45 67";
   const displayEmail = settings?.email || "info@favianjewellery.com";
-  const displayAddress = settings?.address || "Istanbul, Turkiye";
+  const displayAddress = settings?.address || "İstanbul, Türkiye";
   const displayWorkingHours = settings?.workingHours || "Pazartesi - Cumartesi: 10:00 - 19:00";
 
   // Build tel: href from phone (strip formatting for href)
@@ -153,10 +153,10 @@ export default function IletisimPage() {
       <div className="bg-background border-b border-border py-12">
         <div className="container mx-auto px-4 text-center">
           <h1 className="font-playfair text-4xl font-bold text-foreground mb-2">
-            Iletisim
+            İletişim
           </h1>
           <p className="text-muted-foreground">
-            Bize ulasin, sorularinizi yanitlayalim
+            Bize ulaşın, sorularınızı yanıtlayalım
           </p>
         </div>
       </div>
@@ -165,14 +165,14 @@ export default function IletisimPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
           <div>
             <h2 className="font-playfair text-2xl font-bold text-foreground mb-6">
-              Bize Yazin
+              Bize Yazın
             </h2>
 
             {isSuccess && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
                 <CheckCircle className="w-5 h-5 text-green-600" />
                 <p className="text-green-800">
-                  Mesajiniz alindi! En kisa surede size donecegiz.
+                  Mesajınız alındı! En kısa sürede size döneceğiz.
                 </p>
               </div>
             )}
@@ -187,7 +187,7 @@ export default function IletisimPage() {
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1">
-                  Adiniz Soyadiniz <span className="text-destructive">*</span>
+                  Adınız Soyadınız <span className="text-destructive">*</span>
                 </label>
                 <Input
                   value={formData.name}
@@ -262,7 +262,7 @@ export default function IletisimPage() {
 
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1">
-                  Mesajiniz <span className="text-destructive">*</span>
+                  Mesajınız <span className="text-destructive">*</span>
                 </label>
                 <textarea
                   value={formData.message}
@@ -290,7 +290,7 @@ export default function IletisimPage() {
                 className="w-full bg-primary hover:bg-accent hover:text-accent-foreground text-primary-foreground"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Gonderiliyor..." : "Gonder"}
+                {isSubmitting ? "Gönderiliyor..." : "Gönder"}
               </Button>
             </form>
           </div>
@@ -298,14 +298,14 @@ export default function IletisimPage() {
           <div className="space-y-6">
             <Card className="border-border">
               <CardHeader>
-                <CardTitle className="text-foreground">Iletisim Bilgileri</CardTitle>
+                <CardTitle className="text-foreground">İletişim Bilgileri</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-medium text-foreground">Adres</h4>
-                    <p className="text-muted-foreground">{settingsLoading ? "Yukleniyor..." : displayAddress}</p>
+                    <p className="text-muted-foreground">{settingsLoading ? "Yükleniyor..." : displayAddress}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -316,7 +316,7 @@ export default function IletisimPage() {
                       href={phoneHref}
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      {settingsLoading ? "Yukleniyor..." : displayPhone}
+                      {settingsLoading ? "Yükleniyor..." : displayPhone}
                     </a>
                   </div>
                 </div>
@@ -328,16 +328,16 @@ export default function IletisimPage() {
                       href={emailHref}
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      {settingsLoading ? "Yukleniyor..." : displayEmail}
+                      {settingsLoading ? "Yükleniyor..." : displayEmail}
                     </a>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="font-medium text-foreground">Calisma Saatleri</h4>
+                    <h4 className="font-medium text-foreground">Çalışma Saatleri</h4>
                     <p className="text-muted-foreground">
-                      {settingsLoading ? "Yukleniyor..." : displayWorkingHours}
+                      {settingsLoading ? "Yükleniyor..." : displayWorkingHours}
                     </p>
                   </div>
                 </div>
@@ -346,11 +346,11 @@ export default function IletisimPage() {
 
             <Card className="border-border">
               <CardHeader>
-                <CardTitle className="text-foreground">WhatsApp ile Ulasin</CardTitle>
+                <CardTitle className="text-foreground">WhatsApp ile Ulaşın</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-4">
-                  Hizli iletisim icin WhatsApp uzerinden bize yazabilirsiniz.
+                  Hızlı iletişim için WhatsApp üzerinden bize yazabilirsiniz.
                 </p>
                 <Button
                   onClick={handleWhatsApp}

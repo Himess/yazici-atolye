@@ -45,9 +45,9 @@ const initialForm: ProductForm = {
 };
 
 const categoryOptions = [
-  { value: "yuzuk", label: "Yuzuk" },
+  { value: "yuzuk", label: "Yüzük" },
   { value: "kolye", label: "Kolye" },
-  { value: "kupe", label: "Kupe" },
+  { value: "kupe", label: "Küpe" },
   { value: "bileklik", label: "Bileklik" },
 ];
 
@@ -91,7 +91,7 @@ function ProductFormContent() {
     try {
       setLoading(true);
       const res = await fetch(`/api/admin/products/${editId}`);
-      if (!res.ok) throw new Error("Urun bulunamadi");
+      if (!res.ok) throw new Error("Ürün bulunamadı");
       const product = await res.json();
       setForm({
         name: product.name || "",
@@ -127,7 +127,7 @@ function ProductFormContent() {
         setForm(prev => ({ ...prev, images: imgs.join(", ") }));
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Urun yuklenemedi");
+      setError(err instanceof Error ? err.message : "Ürün yüklenemedi");
     } finally {
       setLoading(false);
     }
@@ -189,14 +189,14 @@ function ProductFormContent() {
         });
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.error || "Yuklenemedi");
+          throw new Error(errData.error || "Yüklenemedi");
         }
         const data = await res.json();
         if (data.url) {
           uploadedUrls.push(data.url);
         }
       } catch (err) {
-        alert(err instanceof Error ? err.message : "Gorsel yuklenirken hata olustu");
+        alert(err instanceof Error ? err.message : "Görsel yüklenirken hata oluştu");
       }
     }
 
@@ -224,11 +224,11 @@ function ProductFormContent() {
     setError("");
 
     if (!form.name.trim()) {
-      setError("Urun adi zorunludur");
+      setError("Ürün adı zorunludur");
       return;
     }
     if (!form.price || isNaN(Number(form.price))) {
-      setError("Gecerli bir fiyat giriniz");
+      setError("Geçerli bir fiyat giriniz");
       return;
     }
 
@@ -269,7 +269,7 @@ function ProductFormContent() {
 
       router.push("/admin/urunler");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Kaydetme islemi basarisiz");
+      setError(err instanceof Error ? err.message : "Kaydetme işlemi başarısız");
     } finally {
       setSaving(false);
     }
@@ -279,7 +279,7 @@ function ProductFormContent() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 animate-spin text-[#C6A25A]" />
-        <span className="ml-3 text-lg text-gray-600">Urun yukleniyor...</span>
+        <span className="ml-3 text-lg text-gray-600">Ürün yükleniyor...</span>
       </div>
     );
   }
@@ -296,10 +296,10 @@ function ProductFormContent() {
         </Link>
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
-            {isEditing ? "Urun Duzenle" : "Yeni Urun Ekle"}
+            {isEditing ? "Ürün Düzenle" : "Yeni Ürün Ekle"}
           </h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            {isEditing ? "Urun bilgilerini guncelleyin" : "Yeni bir urun olusturun"}
+            {isEditing ? "Ürün bilgilerini güncelleyin" : "Yeni bir ürün oluşturun"}
           </p>
         </div>
       </div>
@@ -318,14 +318,14 @@ function ProductFormContent() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Urun Adi *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Ürün Adı *</label>
               <input
                 type="text"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: 0,50 Karat Pirlanta Tektas Yuzuk"
+                placeholder="örnek: 0,50 Karat Pırlanta Tektaş Yüzük"
                 required
               />
             </div>
@@ -337,40 +337,40 @@ function ProductFormContent() {
                 value={form.slug}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm bg-gray-50"
-                placeholder="otomatik olusturulur"
+                placeholder="otomatik oluşturulur"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Urun Kodu</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Ürün Kodu</label>
               <input
                 type="text"
                 name="code"
                 value={form.code}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: YA-TK-001"
+                placeholder="örnek: YA-TK-001"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Kisa Aciklama</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Kısa Açıklama</label>
               <input
                 type="text"
                 name="description"
                 value={form.description}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="Urun hakkinda kisa aciklama"
+                placeholder="Ürün hakkında kısa açıklama"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Detayli Aciklama</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Detaylı Açıklama</label>
               <textarea
                 name="about"
                 value={form.about}
                 onChange={handleChange}
                 rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm resize-y"
-                placeholder="Urun hakkinda detayli bilgi"
+                placeholder="Ürün hakkında detaylı bilgi"
               />
             </div>
           </div>
@@ -404,7 +404,7 @@ function ProductFormContent() {
                 value={form.oldPrice}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="Indirimli gosterim icin"
+                placeholder="İndirimli gösterim için"
                 min="0"
                 step="0.01"
               />
@@ -432,7 +432,7 @@ function ProductFormContent() {
                 value={form.categoryLabel}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: Alyans, Tektas"
+                placeholder="örnek: Alyans, Tektaş"
               />
             </div>
           </div>
@@ -452,18 +452,18 @@ function ProductFormContent() {
                 value={form.material}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: 14 Ayar Sari Altin"
+                placeholder="örnek: 14 Ayar Sarı Altın"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Agirlik</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Ağırlık</label>
               <input
                 type="text"
                 name="weight"
                 value={form.weight}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: 2.80 gr"
+                placeholder="örnek: 2.80 gr"
               />
             </div>
             <div>
@@ -474,7 +474,7 @@ function ProductFormContent() {
                 value={form.purity}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: 14 Ayar"
+                placeholder="örnek: 14 Ayar"
               />
             </div>
           </div>
@@ -483,12 +483,12 @@ function ProductFormContent() {
         {/* Gorseller */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-3">
-            Gorseller
+            Görseller
           </h2>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Gorsel URL&apos;leri (virgul ile ayirin)
+                Görsel URL&apos;leri (virgül ile ayırın)
               </label>
               <input
                 type="text"
@@ -502,10 +502,10 @@ function ProductFormContent() {
 
             {/* Image Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Gorsel Yukle</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Görsel Yükle</label>
               <label className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[#C6A25A] hover:bg-[#C6A25A]/5 transition-colors">
                 <ImagePlus className="w-5 h-5 text-gray-400" />
-                <span className="text-sm text-gray-500">Gorsel secmek icin tiklayin</span>
+                <span className="text-sm text-gray-500">Görsel seçmek için tıklayın</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -523,7 +523,7 @@ function ProductFormContent() {
                   <div key={i} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden group">
                     <Image
                       src={url}
-                      alt={`Gorsel ${i + 1}`}
+                      alt={`Görsel ${i + 1}`}
                       fill
                       className="object-cover"
                       onError={(e) => {
@@ -544,7 +544,7 @@ function ProductFormContent() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Hover Gorsel URL
+                Hover Görsel URL
               </label>
               <input
                 type="text"
@@ -572,7 +572,7 @@ function ProductFormContent() {
                 onChange={handleChange}
                 className="w-4 h-4 rounded border-gray-300 text-[#C6A25A] focus:ring-[#C6A25A]"
               />
-              <span className="text-sm text-gray-700">One Cikan Urun</span>
+              <span className="text-sm text-gray-700">Öne Çıkan Ürün</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -593,7 +593,7 @@ function ProductFormContent() {
             href="/admin/urunler"
             className="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
           >
-            Iptal
+            İptal
           </Link>
           <button
             type="submit"
@@ -608,7 +608,7 @@ function ProductFormContent() {
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                {isEditing ? "Guncelle" : "Kaydet"}
+                {isEditing ? "Güncelle" : "Kaydet"}
               </>
             )}
           </button>

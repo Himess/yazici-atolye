@@ -190,7 +190,7 @@ export function HeroSlider() {
           setTimeout(() => setIsAutoPlaying(true), 5000);
         }}
         className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 bg-white/30 hover:bg-white/60 flex items-center justify-center transition-colors"
-        aria-label="Onceki"
+        aria-label="Önceki"
       >
         <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
       </button>

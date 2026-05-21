@@ -25,11 +25,11 @@ interface FormSubmission {
 }
 
 const formTypeLabels: Record<string, string> = {
-  contact: "Iletisim",
+  contact: "İletişim",
   inquiry: "Bilgi Talebi",
-  order: "Siparis",
-  custom: "Ozel Tasarim",
-  other: "Diger",
+  order: "Sipariş",
+  custom: "Özel Tasarım",
+  other: "Diğer",
 };
 
 export default function AdminFormsPage() {
@@ -43,11 +43,11 @@ export default function AdminFormsPage() {
     try {
       setLoading(true);
       const res = await fetch("/api/admin/forms");
-      if (!res.ok) throw new Error("Form verileri yuklenemedi");
+      if (!res.ok) throw new Error("Form verileri yüklenemedi");
       const data = await res.json();
       setSubmissions(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Bir hata olustu");
+      setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
       setLoading(false);
     }
@@ -65,19 +65,19 @@ export default function AdminFormsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isRead: true }),
       });
-      if (!res.ok) throw new Error("Guncellenemedi");
+      if (!res.ok) throw new Error("Güncellenemedi");
       setSubmissions((prev) =>
         prev.map((s) => (s.id === id ? { ...s, isRead: true } : s))
       );
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Islem basarisiz");
+      alert(err instanceof Error ? err.message : "İşlem başarısız");
     } finally {
       setMarking(null);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Bu form gonderimini silmek istediginize emin misiniz?")) return;
+    if (!confirm("Bu form gönderimini silmek istediğinize emin misiniz?")) return;
 
     try {
       setDeleting(id);
@@ -85,7 +85,7 @@ export default function AdminFormsPage() {
       if (!res.ok) throw new Error("Silinemedi");
       setSubmissions((prev) => prev.filter((s) => s.id !== id));
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Silme basarisiz");
+      alert(err instanceof Error ? err.message : "Silme başarısız");
     } finally {
       setDeleting(null);
     }
@@ -112,7 +112,7 @@ export default function AdminFormsPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 animate-spin text-[#C6A25A]" />
-        <span className="ml-3 text-lg text-gray-600">Form gonderimleri yukleniyor...</span>
+        <span className="ml-3 text-lg text-gray-600">Form gönderimleri yükleniyor...</span>
       </div>
     );
   }
@@ -134,14 +134,14 @@ export default function AdminFormsPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <FileText className="w-7 h-7 text-[#C6A25A]" />
-            Form Gonderimleri
+            Form Gönderimleri
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            {submissions.length} gonderim
+            {submissions.length} gönderim
             {unreadCount > 0 && (
               <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-[#C6A25A] text-white text-xs rounded-full">
                 <AlertCircle className="w-3 h-3" />
-                {unreadCount} okunmamis
+                {unreadCount} okunmamış
               </span>
             )}
           </p>
@@ -158,7 +158,7 @@ export default function AdminFormsPage() {
                   {/* Read indicator */}
                 </th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Isim
+                  İsim
                 </th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Telefon
@@ -167,7 +167,7 @@ export default function AdminFormsPage() {
                   E-posta
                 </th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Form Turu
+                  Form Türü
                 </th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Mesaj
@@ -176,7 +176,7 @@ export default function AdminFormsPage() {
                   Tarih
                 </th>
                 <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Islemler
+                  İşlemler
                 </th>
               </tr>
             </thead>
@@ -248,7 +248,7 @@ export default function AdminFormsPage() {
                           onClick={() => handleMarkAsRead(sub.id)}
                           disabled={marking === sub.id}
                           className="p-2 text-gray-400 hover:text-[#C6A25A] hover:bg-[#C6A25A]/10 rounded-lg transition-colors disabled:opacity-50"
-                          title="Okundu olarak isaretle"
+                          title="Okundu olarak işaretle"
                         >
                           {marking === sub.id ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -276,7 +276,7 @@ export default function AdminFormsPage() {
               {submissions.length === 0 && (
                 <tr>
                   <td colSpan={8} className="px-6 py-12 text-center text-gray-400">
-                    Henuz form gonderimi yok.
+                    Henüz form gönderimi yok.
                   </td>
                 </tr>
               )}

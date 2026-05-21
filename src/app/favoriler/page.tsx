@@ -20,7 +20,7 @@ export default function FavorilerPage() {
             Favorilerim
           </h1>
           <p className="text-muted-foreground">
-            Begendiklerin parcalar burada
+            Beğendiklerin parçalar burada
           </p>
         </div>
       </div>
@@ -30,15 +30,15 @@ export default function FavorilerPage() {
           <div className="text-center py-16">
             <Heart className="w-16 h-16 text-border mx-auto mb-4" />
             <h2 className="text-xl font-semibold text-foreground mb-2">
-              Henuz favori urun eklemediniz
+              Henüz favori ürün eklemediniz
             </h2>
             <p className="text-muted-foreground mb-6">
-              Begendikleri urunleri favorilere ekleyerek kolayca erisebilirsiniz.
+              Beğendiğiniz ürünleri favorilere ekleyerek kolayca erişebilirsiniz.
             </p>
             <Button asChild className="bg-primary hover:bg-accent hover:text-accent-foreground">
               <Link href="/urunler">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Urunlere Git
+                Ürünlere Git
               </Link>
             </Button>
           </div>
@@ -46,7 +46,7 @@ export default function FavorilerPage() {
           <>
             <div className="flex justify-between items-center mb-8">
               <p className="text-muted-foreground">
-                {favoriteProducts.length} urun
+                {favoriteProducts.length} ürün
               </p>
               <Button
                 variant="outline"
@@ -54,7 +54,7 @@ export default function FavorilerPage() {
                 onClick={clearFavorites}
                 className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
               >
-                Tumu Kaldir
+                Tümünü Kaldır
               </Button>
             </div>
 

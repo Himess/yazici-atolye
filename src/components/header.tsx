@@ -11,7 +11,7 @@ import { useFavorites } from "@/lib/favorites-context";
 import { useSearch } from "@/lib/search-context";
 import { CartDrawer } from "@/components/cart-drawer";
 import { AuthModal } from "@/components/auth-modal";
-import { formatPrice } from "@/lib/products";
+import { formatPrice, formatProductName } from "@/lib/products";
 import {
   Search,
   User,
@@ -187,8 +187,8 @@ export function Header() {
               <button
                 onClick={() => setIsLoginOpen(true)}
                 className="hidden sm:flex items-center gap-1.5 p-2 text-foreground hover:text-gold transition-colors"
-                title={user ? user.name : "Giris Yap"}
-                aria-label={user ? `Hesabim: ${user.name}` : "Giris Yap"}
+                title={user ? user.name : "Giriş Yap"}
+                aria-label={user ? `Hesabım: ${user.name}` : "Giriş Yap"}
               >
                 {user ? (
                   <div className="w-5 h-5 bg-gold rounded-full flex items-center justify-center">
@@ -208,7 +208,7 @@ export function Header() {
               <Link
                 href="/favoriler"
                 className="hidden sm:flex items-center gap-1.5 p-2 text-foreground hover:text-gold transition-colors relative"
-                aria-label={`Favoriler (${favorites.length} urun)`}
+                aria-label={`Favoriler (${favorites.length} ürün)`}
               >
                 <Heart className="w-5 h-5" />
                 <span className="text-[11px] tracking-[0.1em] uppercase font-sans font-medium hidden md:inline">
@@ -225,7 +225,7 @@ export function Header() {
               <button
                 onClick={() => setIsCartOpen(true)}
                 className="flex items-center gap-1.5 p-2 text-foreground hover:text-gold transition-colors relative"
-                aria-label={`Sepet (${totalItems} urun)`}
+                aria-label={`Sepet (${totalItems} ürün)`}
               >
                 <ShoppingBag className="w-5 h-5" />
                 <span className="text-[11px] tracking-[0.1em] uppercase font-sans font-medium hidden md:inline">
@@ -409,7 +409,7 @@ export function Header() {
           <button
             onClick={() => setIsCartOpen(true)}
             className="p-2 text-foreground hover:text-gold transition-colors relative -mr-2"
-            aria-label={`Sepet (${totalItems} urun)`}
+            aria-label={`Sepet (${totalItems} ürün)`}
           >
             <ShoppingBag className="w-5 h-5" />
             {totalItems > 0 && (
@@ -435,7 +435,7 @@ export function Header() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full px-4 py-3 pr-20 border-b-2 border-gold text-base focus:outline-none bg-transparent font-sans"
                   autoFocus
-                  aria-label="Urun ara"
+                  aria-label="Ürün ara"
                 />
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
                   <button
@@ -458,7 +458,7 @@ export function Header() {
                 </div>
               </div>
 
-              {/* Arama Sonuclari */}
+              {/* Arama Sonuçları */}
               {isSearching && searchResults.length > 0 && (
                 <div
                   ref={searchResultsRef}
@@ -492,7 +492,7 @@ export function Header() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-foreground truncate font-sans">
-                            {product.name}
+                            {formatProductName(product.name)}
                           </p>
                           <p className="text-xs text-muted-foreground mt-1 font-sans">
                             {formatPrice(product.price)}

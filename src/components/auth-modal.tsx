@@ -26,22 +26,22 @@ export function AuthModal() {
     try {
       if (isRegister) {
         if (!name.trim()) {
-          setError("Lutfen adinizi girin");
+          setError("Lütfen adınızı girin");
           setIsLoading(false);
           return;
         }
         const success = await register(name, email, password);
         if (!success) {
-          setError("Bu e-posta adresi zaten kullaniliyor");
+          setError("Bu e-posta adresi zaten kullanılıyor");
         }
       } else {
         const success = await login(email, password);
         if (!success) {
-          setError("E-posta veya sifre hatali");
+          setError("E-posta veya şifre hatalı");
         }
       }
     } catch {
-      setError("Bir hata olustu, lutfen tekrar deneyin");
+      setError("Bir hata oluştu, lütfen tekrar deneyin");
     }
 
     setIsLoading(false);
@@ -65,7 +65,7 @@ export function AuthModal() {
       <Sheet open={isLoginOpen} onOpenChange={setIsLoginOpen}>
         <SheetContent className="w-full sm:max-w-md bg-white">
           <SheetHeader>
-            <SheetTitle className="font-playfair text-xl text-[#2B2B2B]">Hesabim</SheetTitle>
+            <SheetTitle className="font-playfair text-xl text-[#2B2B2B]">Hesabım</SheetTitle>
           </SheetHeader>
 
           <div className="py-8">
@@ -86,20 +86,20 @@ export function AuthModal() {
                 <svg className="w-5 h-5 mr-3 text-[#6D6B68]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-                Siparislerim (Yakinda)
+                Siparişlerim (Yakında)
               </Button>
               <Button variant="outline" className="w-full justify-start border-[#E5E5E5] text-[#6D6B68]" disabled>
                 <svg className="w-5 h-5 mr-3 text-[#6D6B68]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
-                Favorilerim (Yakinda)
+                Favorilerim (Yakında)
               </Button>
               <Button variant="outline" className="w-full justify-start border-[#E5E5E5] text-[#6D6B68]" disabled>
                 <svg className="w-5 h-5 mr-3 text-[#6D6B68]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                Hesap Ayarlari (Yakinda)
+                Hesap Ayarları (Yakında)
               </Button>
             </div>
 
@@ -110,7 +110,7 @@ export function AuthModal() {
               className="w-full border-red-300 text-red-600 hover:bg-red-50"
               onClick={logout}
             >
-              Cikis Yap
+              Çıkış Yap
             </Button>
           </div>
         </SheetContent>
@@ -124,7 +124,7 @@ export function AuthModal() {
       <SheetContent className="w-full sm:max-w-md bg-white">
         <SheetHeader>
           <SheetTitle className="font-playfair text-xl text-[#2B2B2B]">
-            {isRegister ? "Uye Ol" : "Giris Yap"}
+            {isRegister ? "Üye Ol" : "Giriş Yap"}
           </SheetTitle>
         </SheetHeader>
 
@@ -138,7 +138,7 @@ export function AuthModal() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Adiniz Soyadiniz"
+                placeholder="Adınız Soyadınız"
                 className="border-[#E5E5E5] focus:border-[#095246] focus:ring-[#095246]"
                 required
               />
@@ -153,7 +153,7 @@ export function AuthModal() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="ornek@email.com"
+              placeholder="örnek@email.com"
               className="border-[#E5E5E5] focus:border-[#095246] focus:ring-[#095246]"
               required
             />
@@ -161,7 +161,7 @@ export function AuthModal() {
 
           <div>
             <label className="block text-sm font-medium text-[#6D6B68] mb-1">
-              Sifre
+              Şifre
             </label>
             <Input
               type="password"
@@ -183,19 +183,19 @@ export function AuthModal() {
             className="w-full bg-[#095246] hover:bg-[#BFAE8F] hover:text-[#2B2B2B] text-white py-5 transition-all duration-300"
             disabled={isLoading}
           >
-            {isLoading ? "Yukleniyor..." : isRegister ? "Uye Ol" : "Giris Yap"}
+            {isLoading ? "Yükleniyor..." : isRegister ? "Üye Ol" : "Giriş Yap"}
           </Button>
 
           <Separator className="my-4 bg-[#E5E5E5]" />
 
           <p className="text-center text-sm text-[#6D6B68]">
-            {isRegister ? "Zaten uye misiniz?" : "Henuz uye degil misiniz?"}{" "}
+            {isRegister ? "Zaten üye misiniz?" : "Henüz üye değil misiniz?"}{" "}
             <button
               type="button"
               onClick={toggleMode}
               className="text-[#095246] font-medium hover:text-[#BFAE8F] transition-colors"
             >
-              {isRegister ? "Giris Yapin" : "Uye Olun"}
+              {isRegister ? "Giriş Yapın" : "Üye Olun"}
             </button>
           </p>
         </form>

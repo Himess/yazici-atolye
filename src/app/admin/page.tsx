@@ -35,7 +35,7 @@ export default async function AdminDashboard() {
 
   const stats = [
     {
-      label: 'Urunler',
+      label: 'Ürünler',
       value: productCount,
       icon: Package,
       href: '/admin/urunler',
@@ -78,7 +78,7 @@ export default async function AdminDashboard() {
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">Dashboard</h1>
         <p className="text-zinc-500 text-sm mt-1">
-          Favian Jewellery yonetim paneline hos geldiniz.
+          Favian Jewellery yönetim paneline hoş geldiniz.
         </p>
       </div>
 
@@ -120,13 +120,13 @@ export default async function AdminDashboard() {
       <div className="bg-white rounded-xl border border-zinc-200 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100">
           <h2 className="text-lg font-semibold text-zinc-900">
-            Son Form Basvurulari
+            Son Form Başvuruları
           </h2>
           <Link
             href="/admin/formlar"
             className="text-sm text-[#C6A25A] hover:text-[#A8862E] font-medium flex items-center gap-1 transition-colors"
           >
-            Tumunu Gor
+            Tümünü Gör
             <ArrowRight size={14} />
           </Link>
         </div>
@@ -187,7 +187,7 @@ export default async function AdminDashboard() {
         ) : (
           <div className="px-6 py-12 text-center">
             <Mail size={40} className="mx-auto text-zinc-300 mb-3" />
-            <p className="text-zinc-500 text-sm">Henuz form basvurusu yok.</p>
+            <p className="text-zinc-500 text-sm">Henüz form başvurusu yok.</p>
           </div>
         )}
       </div>

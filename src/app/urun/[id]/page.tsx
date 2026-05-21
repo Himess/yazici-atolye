@@ -5,7 +5,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { formatPrice, GoldColor } from "@/lib/products";
+import { formatPrice, formatProductName, GoldColor } from "@/lib/products";
 import { ColorSelector } from "@/components/color-selector";
 import { useCart } from "@/lib/cart-context";
 import { useFavorites } from "@/lib/favorites-context";
@@ -161,7 +161,7 @@ export default function UrunDetayPage() {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-muted-foreground">Urun yukleniyor...</p>
+          <p className="text-muted-foreground">Ürün yükleniyor...</p>
         </div>
       </div>
     );
@@ -176,14 +176,14 @@ export default function UrunDetayPage() {
   const whatsappNumber = settings?.whatsapp?.replace(/[^0-9]/g, '') || '902121234567';
 
   const handleShare = () => {
-    const text = `${product.name} - ${formatPrice(product.price)} | Favian Jewellery`;
+    const text = `${formatProductName(product.name)} - ${formatPrice(product.price)} | Favian Jewellery`;
     const url = typeof window !== 'undefined' ? window.location.href : '';
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
     window.open(whatsappUrl, '_blank');
   };
 
   const handleWhatsApp = () => {
-    const text = `Merhaba, "${product.name}" (Kod: ${product.code}) urunuyle ilgileniyorum. Detayli bilgi alabilir miyim?`;
+    const text = `Merhaba, "${formatProductName(product.name)}" (Kod: ${product.code}) ürünüyle ilgileniyorum. Detaylı bilgi alabilir miyim?`;
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -195,11 +195,11 @@ export default function UrunDetayPage() {
         <nav className="flex flex-wrap items-center gap-2 text-sm mb-6">
           <Link href="/" className="text-stone-500 hover:text-stone-900">Ana Sayfa</Link>
           <span className="text-stone-400">/</span>
-          <Link href="/urunler" className="text-stone-500 hover:text-stone-900">Urunler</Link>
+          <Link href="/urunler" className="text-stone-500 hover:text-stone-900">Ürünler</Link>
           <span className="text-stone-400">/</span>
           <Link href={`/urunler?kategori=${product.category}`} className="text-stone-500 hover:text-stone-900">{product.categoryLabel}</Link>
           <span className="text-stone-400">/</span>
-          <span className="font-sans font-bold text-stone-900 truncate max-w-[200px]">{product.name}</span>
+          <span className="font-sans font-bold text-stone-900 truncate max-w-[200px]">{formatProductName(product.name)}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
@@ -274,7 +274,7 @@ export default function UrunDetayPage() {
                 <button
                   onClick={() => setSelectedImage((prev) => (prev - 1 + allImages.length) % allImages.length)}
                   className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-background/80 hover:bg-background rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all"
-                  aria-label="Onceki gorsel"
+                  aria-label="Önceki görsel"
                 >
                   <ChevronLeft className="w-5 h-5 text-foreground" />
                 </button>
@@ -285,7 +285,7 @@ export default function UrunDetayPage() {
                 <button
                   onClick={() => setSelectedImage((prev) => (prev + 1) % allImages.length)}
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-background/80 hover:bg-background rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all"
-                  aria-label="Sonraki gorsel"
+                  aria-label="Sonraki görsel"
                 >
                   <ChevronRight className="w-5 h-5 text-foreground" />
                 </button>
@@ -295,7 +295,7 @@ export default function UrunDetayPage() {
               <button
                 onClick={() => setIsZoomOpen(true)}
                 className="absolute bottom-4 right-4 p-2 bg-background rounded-full shadow-md hover:shadow-lg transition-all"
-                aria-label="Buyut"
+                aria-label="Büyüt"
               >
                 <ZoomIn className="w-5 h-5 text-muted-foreground" />
               </button>
@@ -309,7 +309,7 @@ export default function UrunDetayPage() {
               onClick={() => setIsZoomOpen(false)}
               role="dialog"
               aria-modal="true"
-              aria-label="Buyutulmus gorsel"
+              aria-label="Büyütülmüş görsel"
             >
               {/* Kapat butonu */}
               <button
@@ -328,7 +328,7 @@ export default function UrunDetayPage() {
                     setSelectedImage((prev) => (prev - 1 + allImages.length) % allImages.length);
                   }}
                   className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all"
-                  aria-label="Onceki gorsel"
+                  aria-label="Önceki görsel"
                 >
                   <ChevronLeft className="w-6 h-6 text-white" />
                 </button>
@@ -353,7 +353,7 @@ export default function UrunDetayPage() {
                     setSelectedImage((prev) => (prev + 1) % allImages.length);
                   }}
                   className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all"
-                  aria-label="Sonraki gorsel"
+                  aria-label="Sonraki görsel"
                 >
                   <ChevronRight className="w-6 h-6 text-white" />
                 </button>
@@ -372,7 +372,7 @@ export default function UrunDetayPage() {
                       className={`w-2.5 h-2.5 rounded-full transition-all ${
                         selectedImage === index ? 'bg-white w-6' : 'bg-white/50 hover:bg-white/70'
                       }`}
-                      aria-label={`Gorsel ${index + 1}`}
+                      aria-label={`Görsel ${index + 1}`}
                     />
                   ))}
                 </div>
@@ -389,16 +389,16 @@ export default function UrunDetayPage() {
                 <button
                   onClick={() => toggleFavorite(product.id)}
                   className={`p-2 border rounded-lg transition-all ${favorite ? 'border-red-500 bg-red-50' : 'border-border hover:bg-muted'}`}
-                  title={favorite ? "Favorilerden Cikar" : "Favorilere Ekle"}
-                  aria-label={favorite ? "Favorilerden Cikar" : "Favorilere Ekle"}
+                  title={favorite ? "Favorilerden Çıkar" : "Favorilere Ekle"}
+                  aria-label={favorite ? "Favorilerden Çıkar" : "Favorilere Ekle"}
                 >
                   <Heart className={`w-5 h-5 ${favorite ? 'text-red-500 fill-red-500' : 'text-muted-foreground'}`} />
                 </button>
                 <button
                   onClick={handleShare}
                   className="p-2 border border-border rounded-lg hover:bg-muted transition-all"
-                  title="Paylas"
-                  aria-label="Paylas"
+                  title="Paylaş"
+                  aria-label="Paylaş"
                 >
                   <Share2 className="w-5 h-5 text-muted-foreground" />
                 </button>
@@ -406,10 +406,10 @@ export default function UrunDetayPage() {
             </div>
 
             {/* Urun Kodu */}
-            <p className="text-sm text-stone-500 mb-2">Urun Kodu: {product.code}</p>
+            <p className="text-sm text-stone-500 mb-2">Ürün Kodu: {product.code}</p>
 
             {/* Urun Adi */}
-            <h1 className="font-sans text-xl sm:text-2xl lg:text-3xl font-bold text-stone-900 mb-4">{product.name}</h1>
+            <h1 className="font-sans text-xl sm:text-2xl lg:text-3xl font-bold text-stone-900 mb-4">{formatProductName(product.name)}</h1>
 
             {/* Renk Secimi */}
             {product.colorVariants && product.colorVariants.length > 0 && (
@@ -470,17 +470,17 @@ export default function UrunDetayPage() {
 
             {/* Taksit Bilgisi */}
             <p className="text-sm text-stone-500 mb-6">
-              <span className="text-emerald-600 font-medium">12 ay vade farksiz</span> taksit imkani
+              <span className="text-emerald-600 font-medium">12 ay vade farksız</span> taksit imkânı
             </p>
 
             <Separator className="my-6 bg-stone-200" />
 
             {/* Urun Ozellikleri */}
             <div className="space-y-4 mb-6">
-              <h3 className="font-semibold text-stone-900">Urun Ozellikleri</h3>
+              <h3 className="font-semibold text-stone-900">Ürün Özellikleri</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                 <div className="flex justify-between border-b border-stone-100 pb-2">
-                  <span className="text-stone-500">Agirlik</span>
+                  <span className="text-stone-500">Ağırlık</span>
                   <span className="text-stone-900 font-medium">{product.weight}</span>
                 </div>
                 <div className="flex justify-between border-b border-stone-100 pb-2">
@@ -503,17 +503,17 @@ export default function UrunDetayPage() {
             {/* Tas Bilgileri Tablosu */}
             {product.stones.length > 0 && (
               <div className="mb-6">
-                <h3 className="font-semibold text-stone-900 mb-3">Tas Bilgileri</h3>
+                <h3 className="font-semibold text-stone-900 mb-3">Taş Bilgileri</h3>
                 <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
                   <table className="w-full text-sm min-w-[500px]">
                     <thead>
                       <tr className="bg-stone-100">
-                        <th className="text-left px-3 py-2 font-medium text-stone-700">Tas</th>
+                        <th className="text-left px-3 py-2 font-medium text-stone-700">Taş</th>
                         <th className="text-center px-3 py-2 font-medium text-stone-700">Adet</th>
                         <th className="text-center px-3 py-2 font-medium text-stone-700">Karat</th>
                         <th className="text-center px-3 py-2 font-medium text-stone-700">Renk</th>
-                        <th className="text-center px-3 py-2 font-medium text-stone-700">Berraklik</th>
-                        <th className="text-center px-3 py-2 font-medium text-stone-700">Sekil</th>
+                        <th className="text-center px-3 py-2 font-medium text-stone-700">Berraklık</th>
+                        <th className="text-center px-3 py-2 font-medium text-stone-700">Şekil</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -574,21 +574,21 @@ export default function UrunDetayPage() {
               <Shield className="w-8 h-8 text-primary flex-shrink-0" />
               <div>
                 <h4 className="font-semibold text-foreground">Garanti</h4>
-                <p className="text-sm text-muted-foreground">2 yil garanti kapsaminda</p>
+                <p className="text-sm text-muted-foreground">2 yıl garanti kapsamında</p>
               </div>
             </div>
             <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
               <FileText className="w-8 h-8 text-primary flex-shrink-0" />
               <div>
                 <h4 className="font-semibold text-foreground">Sertifika</h4>
-                <p className="text-sm text-muted-foreground">Urunlerimiz sertifikalidir</p>
+                <p className="text-sm text-muted-foreground">Ürünlerimiz sertifikalıdır</p>
               </div>
             </div>
             <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
               <Package className="w-8 h-8 text-primary flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-foreground">Ucretsiz Kargo</h4>
-                <p className="text-sm text-muted-foreground">500 TL ustu siparislerde</p>
+                <h4 className="font-semibold text-foreground">Ücretsiz Kargo</h4>
+                <p className="text-sm text-muted-foreground">500 TL üstü siparişlerde</p>
               </div>
             </div>
           </div>

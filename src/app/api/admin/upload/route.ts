@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
 
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { success: false, error: 'Gecersiz dosya tipi. Sadece JPG, PNG, WebP, GIF ve SVG kabul edilir.' },
+        { success: false, error: 'Geçersiz dosya tipi. Sadece JPG, PNG, WebP, GIF ve SVG kabul edilir.' },
         { status: 400 }
       );
     }
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json(
-      { success: false, error: 'Dosya yuklenirken bir hata olustu' },
+      { success: false, error: 'Dosya yüklenirken bir hata oluştu' },
       { status: 500 }
     );
   }
@@ -164,7 +164,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Gallery list error:', error);
     return NextResponse.json(
-      { success: false, error: 'Gorseller listelenirken bir hata olustu' },
+      { success: false, error: 'Görseller listelenirken bir hata oluştu' },
       { status: 500 }
     );
   }

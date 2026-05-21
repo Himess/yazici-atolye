@@ -20,12 +20,12 @@ import {
 
 const menuItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { label: 'Urunler', href: '/admin/urunler', icon: Package },
+  { label: 'Ürünler', href: '/admin/urunler', icon: Package },
   { label: 'Kategoriler', href: '/admin/kategoriler', icon: FolderTree },
   { label: 'Slider', href: '/admin/slider', icon: Image },
   { label: 'Yorumlar', href: '/admin/yorumlar', icon: MessageSquareQuote },
   { label: 'Formlar', href: '/admin/formlar', icon: Mail },
-  { label: 'Icerikler', href: '/admin/icerikler', icon: FileText },
+  { label: 'İçerikler', href: '/admin/icerikler', icon: FileText },
   { label: 'Ayarlar', href: '/admin/ayarlar', icon: Settings },
 ];
 
@@ -94,7 +94,7 @@ export default function AdminLayout({
             </div>
             <div>
               <h1 className="text-sm font-semibold text-white">Favian Jewellery</h1>
-              <p className="text-[11px] text-zinc-400">Yonetim Paneli</p>
+              <p className="text-[11px] text-zinc-400">Yönetim Paneli</p>
             </div>
           </Link>
           <button
@@ -139,7 +139,7 @@ export default function AdminLayout({
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-300 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200 w-full"
           >
             <LogOut size={18} />
-            <span>Cikis Yap</span>
+            <span>Çıkış Yap</span>
           </button>
         </div>
       </aside>

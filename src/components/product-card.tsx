@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Product, formatPrice } from "@/lib/products";
+import { Product, formatPrice, formatProductName } from "@/lib/products";
 import { useFavorites } from "@/lib/favorites-context";
 import { Heart } from "lucide-react";
 
@@ -92,7 +92,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Product Info */}
         <div className="pt-4 pb-2">
           <h3 className="text-[13px] font-sans font-medium text-foreground group-hover:text-gold transition-colors line-clamp-1">
-            {product.name}
+            {formatProductName(product.name)}
           </h3>
 
           <div className="flex items-center gap-2 mt-2">

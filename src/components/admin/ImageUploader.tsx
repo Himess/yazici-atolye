@@ -89,7 +89,7 @@ export default function ImageUploader({
   value,
   onChange,
   folder = 'genel',
-  label = 'Gorsel',
+  label = 'Görsel',
   aspectRatio = 'aspect-video',
 }: ImageUploaderProps) {
   const [uploading, setUploading] = useState(false);
@@ -124,10 +124,10 @@ export default function ImageUploader({
           onChange(data.url);
           setPreview(null);
         } else {
-          setError(data.error || 'Yukleme basarisiz');
+          setError(data.error || 'Yükleme başarısız');
         }
       } catch {
-        setError('Yukleme sirasinda bir hata olustu');
+        setError('Yükleme sırasında bir hata oluştu');
       } finally {
         setUploading(false);
       }
@@ -207,7 +207,7 @@ export default function ImageUploader({
         <div className={`relative ${aspectRatio} rounded-xl overflow-hidden bg-zinc-100 border border-zinc-200 group`}>
           <img
             src={displayImage}
-            alt="Yuklenen gorsel"
+            alt="Yüklenen görsel"
             className="w-full h-full object-cover"
           />
 
@@ -216,7 +216,7 @@ export default function ImageUploader({
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
               <div className="flex flex-col items-center gap-2 text-white">
                 <Loader2 size={28} className="animate-spin" />
-                <span className="text-sm">Yukleniyor...</span>
+                <span className="text-sm">Yükleniyor...</span>
               </div>
             </div>
           )}
@@ -229,7 +229,7 @@ export default function ImageUploader({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   className="p-2.5 rounded-full bg-white/90 text-zinc-700 hover:bg-white transition-colors shadow-lg"
-                  title="Degistir"
+                  title="Değiştir"
                 >
                   <Upload size={16} />
                 </button>
@@ -237,7 +237,7 @@ export default function ImageUploader({
                   type="button"
                   onClick={clearImage}
                   className="p-2.5 rounded-full bg-white/90 text-red-600 hover:bg-white transition-colors shadow-lg"
-                  title="Kaldir"
+                  title="Kaldır"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -255,7 +255,7 @@ export default function ImageUploader({
           {uploading ? (
             <div className="flex flex-col items-center gap-2">
               <Loader2 size={28} className="animate-spin text-[#C6A25A]" />
-              <span className="text-sm text-zinc-500">Yukleniyor...</span>
+              <span className="text-sm text-zinc-500">Yükleniyor...</span>
             </div>
           ) : (
             <div className="flex flex-col items-center gap-2 text-zinc-400 group-hover:text-[#C6A25A] transition-colors">
@@ -263,10 +263,10 @@ export default function ImageUploader({
                 <ImageIcon size={24} />
               </div>
               <span className="text-sm font-medium">
-                Gorsel yuklemek icin tiklayin
+                Görsel yüklemek için tıklayın
               </span>
               <span className="text-xs text-zinc-400">
-                veya surukleyip birakin (maks. 5MB)
+                veya sürükleyip bırakın (maks. 5MB)
               </span>
             </div>
           )}
@@ -298,7 +298,7 @@ export default function ImageUploader({
           className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:border-[#C6A25A] hover:text-[#C6A25A] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
           <Upload size={13} />
-          Yukle
+          Yükle
         </button>
 
         <button
@@ -338,7 +338,7 @@ export default function ImageUploader({
             {/* Baslik */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200">
               <h3 className="text-lg font-semibold text-zinc-900">
-                Gorsel Galerisi
+                Görsel Galerisi
               </h3>
               <button
                 onClick={() => setGalleryOpen(false)}
@@ -401,7 +401,7 @@ export default function ImageUploader({
               ) : (
                 <div className="flex flex-col items-center justify-center py-12 text-zinc-400">
                   <ImageIcon size={40} className="mb-3" />
-                  <p className="text-sm">Bu klasorde gorsel bulunamadi.</p>
+                  <p className="text-sm">Bu klasörde görsel bulunamadı.</p>
                 </div>
               )}
             </div>

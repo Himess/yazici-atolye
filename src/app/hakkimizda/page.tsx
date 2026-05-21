@@ -47,10 +47,10 @@ export default function HakkimizdaPage() {
     }
   })();
   const defaultAtolyeImages = [
-    { image: "/images/atolye-usta-1.png", alt: "Usta Calismasi" },
-    { image: "/images/atolye-3.png", alt: "Atolye Detay" },
-    { image: "/images/atolye-4.png", alt: "El Isciligi" },
-    { image: "/images/atolye-kutu-1.png", alt: "Ozel Paketleme" },
+    { image: "/images/atolye-usta-1.png", alt: "Usta Çalışması" },
+    { image: "/images/atolye-3.png", alt: "Atölye Detay" },
+    { image: "/images/atolye-4.png", alt: "El İşçiliği" },
+    { image: "/images/atolye-kutu-1.png", alt: "Özel Paketleme" },
   ];
   const finalAtolyeImages = atolyeImages.length > 0 ? atolyeImages : defaultAtolyeImages;
 
@@ -69,10 +69,10 @@ export default function HakkimizdaPage() {
     }
   })();
   const defaultNedenBizItems = [
-    { icon: "Award", title: "40 Yillik Tecrube", description: "Nesiller boyu aktarilan usta isciligi" },
-    { icon: "Shield", title: "Sertifikali Urunler", description: "Tum taslar ve metaller sertifikali" },
-    { icon: "Gem", title: "Uygun Fiyat", description: "Aracisiz, dogrudan atolyeden size" },
-    { icon: "Heart", title: "El Yapimi", description: "Her parca ozenle el isciligi ile uretilir" },
+    { icon: "Award", title: "40 Yıllık Tecrübe", description: "Nesiller boyu aktarılan usta işçiliği" },
+    { icon: "Shield", title: "Sertifikalı Ürünler", description: "Tüm taşlar ve metaller sertifikalı" },
+    { icon: "Gem", title: "Uygun Fiyat", description: "Aracısız, doğrudan atölyeden size" },
+    { icon: "Heart", title: "El Yapımı", description: "Her parça özenle el işçiliği ile üretilir" },
   ];
   const finalNedenBizItems = nedenBizItems.length > 0 ? nedenBizItems : defaultNedenBizItems;
 
@@ -82,7 +82,7 @@ export default function HakkimizdaPage() {
       <section className="relative h-[400px] md:h-[500px] overflow-hidden">
         <Image
           src={content.hero?.image || "/images/atolye-usta-1.png"}
-          alt="Favian Jewellery - 40 Yillik Tecrube"
+          alt="Favian Jewellery - 40 Yıllık Tecrübe"
           fill
           className="object-cover"
           priority
@@ -91,10 +91,10 @@ export default function HakkimizdaPage() {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-4">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl mb-4 text-white">
-              {content.hero?.title || "Uretimden Sizlere"}
+              {content.hero?.title || "Üretimden Sizlere"}
             </h1>
             <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
-              {content.hero?.subtitle || "40 yili askin tecrubemiz ile buyuk kuyumculara toptan satis yapiyoruz. Simdi ayni kaliteyi, aracisiz fiyatlarla sizlere sunuyoruz."}
+              {content.hero?.subtitle || "40 yılı aşkın tecrübemiz ile büyük kuyumculara toptan satış yapıyoruz. Şimdi aynı kaliteyi, aracısız fiyatlarla sizlere sunuyoruz."}
             </p>
           </div>
         </div>
@@ -111,13 +111,13 @@ export default function HakkimizdaPage() {
             <div className="grid md:grid-cols-2 gap-12 mt-12 items-center">
               <div>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  {content.hikaye?.p1 || "Favian Jewellery, 40 yili askin suredir Turkiye'nin onde gelen kuyumcu markalalarina toptan uretim yapmaktadir. Nesiller boyu aktarilan kuyumculuk sanatini, modern tasarimlarla bulusturuyoruz."}
+                  {content.hikaye?.p1 || "Favian Jewellery, 40 yılı aşkın süredir Türkiye'nin önde gelen kuyumcu markalarına toptan üretim yapmaktadır. Nesiller boyu aktarılan kuyumculuk sanatını, modern tasarımlarla buluşturuyoruz."}
                 </p>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  {content.hikaye?.p2 || "Yillardir buyuk magazalara tedarik ettigimiz ayni kalitedeki urunleri, artik aracisiz olarak sizlere ulastiriyoruz. Boylece piyasa fiyatinin cok altinda, ustun kaliteli takilara sahip olabilirsiniz."}
+                  {content.hikaye?.p2 || "Yıllardır büyük mağazalara tedarik ettiğimiz aynı kalitedeki ürünleri, artık aracısız olarak sizlere ulaştırıyoruz. Böylece piyasa fiyatının çok altında, üstün kaliteli takılara sahip olabilirsiniz."}
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  {content.hikaye?.p3 || "Her parcamiz, usta ellerden cikar ve sizin icin ozel olarak hazirlanir. El yapimi takilarimiz, sizin ozel anlariniza anlam katar."}
+                  {content.hikaye?.p3 || "Her parçamız, usta ellerden çıkar ve sizin için özel olarak hazırlanır. El yapımı takılarımız, sizin özel anlarınıza anlam katar."}
                 </p>
               </div>
               <div className="relative aspect-square">
@@ -137,7 +137,7 @@ export default function HakkimizdaPage() {
       <section className="py-16 bg-[#F5F5F5]">
         <div className="container mx-auto px-4">
           <div className="section-line">
-            <h2 className="section-title">Atolyemizden Kareler</h2>
+            <h2 className="section-title">Atölyemizden Kareler</h2>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
@@ -145,7 +145,7 @@ export default function HakkimizdaPage() {
               <div key={index} className="relative aspect-square overflow-hidden group">
                 <Image
                   src={item.image || "/images/atolye.png"}
-                  alt={item.alt || "Atolye"}
+                  alt={item.alt || "Atölye"}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -183,7 +183,7 @@ export default function HakkimizdaPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="font-serif text-3xl md:text-4xl text-center mb-12 text-white">
-              Bize Ulasin
+              Bize Ulaşın
             </h2>
 
             <div className="grid md:grid-cols-2 gap-12">
@@ -196,7 +196,7 @@ export default function HakkimizdaPage() {
                   <div>
                     <h3 className="font-medium mb-1 text-white">Adres</h3>
                     <p className="text-white/70">
-                      {settings.address || "Yukleniyor..."}
+                      {settings.address || "Yükleniyor..."}
                     </p>
                   </div>
                 </div>
@@ -209,7 +209,7 @@ export default function HakkimizdaPage() {
                     <h3 className="font-medium mb-1 text-white">Telefon</h3>
                     <p className="text-white/70">
                       <a href={`tel:+${phoneDigits(settings.phone)}`} className="hover:text-[#C4A574] transition-colors">
-                        {settings.phone || "Yukleniyor..."}
+                        {settings.phone || "Yükleniyor..."}
                       </a>
                     </p>
                     {settings.whatsapp && (
@@ -230,7 +230,7 @@ export default function HakkimizdaPage() {
                     <h3 className="font-medium mb-1 text-white">E-posta</h3>
                     <p className="text-white/70">
                       <a href={`mailto:${settings.email || ""}`} className="hover:text-[#C4A574] transition-colors">
-                        {settings.email || "Yukleniyor..."}
+                        {settings.email || "Yükleniyor..."}
                       </a>
                     </p>
                   </div>
@@ -241,9 +241,9 @@ export default function HakkimizdaPage() {
                     <Clock className="w-5 h-5 text-[#C4A574]" />
                   </div>
                   <div>
-                    <h3 className="font-medium mb-1 text-white">Calisma Saatleri</h3>
+                    <h3 className="font-medium mb-1 text-white">Çalışma Saatleri</h3>
                     <p className="text-white/70">
-                      {settings.workingHours || "Yukleniyor..."}
+                      {settings.workingHours || "Yükleniyor..."}
                     </p>
                   </div>
                 </div>
@@ -252,16 +252,16 @@ export default function HakkimizdaPage() {
               {/* Sag - Harita veya CTA */}
               <div className="flex flex-col justify-center">
                 <div className="bg-white/5 p-8 text-center">
-                  <p className="font-script text-2xl text-[#C4A574] mb-4">Atolyemizi Ziyaret Edin</p>
+                  <p className="font-script text-2xl text-[#C4A574] mb-4">Atölyemizi Ziyaret Edin</p>
                   <p className="text-white/70 mb-6">
-                    Urunlerimizi yakindan gormek ve ozel tasarim taleplerinizi
-                    konusmak icin atolyemize bekleriz.
+                    Ürünlerimizi yakından görmek ve özel tasarım taleplerinizi
+                    konuşmak için atölyemize bekleriz.
                   </p>
                   <Link
                     href="/iletisim"
                     className="inline-block bg-white text-black px-8 py-3 text-sm tracking-wider uppercase hover:bg-[#C4A574] transition-colors"
                   >
-                    Iletisime Gec
+                    İletişime Geç
                   </Link>
                 </div>
               </div>
@@ -273,15 +273,15 @@ export default function HakkimizdaPage() {
       {/* CTA */}
       <section className="py-16">
         <div className="container mx-auto px-4 text-center">
-          <p className="font-script text-3xl md:text-4xl mb-4">Koleksiyonumuzu Kesfedin</p>
+          <p className="font-script text-3xl md:text-4xl mb-4">Koleksiyonumuzu Keşfedin</p>
           <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-            40 yillik tecrubemizle urettigimiz essiz parcalari inceleyin
+            40 yıllık tecrübemizle ürettiğimiz eşsiz parçaları inceleyin
           </p>
           <Link
             href="/urunler"
             className="inline-block bg-black text-white px-8 py-3 text-sm tracking-wider uppercase hover:bg-gray-800 transition-colors"
           >
-            Urunleri Gor
+            Ürünleri Gör
           </Link>
         </div>
       </section>

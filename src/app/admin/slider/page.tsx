@@ -63,11 +63,11 @@ export default function AdminSliderPage() {
     try {
       setLoading(true);
       const res = await fetch("/api/admin/slides");
-      if (!res.ok) throw new Error("Slider verileri yuklenemedi");
+      if (!res.ok) throw new Error("Slider verileri yüklenemedi");
       const data = await res.json();
       setSlides(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Bir hata olustu");
+      setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
       setLoading(false);
     }
@@ -103,14 +103,14 @@ export default function AdminSliderPage() {
       });
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || "Yuklenemedi");
+        throw new Error(errData.error || "Yüklenemedi");
       }
       const data = await res.json();
       if (data.url) {
         setForm((prev) => ({ ...prev, image: data.url }));
       }
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Gorsel yuklenirken hata olustu");
+      alert(err instanceof Error ? err.message : "Görsel yüklenirken hata oluştu");
     }
 
     e.target.value = "";
@@ -139,7 +139,7 @@ export default function AdminSliderPage() {
 
   const handleSave = async () => {
     if (!form.image.trim()) {
-      alert("Gorsel URL zorunludur");
+      alert("Görsel URL zorunludur");
       return;
     }
 
@@ -162,7 +162,7 @@ export default function AdminSliderPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error("Guncellenemedi");
+        if (!res.ok) throw new Error("Güncellenemedi");
         const updated = await res.json();
         setSlides((prev) => prev.map((s) => (s.id === editingId ? updated : s)));
       } else {
@@ -171,13 +171,13 @@ export default function AdminSliderPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error("Olusturulamadi");
+        if (!res.ok) throw new Error("Oluşturulamadı");
         const created = await res.json();
         setSlides((prev) => [...prev, created]);
       }
       cancelEdit();
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Islem basarisiz");
+      alert(err instanceof Error ? err.message : "İşlem başarısız");
     } finally {
       setSaving(false);
     }
@@ -192,7 +192,7 @@ export default function AdminSliderPage() {
       if (!res.ok) throw new Error("Silinemedi");
       setSlides((prev) => prev.filter((s) => s.id !== id));
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Silme basarisiz");
+      alert(err instanceof Error ? err.message : "Silme başarısız");
     } finally {
       setDeleting(null);
     }
@@ -202,7 +202,7 @@ export default function AdminSliderPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 animate-spin text-[#C6A25A]" />
-        <span className="ml-3 text-lg text-gray-600">Slider yukleniyor...</span>
+        <span className="ml-3 text-lg text-gray-600">Slider yükleniyor...</span>
       </div>
     );
   }
@@ -224,7 +224,7 @@ export default function AdminSliderPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <ImageIcon className="w-7 h-7 text-[#C6A25A]" />
-            Slider Yonetimi
+            Slider Yönetimi
           </h1>
           <p className="text-sm text-gray-500 mt-1">{slides.length} slayt</p>
         </div>
@@ -245,33 +245,33 @@ export default function AdminSliderPage() {
       {(showAddForm || editingId) && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            {editingId ? "Slayt Duzenle" : "Yeni Slayt Ekle"}
+            {editingId ? "Slayt Düzenle" : "Yeni Slayt Ekle"}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Baslik</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Başlık</label>
               <input
                 type="text"
                 name="title"
                 value={form.title}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="Slayt basligi"
+                placeholder="Slayt başlığı"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Alt Baslik</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Alt Başlık</label>
               <input
                 type="text"
                 name="subtitle"
                 value={form.subtitle}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="Slayt alt basligi"
+                placeholder="Slayt alt başlığı"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Gorsel URL *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Görsel URL *</label>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -300,7 +300,7 @@ export default function AdminSliderPage() {
                 value={form.buttonText}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="Hemen Alisverise Basla"
+                placeholder="Hemen Alışverişe Başla"
               />
             </div>
             <div>
@@ -323,11 +323,11 @@ export default function AdminSliderPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
               >
                 <option value="dark">Koyu (Dark)</option>
-                <option value="light">Acik (Light)</option>
+                <option value="light">Açık (Light)</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sira</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
               <input
                 type="number"
                 name="order"
@@ -356,7 +356,7 @@ export default function AdminSliderPage() {
             <div className="mt-4 relative w-full max-w-md aspect-[16/9] rounded-lg overflow-hidden bg-gray-100">
               <Image
                 src={form.image}
-                alt="Slayt onizleme"
+                alt="Slayt önizleme"
                 fill
                 className="object-cover"
                 onError={(e) => {
@@ -384,14 +384,14 @@ export default function AdminSliderPage() {
               className="inline-flex items-center gap-2 bg-[#C6A25A] text-white px-4 py-2 rounded-lg hover:bg-[#b08d47] transition-colors font-medium text-sm disabled:opacity-50"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {editingId ? "Guncelle" : "Kaydet"}
+              {editingId ? "Güncelle" : "Kaydet"}
             </button>
             <button
               onClick={cancelEdit}
               className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm"
             >
               <X className="w-4 h-4" />
-              Iptal
+              İptal
             </button>
           </div>
         </div>
@@ -443,7 +443,7 @@ export default function AdminSliderPage() {
             {/* Info */}
             <div className="p-4">
               <h3 className="font-semibold text-gray-900 text-sm truncate">
-                {slide.title || "(Basliksiz)"}
+                {slide.title || "(Başlıksız)"}
               </h3>
               {slide.subtitle && (
                 <p className="text-xs text-gray-500 mt-0.5 truncate">{slide.subtitle}</p>
@@ -461,7 +461,7 @@ export default function AdminSliderPage() {
                   className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs text-gray-600 hover:text-[#C6A25A] hover:bg-[#C6A25A]/10 rounded-lg transition-colors"
                 >
                   <Pencil className="w-3.5 h-3.5" />
-                  Duzenle
+                  Düzenle
                 </button>
                 <button
                   onClick={() => handleDelete(slide.id)}
@@ -481,7 +481,7 @@ export default function AdminSliderPage() {
         ))}
         {slides.length === 0 && (
           <div className="col-span-full text-center py-12 text-gray-400">
-            Henuz slayt eklenmemis.
+            Henüz slayt eklenmemiş.
           </div>
         )}
       </div>

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/lib/cart-context";
-import { formatPrice } from "@/lib/products";
+import { formatPrice, formatProductName } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
@@ -17,7 +17,7 @@ export function CartDrawer() {
       <SheetContent className="w-full sm:max-w-lg bg-background">
         <SheetHeader>
           <SheetTitle className="font-playfair text-xl text-foreground">
-            Sepetim ({items.length} urun)
+            Sepetim ({items.length} ürün)
           </SheetTitle>
         </SheetHeader>
 
@@ -25,14 +25,14 @@ export function CartDrawer() {
           {items.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
               <ShoppingBag className="w-16 h-16 text-border mb-4" />
-              <p className="text-muted-foreground mb-4">Sepetiniz bos</p>
+              <p className="text-muted-foreground mb-4">Sepetiniz boş</p>
               <Button
                 onClick={() => setIsCartOpen(false)}
                 variant="outline"
                 className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                 asChild
               >
-                <Link href="/urunler">Alisverise Basla</Link>
+                <Link href="/urunler">Alışverişe Başla</Link>
               </Button>
             </div>
           ) : (
@@ -40,7 +40,7 @@ export function CartDrawer() {
               <div className="flex-1 overflow-y-auto py-4 space-y-4">
                 {items.map((item) => (
                   <div key={item.product.id} className="flex gap-4 p-3 bg-muted rounded-lg">
-                    {/* Urun Gorseli */}
+                    {/* Ürün Görseli */}
                     <div className="w-20 h-20 bg-background rounded-lg overflow-hidden flex-shrink-0 relative">
                       {item.product.images[0] && (item.product.images[0].includes("/images/") || item.product.images[0].startsWith("http")) ? (
                         <Image
@@ -57,10 +57,10 @@ export function CartDrawer() {
                       )}
                     </div>
 
-                    {/* Urun Bilgileri */}
+                    {/* Ürün Bilgileri */}
                     <div className="flex-1 min-w-0">
                       <h4 className="font-medium text-foreground text-sm truncate">
-                        {item.product.name}
+                        {formatProductName(item.product.name)}
                       </h4>
                       <p className="text-xs text-muted-foreground">{item.product.code}</p>
                       <p className="text-sm font-semibold text-foreground mt-1">
@@ -82,7 +82,7 @@ export function CartDrawer() {
                         <button
                           onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
                           className="w-6 h-6 flex items-center justify-center bg-background border border-border rounded text-muted-foreground hover:border-primary hover:text-primary"
-                          aria-label="Arttir"
+                          aria-label="Arttır"
                         >
                           <Plus className="w-3 h-3" />
                         </button>
@@ -101,7 +101,7 @@ export function CartDrawer() {
 
               <Separator className="bg-border" />
 
-              {/* Toplam ve Odeme */}
+              {/* Toplam ve Ödeme */}
               <div className="py-4 space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Ara Toplam</span>
@@ -109,7 +109,7 @@ export function CartDrawer() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Kargo</span>
-                  <span className="text-primary font-medium">Ucretsiz</span>
+                  <span className="text-primary font-medium">Ücretsiz</span>
                 </div>
                 <Separator className="bg-border" />
                 <div className="flex justify-between items-center">
@@ -121,7 +121,7 @@ export function CartDrawer() {
                   className="w-full bg-primary hover:bg-accent hover:text-accent-foreground text-primary-foreground py-6 transition-all duration-300"
                   disabled
                 >
-                  Odemeye Gec (Yakinda)
+                  Ödemeye Geç (Yakında)
                 </Button>
                 <Button
                   variant="outline"
@@ -129,7 +129,7 @@ export function CartDrawer() {
                   onClick={() => setIsCartOpen(false)}
                   asChild
                 >
-                  <Link href="/urunler">Alisverise Devam Et</Link>
+                  <Link href="/urunler">Alışverişe Devam Et</Link>
                 </Button>
               </div>
             </>

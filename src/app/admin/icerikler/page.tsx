@@ -45,34 +45,34 @@ const contentTypes = [
   { value: "text", label: "Metin" },
   { value: "textarea", label: "Uzun Metin" },
   { value: "html", label: "HTML" },
-  { value: "image", label: "Gorsel URL" },
+  { value: "image", label: "Görsel URL" },
   { value: "url", label: "Link" },
 ];
 
 const sectionLabels: Record<string, string> = {
-  "anasayfa:koleksiyon_baslik": "Koleksiyon Basligi",
+  "anasayfa:koleksiyon_baslik": "Koleksiyon Başlığı",
   "anasayfa:sticky": "Sticky Scroll Resmi",
-  "anasayfa:marka": "Marka Mesaji",
-  "anasayfa:banner": "Banner (Her Gun Isilta)",
-  "anasayfa:guven": "Guven Ikonlari (3 kart)",
-  "anasayfa:faq": "Sikca Sorulan Sorular",
-  "anasayfa:uretim": "Uretimden Sizlere",
+  "anasayfa:marka": "Marka Mesajı",
+  "anasayfa:banner": "Banner (Her Gün Işıltı)",
+  "anasayfa:guven": "Güven İkonları (3 kart)",
+  "anasayfa:faq": "Sıkça Sorulan Sorular",
+  "anasayfa:uretim": "Üretimden Sizlere",
   "anasayfa:instagram": "Instagram Grid (6 resim)",
-  "hakkimizda:hero": "Hakkimizda - Hero",
-  "hakkimizda:hikaye": "Hakkimizda - Hikayemiz",
-  "hakkimizda:atolye_gorselleri": "Hakkimizda - Atolye Gorselleri",
-  "hakkimizda:neden_biz": "Hakkimizda - Neden Biz",
+  "hakkimizda:hero": "Hakkımızda - Hero",
+  "hakkimizda:hikaye": "Hakkımızda - Hikayemiz",
+  "hakkimizda:atolye_gorselleri": "Hakkımızda - Atölye Görselleri",
+  "hakkimizda:neden_biz": "Hakkımızda - Neden Biz",
 };
 
 const keyLabels: Record<string, string> = {
-  title: "Baslik",
-  subtitle: "Alt Baslik",
-  image: "Gorsel URL",
-  quote: "Alinti Metin",
+  title: "Başlık",
+  subtitle: "Alt Başlık",
+  image: "Görsel URL",
+  quote: "Alıntı Metin",
   author: "Yazar",
   buttonText: "Buton Metni",
   buttonUrl: "Buton Linki",
-  items: "Icerik Listesi (JSON)",
+  items: "İçerik Listesi (JSON)",
   p1: "Paragraf 1",
   p2: "Paragraf 2",
   p3: "Paragraf 3",
@@ -80,7 +80,7 @@ const keyLabels: Record<string, string> = {
 
 const pageLabels: Record<string, string> = {
   anasayfa: "Ana Sayfa",
-  hakkimizda: "Hakkimizda",
+  hakkimizda: "Hakkımızda",
 };
 
 export default function AdminContentPage() {
@@ -98,7 +98,7 @@ export default function AdminContentPage() {
     try {
       setLoading(true);
       const res = await fetch("/api/admin/content");
-      if (!res.ok) throw new Error("Icerikler yuklenemedi");
+      if (!res.ok) throw new Error("İçerikler yüklenemedi");
       const data = await res.json();
       setContents(data);
 
@@ -107,7 +107,7 @@ export default function AdminContentPage() {
       data.forEach((c: PageContent) => sections.add(`${c.page}:${c.section}`));
       setExpandedSections(sections);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Bir hata olustu");
+      setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
       setLoading(false);
     }
@@ -145,7 +145,7 @@ export default function AdminContentPage() {
 
   const handleSave = async () => {
     if (!form.page.trim() || !form.section.trim() || !form.key.trim()) {
-      alert("Sayfa, bolum ve anahtar alanlari zorunludur");
+      alert("Sayfa, bölüm ve anahtar alanları zorunludur");
       return;
     }
 
@@ -166,7 +166,7 @@ export default function AdminContentPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error("Guncellenemedi");
+        if (!res.ok) throw new Error("Güncellenemedi");
         const updated = await res.json();
         setContents((prev) => prev.map((c) => (c.id === editingId ? updated : c)));
       } else {
@@ -175,13 +175,13 @@ export default function AdminContentPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error("Olusturulamadi");
+        if (!res.ok) throw new Error("Oluşturulamadı");
         const created = await res.json();
         setContents((prev) => [...prev, created]);
       }
       cancelEdit();
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Islem basarisiz");
+      alert(err instanceof Error ? err.message : "İşlem başarısız");
     } finally {
       setSaving(false);
     }
@@ -194,16 +194,16 @@ export default function AdminContentPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...content, value: newValue }),
       });
-      if (!res.ok) throw new Error("Guncellenemedi");
+      if (!res.ok) throw new Error("Güncellenemedi");
       const updated = await res.json();
       setContents((prev) => prev.map((c) => (c.id === content.id ? updated : c)));
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Kaydetme basarisiz");
+      alert(err instanceof Error ? err.message : "Kaydetme başarısız");
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Bu icerigi silmek istediginize emin misiniz?")) return;
+    if (!confirm("Bu içeriği silmek istediğinize emin misiniz?")) return;
 
     try {
       setDeleting(id);
@@ -211,7 +211,7 @@ export default function AdminContentPage() {
       if (!res.ok) throw new Error("Silinemedi");
       setContents((prev) => prev.filter((c) => c.id !== id));
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Silme basarisiz");
+      alert(err instanceof Error ? err.message : "Silme başarısız");
     } finally {
       setDeleting(null);
     }
@@ -248,7 +248,7 @@ export default function AdminContentPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 animate-spin text-[#C6A25A]" />
-        <span className="ml-3 text-lg text-gray-600">Icerikler yukleniyor...</span>
+        <span className="ml-3 text-lg text-gray-600">İçerikler yükleniyor...</span>
       </div>
     );
   }
@@ -270,10 +270,10 @@ export default function AdminContentPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <FileEdit className="w-7 h-7 text-[#C6A25A]" />
-            Icerik Yonetimi
+            İçerik Yönetimi
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Sayfa iceriklerini anahtar-deger olarak yonetin
+            Sayfa içeriklerini anahtar-değer olarak yönetin
           </p>
         </div>
         <button
@@ -285,7 +285,7 @@ export default function AdminContentPage() {
           className="inline-flex items-center gap-2 bg-[#C6A25A] text-white px-5 py-2.5 rounded-lg hover:bg-[#b08d47] transition-colors font-medium text-sm"
         >
           <Plus className="w-4 h-4" />
-          Yeni Icerik
+          Yeni İçerik
         </button>
       </div>
 
@@ -293,7 +293,7 @@ export default function AdminContentPage() {
       {(showAddForm || editingId) && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            {editingId ? "Icerik Duzenle" : "Yeni Icerik Ekle"}
+            {editingId ? "İçerik Düzenle" : "Yeni İçerik Ekle"}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -304,18 +304,18 @@ export default function AdminContentPage() {
                 value={form.page}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: anasayfa"
+                placeholder="örnek: anasayfa"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Bolum *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Bölüm *</label>
               <input
                 type="text"
                 name="section"
                 value={form.section}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: hero"
+                placeholder="örnek: hero"
               />
             </div>
             <div>
@@ -326,11 +326,11 @@ export default function AdminContentPage() {
                 value={form.key}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: baslik"
+                placeholder="örnek: başlık"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tur</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Tür</label>
               <select
                 name="type"
                 value={form.type}
@@ -345,7 +345,7 @@ export default function AdminContentPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sira</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
               <input
                 type="number"
                 name="order"
@@ -356,7 +356,7 @@ export default function AdminContentPage() {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Deger</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Değer</label>
               {form.type === "textarea" || form.type === "html" ? (
                 <textarea
                   name="value"
@@ -364,7 +364,7 @@ export default function AdminContentPage() {
                   onChange={handleChange}
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm resize-y font-mono"
-                  placeholder="Icerik degeri"
+                  placeholder="İçerik değeri"
                 />
               ) : (
                 <input
@@ -373,7 +373,7 @@ export default function AdminContentPage() {
                   value={form.value}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                  placeholder="Icerik degeri"
+                  placeholder="İçerik değeri"
                 />
               )}
             </div>
@@ -385,14 +385,14 @@ export default function AdminContentPage() {
               className="inline-flex items-center gap-2 bg-[#C6A25A] text-white px-4 py-2 rounded-lg hover:bg-[#b08d47] transition-colors font-medium text-sm disabled:opacity-50"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {editingId ? "Guncelle" : "Kaydet"}
+              {editingId ? "Güncelle" : "Kaydet"}
             </button>
             <button
               onClick={cancelEdit}
               className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm"
             >
               <X className="w-4 h-4" />
-              Iptal
+              İptal
             </button>
           </div>
         </div>
@@ -401,7 +401,7 @@ export default function AdminContentPage() {
       {/* Content Groups */}
       {Object.keys(grouped).length === 0 ? (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center text-gray-400">
-          Henuz icerik eklenmemis.
+          Henüz içerik eklenmemiş.
         </div>
       ) : (
         <div className="space-y-4">
@@ -482,7 +482,7 @@ export default function AdminContentPage() {
                               <button
                                 onClick={() => startEdit(content)}
                                 className="p-1.5 text-gray-400 hover:text-[#C6A25A] rounded transition-colors"
-                                title="Tam duzenle"
+                                title="Tam düzenle"
                               >
                                 <FileEdit className="w-3.5 h-3.5" />
                               </button>

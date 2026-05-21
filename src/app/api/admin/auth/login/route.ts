@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
 
     if (!email || !password) {
       return NextResponse.json(
-        { success: false, error: 'E-posta ve sifre gereklidir' },
+        { success: false, error: 'E-posta ve şifre gereklidir' },
         { status: 400 }
       );
     }
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Login API error:', error);
     return NextResponse.json(
-      { success: false, error: 'Sunucu hatasi' },
+      { success: false, error: 'Sunucu hatası' },
       { status: 500 }
     );
   }

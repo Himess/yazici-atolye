@@ -54,7 +54,7 @@ export function PriceTicker() {
       <div className="bg-stone-900 text-white py-1.5">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-6 text-xs">
-            <span className="text-stone-400">Fiyatlar yukleniyor...</span>
+            <span className="text-stone-400">Fiyatlar yükleniyor...</span>
           </div>
         </div>
       </div>

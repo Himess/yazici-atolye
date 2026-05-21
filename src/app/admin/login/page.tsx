@@ -29,10 +29,10 @@ export default function AdminLoginPage() {
       if (data.success) {
         router.push('/admin');
       } else {
-        setError(data.error || 'Giris basarisiz');
+        setError(data.error || 'Giriş başarısız');
       }
     } catch {
-      setError('Bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -54,12 +54,12 @@ export default function AdminLoginPage() {
             <span className="text-white text-2xl font-bold">F</span>
           </div>
           <h1 className="text-2xl font-bold text-white">Favian Jewellery</h1>
-          <p className="text-zinc-400 text-sm mt-1">Yonetim Paneli</p>
+          <p className="text-zinc-400 text-sm mt-1">Yönetim Paneli</p>
         </div>
 
         {/* Giris Formu */}
         <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl">
-          <h2 className="text-xl font-semibold text-white mb-6">Giris Yap</h2>
+          <h2 className="text-xl font-semibold text-white mb-6">Giriş Yap</h2>
 
           {error && (
             <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
@@ -99,7 +99,7 @@ export default function AdminLoginPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-zinc-300 mb-1.5"
               >
-                Sifre
+                Şifre
               </label>
               <div className="relative">
                 <Lock
@@ -112,7 +112,7 @@ export default function AdminLoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  placeholder="Sifrenizi girin"
+                  placeholder="Şifrenizi girin"
                   className="w-full pl-10 pr-12 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#C6A25A]/50 focus:border-[#C6A25A]/50 transition-all"
                 />
                 <button
@@ -134,10 +134,10 @@ export default function AdminLoginPage() {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <Loader2 size={18} className="animate-spin" />
-                  Giris yapiliyor...
+                  Giriş yapılıyor...
                 </span>
               ) : (
-                'Giris Yap'
+                'Giriş Yap'
               )}
             </button>
           </form>
@@ -145,7 +145,7 @@ export default function AdminLoginPage() {
 
         {/* Alt bilgi */}
         <p className="text-center text-zinc-600 text-xs mt-6">
-          Favian Jewellery &copy; {new Date().getFullYear()} - Tum haklari saklidir.
+          Favian Jewellery &copy; {new Date().getFullYear()} - Tüm hakları saklıdır.
         </p>
       </div>
     </div>

@@ -57,7 +57,7 @@ export default function AdminSettingsPage() {
       try {
         setLoading(true);
         const res = await fetch("/api/admin/settings");
-        if (!res.ok) throw new Error("Ayarlar yuklenemedi");
+        if (!res.ok) throw new Error("Ayarlar yüklenemedi");
         const data = await res.json();
         setForm({
           phone: data.phone || "",
@@ -74,7 +74,7 @@ export default function AdminSettingsPage() {
           pinterestUrl: data.pinterestUrl || "",
         });
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : "Bir hata olustu");
+        setError(err instanceof Error ? err.message : "Bir hata oluştu");
       } finally {
         setLoading(false);
       }
@@ -107,9 +107,9 @@ export default function AdminSettingsPage() {
       });
 
       if (!res.ok) throw new Error("Kaydedilemedi");
-      setSuccess("Ayarlar basariyla kaydedildi!");
+      setSuccess("Ayarlar başarıyla kaydedildi!");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Kaydetme islemi basarisiz");
+      setError(err instanceof Error ? err.message : "Kaydetme işlemi başarısız");
     } finally {
       setSaving(false);
     }
@@ -119,7 +119,7 @@ export default function AdminSettingsPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 animate-spin text-[#C6A25A]" />
-        <span className="ml-3 text-lg text-gray-600">Ayarlar yukleniyor...</span>
+        <span className="ml-3 text-lg text-gray-600">Ayarlar yükleniyor...</span>
       </div>
     );
   }
@@ -130,10 +130,10 @@ export default function AdminSettingsPage() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
           <Settings className="w-7 h-7 text-[#C6A25A]" />
-          Site Ayarlari
+          Site Ayarları
         </h1>
         <p className="text-sm text-gray-500 mt-1">
-          Iletisim bilgileri ve sosyal medya hesaplarini yonetin
+          İletişim bilgileri ve sosyal medya hesaplarını yönetin
         </p>
       </div>
 
@@ -154,7 +154,7 @@ export default function AdminSettingsPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-3 flex items-center gap-2">
             <Phone className="w-5 h-5 text-[#C6A25A]" />
-            Iletisim Bilgileri
+            İletişim Bilgileri
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -215,13 +215,13 @@ export default function AdminSettingsPage() {
                 onChange={handleChange}
                 rows={2}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm resize-y"
-                placeholder="Istanbul, Turkiye"
+                placeholder="İstanbul, Türkiye"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
                 <Clock className="w-4 h-4 text-gray-400" />
-                Calisma Saatleri
+                Çalışma Saatleri
               </label>
               <input
                 type="text"
@@ -342,7 +342,7 @@ export default function AdminSettingsPage() {
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                Ayarlari Kaydet
+                Ayarları Kaydet
               </>
             )}
           </button>

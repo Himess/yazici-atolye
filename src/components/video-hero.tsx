@@ -33,7 +33,7 @@ export function VideoHero() {
           <div className="mt-2 md:mt-3 flex items-center justify-center gap-3">
             <span className="block h-px w-12 md:w-20 bg-white/40" />
             <span className="text-[10px] md:text-xs text-white/70 tracking-[0.25em] uppercase">
-              El Yapimi Mucevherat
+              El Yapımı Mücevherat
             </span>
             <span className="block h-px w-12 md:w-20 bg-white/40" />
           </div>
@@ -43,7 +43,7 @@ export function VideoHero() {
               href="/urunler"
               className="inline-block bg-white text-black px-8 py-3 text-xs md:text-sm tracking-[0.2em] uppercase font-medium hover:bg-white/90 transition-colors"
             >
-              Koleksiyonu Kesfet
+              Koleksiyonu Keşfet
             </Link>
             <Link
               href="/hakkimizda"

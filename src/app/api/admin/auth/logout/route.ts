@@ -8,7 +8,7 @@ export async function POST() {
   } catch (error) {
     console.error('Logout API error:', error);
     return NextResponse.json(
-      { success: false, error: 'Sunucu hatasi' },
+      { success: false, error: 'Sunucu hatası' },
       { status: 500 }
     );
   }

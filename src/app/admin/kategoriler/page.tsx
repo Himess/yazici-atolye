@@ -58,11 +58,11 @@ export default function AdminCategoriesPage() {
     try {
       setLoading(true);
       const res = await fetch("/api/admin/categories");
-      if (!res.ok) throw new Error("Kategoriler yuklenemedi");
+      if (!res.ok) throw new Error("Kategoriler yüklenemedi");
       const data = await res.json();
       setCategories(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Bir hata olustu");
+      setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
       setLoading(false);
     }
@@ -103,7 +103,7 @@ export default function AdminCategoriesPage() {
 
   const handleSave = async () => {
     if (!form.name.trim()) {
-      alert("Kategori adi zorunludur");
+      alert("Kategori adı zorunludur");
       return;
     }
 
@@ -123,7 +123,7 @@ export default function AdminCategoriesPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error("Guncellenemedi");
+        if (!res.ok) throw new Error("Güncellenemedi");
         const updated = await res.json();
         setCategories((prev) => prev.map((c) => (c.id === editingId ? updated : c)));
       } else {
@@ -132,20 +132,20 @@ export default function AdminCategoriesPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error("Olusturulamadi");
+        if (!res.ok) throw new Error("Oluşturulamadı");
         const created = await res.json();
         setCategories((prev) => [...prev, created]);
       }
       cancelEdit();
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Islem basarisiz");
+      alert(err instanceof Error ? err.message : "İşlem başarısız");
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`"${name}" kategorisini silmek istediginize emin misiniz?`)) return;
+    if (!confirm(`"${name}" kategorisini silmek istediğinize emin misiniz?`)) return;
 
     try {
       setDeleting(id);
@@ -153,7 +153,7 @@ export default function AdminCategoriesPage() {
       if (!res.ok) throw new Error("Silinemedi");
       setCategories((prev) => prev.filter((c) => c.id !== id));
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Silme basarisiz");
+      alert(err instanceof Error ? err.message : "Silme başarısız");
     } finally {
       setDeleting(null);
     }
@@ -163,7 +163,7 @@ export default function AdminCategoriesPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 animate-spin text-[#C6A25A]" />
-        <span className="ml-3 text-lg text-gray-600">Kategoriler yukleniyor...</span>
+        <span className="ml-3 text-lg text-gray-600">Kategoriler yükleniyor...</span>
       </div>
     );
   }
@@ -185,7 +185,7 @@ export default function AdminCategoriesPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <FolderTree className="w-7 h-7 text-[#C6A25A]" />
-            Kategori Yonetimi
+            Kategori Yönetimi
           </h1>
           <p className="text-sm text-gray-500 mt-1">{categories.length} kategori</p>
         </div>
@@ -206,18 +206,18 @@ export default function AdminCategoriesPage() {
       {(showAddForm || editingId) && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            {editingId ? "Kategori Duzenle" : "Yeni Kategori Ekle"}
+            {editingId ? "Kategori Düzenle" : "Yeni Kategori Ekle"}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Kategori Adi *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Kategori Adı *</label>
               <input
                 type="text"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="ornek: Yuzukler"
+                placeholder="örnek: Yüzükler"
               />
             </div>
             <div>
@@ -232,7 +232,7 @@ export default function AdminCategoriesPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Gorsel</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Görsel</label>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -255,11 +255,11 @@ export default function AdminCategoriesPage() {
                       fd.append("folder", "kategoriler");
                       try {
                         const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
-                        if (!res.ok) throw new Error("Yuklenemedi");
+                        if (!res.ok) throw new Error("Yüklenemedi");
                         const data = await res.json();
                         if (data.url) setForm((prev) => ({ ...prev, image: data.url }));
                       } catch {
-                        alert("Gorsel yuklenirken hata olustu");
+                        alert("Görsel yüklenirken hata oluştu");
                       }
                       e.target.value = "";
                     }}
@@ -269,7 +269,7 @@ export default function AdminCategoriesPage() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sira</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
               <input
                 type="number"
                 name="order"
@@ -299,14 +299,14 @@ export default function AdminCategoriesPage() {
               className="inline-flex items-center gap-2 bg-[#C6A25A] text-white px-4 py-2 rounded-lg hover:bg-[#b08d47] transition-colors font-medium text-sm disabled:opacity-50"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {editingId ? "Guncelle" : "Kaydet"}
+              {editingId ? "Güncelle" : "Kaydet"}
             </button>
             <button
               onClick={cancelEdit}
               className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm"
             >
               <X className="w-4 h-4" />
-              Iptal
+              İptal
             </button>
           </div>
         </div>
@@ -321,22 +321,22 @@ export default function AdminCategoriesPage() {
                 <GripVertical className="w-4 h-4 text-gray-300" />
               </th>
               <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Gorsel
+                Görsel
               </th>
               <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Kategori Adi
+                Kategori Adı
               </th>
               <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Slug
               </th>
               <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Sira
+                Sıra
               </th>
               <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Durum
               </th>
               <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Islemler
+                İşlemler
               </th>
             </tr>
           </thead>
@@ -380,7 +380,7 @@ export default function AdminCategoriesPage() {
                     <button
                       onClick={() => startEdit(cat)}
                       className="p-2 text-gray-400 hover:text-[#C6A25A] hover:bg-[#C6A25A]/10 rounded-lg transition-colors"
-                      title="Duzenle"
+                      title="Düzenle"
                     >
                       <Pencil className="w-4 h-4" />
                     </button>
@@ -403,7 +403,7 @@ export default function AdminCategoriesPage() {
             {categories.length === 0 && (
               <tr>
                 <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
-                  Henuz kategori eklenmemis.
+                  Henüz kategori eklenmemiş.
                 </td>
               </tr>
             )}

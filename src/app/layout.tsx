@@ -21,23 +21,23 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: "Favian Jewellery | El Yapimi Takilar & Mucevherat",
+    default: "Favian Jewellery | El Yapımı Takılar & Mücevherat",
     template: "%s | Favian Jewellery",
   },
   description:
-    "Favian Jewellery - Ozel tasarim el yapimi takilar, nisan yuzukleri, alyanslar ve mucevherat. Kalite ve zarafetin bulustugu adres.",
+    "Favian Jewellery - Özel tasarım el yapımı takılar, nişan yüzükleri, alyanslar ve mücevherat. Kalite ve zarafetin buluştuğu adres.",
   keywords: [
     "favian",
     "favian jewellery",
     "kuyumcu",
-    "mucevher",
-    "altin",
-    "yuzuk",
+    "mücevher",
+    "altın",
+    "yüzük",
     "kolye",
-    "kupe",
-    "el yapimi taki",
-    "pirlanta",
-    "nisan yuzugu",
+    "küpe",
+    "el yapımı takı",
+    "pırlanta",
+    "nişan yüzüğü",
     "alyans",
   ],
   authors: [{ name: "Favian Jewellery" }],
@@ -46,14 +46,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "tr_TR",
     siteName: "Favian Jewellery",
-    title: "Favian Jewellery | El Yapimi Takilar & Mucevherat",
+    title: "Favian Jewellery | El Yapımı Takılar & Mücevherat",
     description:
-      "Ozel tasarim el yapimi takilar, nisan yuzukleri, alyanslar ve mucevherat.",
+      "Özel tasarım el yapımı takılar, nişan yüzükleri, alyanslar ve mücevherat.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Favian Jewellery | El Yapimi Takilar",
-    description: "Ozel tasarim el yapimi takilar ve mucevherat.",
+    title: "Favian Jewellery | El Yapımı Takılar",
+    description: "Özel tasarım el yapımı takılar ve mücevherat.",
   },
   robots: {
     index: true,

@@ -30,11 +30,11 @@ export default function AdminProductsPage() {
     try {
       setLoading(true);
       const res = await fetch("/api/admin/products");
-      if (!res.ok) throw new Error("Veriler yuklenemedi");
+      if (!res.ok) throw new Error("Veriler yüklenemedi");
       const data = await res.json();
       setProducts(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Bir hata olustu");
+      setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
       setLoading(false);
     }
@@ -45,7 +45,7 @@ export default function AdminProductsPage() {
   }, []);
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`"${name}" urununu silmek istediginize emin misiniz?`)) return;
+    if (!confirm(`"${name}" ürününü silmek istediğinize emin misiniz?`)) return;
 
     try {
       setDeleting(id);
@@ -53,16 +53,16 @@ export default function AdminProductsPage() {
       if (!res.ok) throw new Error("Silinemedi");
       setProducts((prev) => prev.filter((p) => p.id !== id));
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Silme islemi basarisiz");
+      alert(err instanceof Error ? err.message : "Silme işlemi başarısız");
     } finally {
       setDeleting(null);
     }
   };
 
   const categoryLabels: Record<string, string> = {
-    yuzuk: "Yuzuk",
+    yuzuk: "Yüzük",
     kolye: "Kolye",
-    kupe: "Kupe",
+    kupe: "Küpe",
     bileklik: "Bileklik",
   };
 
@@ -70,7 +70,7 @@ export default function AdminProductsPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 animate-spin text-[#C6A25A]" />
-        <span className="ml-3 text-lg text-gray-600">Urunler yukleniyor...</span>
+        <span className="ml-3 text-lg text-gray-600">Ürünler yükleniyor...</span>
       </div>
     );
   }
@@ -92,16 +92,16 @@ export default function AdminProductsPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <Package className="w-7 h-7 text-[#C6A25A]" />
-            Urun Yonetimi
+            Ürün Yönetimi
           </h1>
-          <p className="text-sm text-gray-500 mt-1">{products.length} urun listeleniyor</p>
+          <p className="text-sm text-gray-500 mt-1">{products.length} ürün listeleniyor</p>
         </div>
         <Link
           href="/admin/urunler/new"
           className="inline-flex items-center gap-2 bg-[#C6A25A] text-white px-5 py-2.5 rounded-lg hover:bg-[#b08d47] transition-colors font-medium text-sm"
         >
           <Plus className="w-4 h-4" />
-          Yeni Urun Ekle
+          Yeni Ürün Ekle
         </Link>
       </div>
 
@@ -112,7 +112,7 @@ export default function AdminProductsPage() {
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Urun Adi
+                  Ürün Adı
                 </th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Kategori
@@ -121,13 +121,13 @@ export default function AdminProductsPage() {
                   Fiyat
                 </th>
                 <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  One Cikan
+                  Öne Çıkan
                 </th>
                 <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Durum
                 </th>
                 <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Islemler
+                  İşlemler
                 </th>
               </tr>
             </thead>
@@ -182,7 +182,7 @@ export default function AdminProductsPage() {
                       <Link
                         href={`/admin/urunler/new?edit=${product.id}`}
                         className="p-2 text-gray-400 hover:text-[#C6A25A] hover:bg-[#C6A25A]/10 rounded-lg transition-colors"
-                        title="Duzenle"
+                        title="Düzenle"
                       >
                         <Pencil className="w-4 h-4" />
                       </Link>
@@ -205,7 +205,7 @@ export default function AdminProductsPage() {
               {products.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
-                    Henuz urun eklenmemis.
+                    Henüz ürün eklenmemiş.
                   </td>
                 </tr>
               )}

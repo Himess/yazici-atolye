@@ -1,91 +1,197 @@
-# Favian Jewellery - Proje Hafizasi
+# Favian Jewellery — Proje Hafızası
 
-Bu dosya proje hakkindaki tum kararlari ve bilgileri saklar.
+Bu dosya proje hakkındaki tüm kararları ve bilgileri saklar.
+
+## Mevcut Durum (2026-05-22 itibarıyla)
+
+- **Site canlı:** https://yazicipirlanta.com (Vercel auto-deploy aktif)
+- **Preview URL:** https://yazici-atolye.vercel.app
+- **Repo:** https://github.com/Himess/yazici-atolye (main branch)
+- **Son commit:** `35cb4ee fix: tum metinleri turkce karakter ile yaz + urun adlari icin Title Case formatlama` (2026-05-21)
+- **Yerel yol:** `C:\Users\USER\Desktop\Projeler\Arsiv\yazici-atolye` (PC restart sonrası buradan aç)
 
 ## Rebrand Notu (2026-04-24)
 
-- **Eski:** Yazici Atolye → **Yeni:** Favian Jewellery
-- Logo: `/images/favian-logo.png` (placeholder olarak eski logo kopyalandi, gercek FAVIAN logo dosyasi konulacak)
+- **Eski:** Yazıcı Atölye → **Yeni:** Favian Jewellery
+- Logo: `/images/favian-logo.png` (placeholder, gerçek FAVIAN logo dosyası eklenecek)
 - Hero: VideoHero (background video) — `public/videos/hero.mp4`
-- Hero slider eski component'i (`hero-slider.tsx`) hala duruyor, kullanilmiyor
-- Email/social handle placeholder'lari: `favianjewellery.com` (gercek mail/domain alinmadi)
-- Repo adi: `yazici-atolye` (GitHub'da degismedi, kod icinde `favian-jewellery`)
-- localStorage key'leri: `yazici-*` olarak kalmaya devam ediyor (mevcut kullanici sessionlarini bozmamak icin)
+- Hero slider eski component'i (`hero-slider.tsx`) hâlâ duruyor ama kullanılmıyor (silmiyoruz, refactor için duruyor)
+- Email/social handle placeholder'ları: `favianjewellery.com` (gerçek mail/domain alınmadı)
+- Repo adı: `yazici-atolye` (GitHub'da değişmedi, kod içinde `Favian Jewellery` brand)
+- localStorage key'leri: `yazici-*` olarak kalmaya devam ediyor (mevcut kullanıcı session'larını bozmamak için)
+
+## Türkçe Karakter Çalışması (2026-05-21)
+
+**Sorun:** İlk kodlama sırasında "bash uyumluluğu" notuyla tüm metinler ASCII olarak yazılmıştı (Yapimi, Mucevher, Pirlanta, vb.). Müşteri profesyonel görünüm istedi.
+
+**Çözüm (commit 35cb4ee):**
+- 31 dosyada 700+ değişiklik. Tüm kullanıcıya görünen metinler artık doğru Türkçe karakterli.
+- ASCII not artık geçersiz — yeni metin yazarken doğrudan Türkçe karakter kullan (Ç, Ş, İ, Ğ, Ü, Ö, ı).
+- Korunan (kasıtlı dokunulmadı):
+  - URL route'ları: `/urun/[id]`, `/urunler`, `/admin/urunler` — slug'lar
+  - Enum/literal type'lar: `category: "yuzuk" | "kolye" | "kupe" | "bileklik"`
+  - Değişken/type/interface adları (TypeScript identifier'ları)
+  - Image dosya isimleri (`/images/yuzuk-1.jpg`)
+  - localStorage key'leri (`yazici-*`)
+  - Comment'ler ve `console.error` mesajları (dev-facing)
+
+## Ürün Adı Formatlama (2026-05-21)
+
+**Sorun:** Admin paneli üzerinden DB'ye girilen ürün adları tutarsız ("rose taşlı yüzük 2", "Altın taşlı yüzük", "DNA yzk 1" gibi karışık).
+
+**Çözüm:** `src/lib/products.ts` içine `formatProductName()` yardımcısı eklendi:
+
+```ts
+export function formatProductName(name: string): string
+```
+
+- Her kelimenin ilk harfini büyük yapar (Title Case)
+- Türkçe locale uyumlu (`toLocaleUpperCase("tr-TR")`) — "iri" → "İri" (noktalı İ ile)
+- All-caps kısaltmaları korur — "DNA" → "DNA" (Dna olmaz)
+- Display-time uygulanır, DB değişmez (gelecekte admin lowercase girse bile düzgün gösterilir)
+
+**Uygulandığı yerler:**
+- `src/components/product-card.tsx` — ürün kartı (grid)
+- `src/app/urun/[id]/page.tsx` — ürün detay (breadcrumb + h1 + WhatsApp/share mesajları)
+- `src/components/cart-drawer.tsx` — sepet
+- `src/components/header.tsx` — arama sonuçları
+
+**Örnekler:**
+- `rose taşlı yüzük 2` → `Rose Taşlı Yüzük 2`
+- `Altın taşlı yüzük` → `Altın Taşlı Yüzük`
+- `gold taşlı iri yüzük 2` → `Gold Taşlı İri Yüzük 2`
+- `DNA yzk 1` → `DNA Yzk 1`
 
 ## Proje Bilgileri
 
-- **Proje Adi:** Favian Jewellery
-- **Tur:** Kuyumcu E-Ticaret Sitesi
-- **Framework:** Next.js 14 (App Router)
-- **Styling:** Tailwind CSS + shadcn/ui
-- **Hosting:** Vercel (planli)
+- **Proje Adı:** Favian Jewellery (eski: Yazıcı Pırlanta)
+- **Tür:** Kuyumcu E-Ticaret Sitesi
+- **Framework:** Next.js 14/16 (App Router)
+- **Styling:** Tailwind CSS v4 + shadcn/ui
+- **Hosting:** Vercel + custom domain (yazicipirlanta.com)
 
 ## Teknoloji Stack
 
-- Next.js 14 (App Router)
-- TypeScript
-- Tailwind CSS v4
-- shadcn/ui components (button, card, badge, input, separator, sheet, navigation-menu)
-- Playfair Display + Inter fontlari
+- Next.js 14/16 (App Router) + TypeScript
+- Tailwind CSS v4 + shadcn/ui (button, card, badge, input, separator, sheet, navigation-menu)
+- Prisma + Supabase (DB + Storage for ürün görselleri)
+- Vercel hosting
+- Sharp image optimization (WebP)
+- Three.js (React Three Fiber) — 360° ürün viewer
+- Fonts: Cormorant Garamond (serif) + Montserrat (sans) + Pinyon Script (cursive/font-script)
 
-## Renk Paleti
+## Renk Paleti (gerçek değerler)
 
-- **Primary:** Amber tonlari (amber-700, amber-800)
-- **Background:** Beyaz, zinc-50
-- **Text:** zinc-900, zinc-600
-- **Accent:** Altin tonlari (gradient'lar icin amber-100 - amber-200)
+- **Primary/Gold:** `#C6A25A` (CSS değişkeni: `--gold`)
+- **Dark text:** `#2B2B2B`
+- **Cream BG:** `#F5F1EA`
+- **Beige BG:** koyu cream tonları
+- **Border:** `#E5E5E5`
+- **Tailwind extension:** `gold`, `dark`, `cream`, `beige`, `border`, `foreground`, `muted-foreground` — `globals.css` içinde
 
-## Sayfa Yapisi
+## Sayfa Yapısı
 
 ```
-/                 - Ana sayfa (hero, kategoriler, one cikan urunler, CTA)
-/urunler          - Urun listesi (filtreleme ile)
-/urun/[id]        - Urun detay sayfasi
-/hakkimizda       - Hakkimizda sayfasi
-/iletisim         - Iletisim formu + bilgiler
+/                 - Ana sayfa (VideoHero, kategoriler, sticky kolye, featured, yüzükler,
+                   banner, güven ikonları, testimonials, FAQ, üretim, Instagram)
+/urunler          - Ürün listesi (filtre, sıralama, arama)
+/urun/[id]        - Ürün detay (galeri, zoom, color variant, taş tablosu, WhatsApp)
+/hakkimizda       - Hakkımızda (hero + hikaye + atölye gallery + neden biz + iletişim)
+/iletisim         - İletişim formu + bilgi kartları + WhatsApp
+/favoriler        - Favoriye eklenen ürünler
+/360-demo         - 3D ürün görüntüleyici (deneme)
+/admin            - Admin dashboard
+/admin/login      - Admin giriş
+/admin/urunler    - Ürün CRUD (+ /new alt sayfası)
+/admin/kategoriler
+/admin/slider     - Hero slider yönetimi
+/admin/yorumlar   - Testimonial yönetimi
+/admin/formlar    - Gelen iletişim formları
+/admin/icerikler  - Sayfa içerik blok yönetimi (hero, banner, FAQ, vb.)
+/admin/ayarlar    - Site geneli ayarlar (telefon, mail, sosyal medya)
 ```
 
-## Onemli Dosyalar
+## Önemli Dosyalar
 
-- `src/lib/products.ts` - Urun verileri ve yardimci fonksiyonlar
-- `src/components/header.tsx` - Site header'i
-- `src/components/footer.tsx` - Site footer'i
-- `src/app/layout.tsx` - Root layout (fontlar, metadata)
-- `setup.mjs` - Sayfa olusturma scripti (gelistirme icin)
+- `src/app/page.tsx` — Ana sayfa (hero, kategoriler, sticky scroll, banner, featured, yüzükler, üretim, testimonials, FAQ, Instagram)
+- `src/app/urun/[id]/page.tsx` — Ürün detay
+- `src/components/header.tsx` — 3 bölüm (Announcement bar / Ana header desktop-only / Mobil sticky header)
+- `src/components/video-hero.tsx` — Aktif hero (background video)
+- `src/components/hero-slider.tsx` — Eski slider (kullanılmıyor ama duruyor)
+- `src/components/footer.tsx` — 4 kolon (Hakkımızda / Hizmetler / Bilgiler / Bülten)
+- `src/components/product-card.tsx` — Grid kartı (formatProductName uygulu)
+- `src/lib/products.ts` — Fallback ürün listesi + `formatPrice` + `formatProductName` helper'ları
+- `src/app/globals.css` — Brand colors, CSS variables, h1-h6 base styles
+- `src/app/layout.tsx` — Root layout (Cormorant Garamond + Montserrat font, SEO metadata)
+- `prisma/schema.prisma` + `seed.ts` + `seed-content.ts` — DB schema + seed data
 
-## Yapilacaklar (TODO)
+## Tasarım Kararları (müşteri talebiyle değiştirildi)
 
-- [ ] Mobil uyum iyilestirmeleri
-- [ ] Gercek urun gorselleri eklenmesi (Gemini ile olusturulabilir)
-- [ ] Odeme sistemi entegrasyonu (iyzico/Stripe - sonra)
-- [ ] Admin paneli (urun ekleme/duzenleme)
-- [ ] WhatsApp entegrasyonu (gercek numara)
-- [ ] SEO optimizasyonlari
-- [ ] Google Analytics entegrasyonu
+- **5 başlık Montserrat Bold:** ÖZEL KOLEKSİYONLARIMIZ, ürün breadcrumb, ürün adı h1, Mücevher Hakkında, (hero sonradan Light'a çekildi)
+- **Hero Montserrat Light (300):** h1 ve subtitle ikisi de light
+- **Sticky scroll kolye resmine CTA:** "Koleksiyonları Keşfet" butonu → `/urunler?kategori=kolye`. Konum: merkez + `md:translate-x-80 lg:translate-x-[28rem] xl:translate-x-[40rem]` (müşteri iteratif olarak sağa çekti)
+- **Logo boyutu 2.5x:** desktop h-[100px] md:h-[120px], mobil sticky h-[80px], drawer h-[100px]. Header height de büyüdü (h-28/md:h-36).
+- **Ana header mobilde gizli:** `hidden lg:block` — aksi halde mobilde 2 logo görünüyordu
+- **Üretim bölümü temizliği:** "Usta ellerden, özenle işlenen parçalar" kartı tamamen kaldırıldı (defaults + seed + runtime filter)
+- **Mücevher Hakkında:** typo düzeltildi (Mucevher Hakkinda → Mücevher Hakkında, sonra ASCII genel temizliğinde tutarlı oldu)
 
-## Domain Bilgisi
+## Yaygın Sorunlar & Çözümler
 
-Domain henuz alinmadi. Onerilen kaynaklar:
-- Namecheap.com (.com icin)
-- Cloudflare.com (en ucuz)
-- isimtescil.net (.com.tr icin)
+- **Dev server kapanıyor:** `nohup npm run dev > dev.log 2>&1 &` + `disown` ile başlat — parent shell'den bağımsız çalışsın
+- **Logo cache:** Vercel CDN eski logoyu önbellekte tutabilir; yeni deploy genelde temizler, gerekirse dosya adını değiştir
+- **H1-H6 font-weight override:** `globals.css` base layer h1-h6'ya zorla `font-serif font-bold` uyguluyor, hero title gibi farklı istediğin yerlerde explicit `font-sans font-light` kullan
+- **Text rengi:** h3'te `text-foreground` base'den geliyor; beyaz istiyorsan explicit `text-white` yazmak lazım
+- **Türkçe karakterler:** Artık doğrudan yaz (Ç, Ş, İ, Ğ, Ü, Ö, ı). Eski "ASCII not" geçersiz.
 
-## Vercel Deploy Notlari
+## Fiyat Pazarlığı (2026-04-16 görüşüldü)
 
-1. GitHub'a push et
-2. vercel.com'da GitHub repo'sunu bagla
-3. Otomatik deploy ayarla
-4. Custom domain ekle (alindiginda)
+**Türkiye 2026 piyasası:**
+- Hazır tema kurulumu: 15-40K TL
+- SaaS kiralık (Ticimax/IdeaSoft): 500-2K/ay — sahibi değilsin
+- Custom Next.js freelance: 40-150K TL
+- Ajans: 200-500K+ TL
 
-## Iletisim Bilgileri (Placeholder)
+**Bu projenin değeri:**
+- Custom kod + tam admin paneli + 360° viewer + özel tasarım
+- Orta-üst freelance segmenti: **85-120K TL** aralığı
 
-- Adres: Istanbul, Turkiye
+**Önerilen teklif:**
+- **One-time:** 90,000 TL (anchor: 100K iste, 85K'ya in)
+- **Aylık bakım:** 2,500-3,500 TL (Vercel+Supabase+domain maliyeti ~1-1.5K)
+- **Ödeme planı:** 3 taksit — %40 başlangıç, %30 teslim, %30 bir ay sonra
+
+**Pazarlık argümanları:**
+- "Hazır kurulum 30K ama tamamen size özel kod, başka kuyumcu da aynısını alamıyor"
+- 1 alyans satışı = 30-50K → site yılda 5-10 ek satış getirince ROI 3-6 ayda kapanır
+- SaaS alternatifi: Ticimax 1500₺/ay × 5 yıl = 90K, sahipliği yok
+- Bakım sözleşmesini tek seferlik fiyata sıkıştırma — AYRI yap
+
+## Geçmiş Commit'ler (önemli olanlar)
+
+```
+35cb4ee  fix: tum metinleri turkce karakter ile yaz + urun adlari icin Title Case formatlama (2026-05-21)
+61900ad  remove: Ozel Koleksiyonlarimiz baslik bolumu
+595fd14  rebrand: Yazici Atolye -> Favian Jewellery + hero video
+5e11def  logo: PIRILANTA -> PIRLANTA (dogru yazim)
+b7173b7  fix: ana header sadece lg+ ekranlarda goster — mobilde tek logo
+bb66efa  style: logo 2.5x buyutuldu (header yuksekligi de buyudu)
+```
+
+## İletişim Bilgileri (Placeholder — admin/ayarlar'dan editlenebilir)
+
+- Adres: İstanbul, Türkiye
 - Telefon: +90 (212) 123 45 67
-- E-posta: info@yaziciatolye.com
-- Calisma Saatleri: Pzt-Cmt 10:00-19:00
+- E-posta: info@favianjewellery.com
+- Çalışma Saatleri: Pzt-Cmt 10:00-19:00
 
-## Notlar
+## Yapılacaklar (backlog)
 
-- Turkce karakterler ASCII olarak yazildi (bash uyumlulugu icin)
-- Emojiler placeholder olarak kullanildi, gercek gorseller eklenecek
-- Odeme butonu disabled durumda ("Yakinda" yazisiyla)
+- [ ] Mobil uyum ince ayar (logo büyüdükten sonra kontrol)
+- [ ] Gerçek ürün görselleri (Gemini ile üretilebilir)
+- [ ] Ödeme entegrasyonu (iyzico/Stripe)
+- [ ] Admin panelinde ürün toplu ekleme
+- [ ] WhatsApp gerçek numara
+- [ ] Google Analytics
+- [ ] SEO ince ayarları
+- [ ] Müşteriye fiyat teklifi sunumu
+- [ ] Admin'in girdiği ürün adlarını DB'de düzenli tutmak (formatProductName display'de var, ama DB de istersen migration yazılabilir)

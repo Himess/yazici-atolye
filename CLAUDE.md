@@ -4,7 +4,7 @@ Bu dosya proje hakkındaki tüm kararları ve bilgileri saklar.
 
 ## Mevcut Durum (2026-05-22 itibarıyla)
 
-- **Site canlı:** https://yazicipirlanta.com (Vercel auto-deploy aktif)
+- **Site canlı:** https://favianjewellery.com (Vercel auto-deploy aktif) — yazicipirlanta.com 301 redirect
 - **Preview URL:** https://yazici-atolye.vercel.app
 - **Repo:** https://github.com/Himess/yazici-atolye (main branch)
 - **Son commit:** `35cb4ee fix: tum metinleri turkce karakter ile yaz + urun adlari icin Title Case formatlama` (2026-05-21)
@@ -16,7 +16,7 @@ Bu dosya proje hakkındaki tüm kararları ve bilgileri saklar.
 - Logo: `/images/favian-logo.png` (placeholder, gerçek FAVIAN logo dosyası eklenecek)
 - Hero: VideoHero (background video) — `public/videos/hero.mp4`
 - Hero slider eski component'i (`hero-slider.tsx`) hâlâ duruyor ama kullanılmıyor (silmiyoruz, refactor için duruyor)
-- Email/social handle placeholder'ları: `favianjewellery.com` (gerçek mail/domain alınmadı)
+- Email/social handle placeholder'ları: `favianjewellery.com` (domain 2026-05-22 alındı, Cloudflare Registrar)
 - Repo adı: `yazici-atolye` (GitHub'da değişmedi, kod içinde `Favian Jewellery` brand)
 - localStorage key'leri: `yazici-*` olarak kalmaya devam ediyor (mevcut kullanıcı session'larını bozmamak için)
 
@@ -68,7 +68,7 @@ export function formatProductName(name: string): string
 - **Tür:** Kuyumcu E-Ticaret Sitesi
 - **Framework:** Next.js 14/16 (App Router)
 - **Styling:** Tailwind CSS v4 + shadcn/ui
-- **Hosting:** Vercel + custom domain (yazicipirlanta.com)
+- **Hosting:** Vercel + custom domain (favianjewellery.com; yazicipirlanta.com 301 redirect olarak korunuyor)
 
 ## Teknoloji Stack
 

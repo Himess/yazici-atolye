@@ -14,6 +14,7 @@ interface ProductForm {
   about: string;
   price: string;
   oldPrice: string;
+  priceOnRequest: boolean;
   category: string;
   categoryLabel: string;
   material: string;
@@ -33,6 +34,7 @@ const initialForm: ProductForm = {
   about: "",
   price: "",
   oldPrice: "",
+  priceOnRequest: false,
   category: "yuzuk",
   categoryLabel: "",
   material: "",
@@ -101,6 +103,7 @@ function ProductFormContent() {
         about: product.about || "",
         price: product.price?.toString() || "",
         oldPrice: product.oldPrice?.toString() || "",
+        priceOnRequest: product.priceOnRequest === true,
         category: product.category || "yuzuk",
         categoryLabel: product.categoryLabel || "",
         material: product.material || "",
@@ -227,8 +230,8 @@ function ProductFormContent() {
       setError("Ürün adı zorunludur");
       return;
     }
-    if (!form.price || isNaN(Number(form.price))) {
-      setError("Geçerli bir fiyat giriniz");
+    if (!form.priceOnRequest && (!form.price || isNaN(Number(form.price)))) {
+      setError("Geçerli bir fiyat giriniz veya \"Satıcıya Sor\" seçeneğini işaretleyin");
       return;
     }
 
@@ -240,8 +243,9 @@ function ProductFormContent() {
         code: form.code || null,
         description: form.description || null,
         about: form.about || null,
-        price: parseFloat(form.price),
-        oldPrice: form.oldPrice ? parseFloat(form.oldPrice) : null,
+        price: form.priceOnRequest ? 0 : parseFloat(form.price),
+        oldPrice: form.priceOnRequest || !form.oldPrice ? null : parseFloat(form.oldPrice),
+        priceOnRequest: form.priceOnRequest,
         category: form.category,
         categoryLabel: form.categoryLabel || null,
         material: form.material || null,
@@ -381,9 +385,42 @@ function ProductFormContent() {
           <h2 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-3">
             Fiyat ve Kategori
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          {/* Fiyat Tipi Seçimi */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Fiyat Tipi</label>
+            <div className="flex flex-wrap gap-3">
+              <label className={`flex items-center gap-2 px-4 py-2.5 border-2 rounded-lg cursor-pointer transition-all ${!form.priceOnRequest ? "border-[#C6A25A] bg-[#C6A25A]/5 text-[#C6A25A]" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}>
+                <input
+                  type="radio"
+                  name="priceOnRequest"
+                  checked={!form.priceOnRequest}
+                  onChange={() => setForm(p => ({ ...p, priceOnRequest: false }))}
+                  className="sr-only"
+                />
+                <span className="text-sm font-medium">Fiyat Belirle (TL)</span>
+              </label>
+              <label className={`flex items-center gap-2 px-4 py-2.5 border-2 rounded-lg cursor-pointer transition-all ${form.priceOnRequest ? "border-[#C6A25A] bg-[#C6A25A]/5 text-[#C6A25A]" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}>
+                <input
+                  type="radio"
+                  name="priceOnRequest"
+                  checked={form.priceOnRequest}
+                  onChange={() => setForm(p => ({ ...p, priceOnRequest: true, price: "", oldPrice: "" }))}
+                  className="sr-only"
+                />
+                <span className="text-sm font-medium">Satıcıya Sor (Fiyat Gizli)</span>
+              </label>
+            </div>
+            {form.priceOnRequest && (
+              <p className="mt-2 text-xs text-gray-500">
+                Bu ürün sitede fiyat yerine &quot;Satıcıya Sor&quot; olarak görünecek. Müşteri WhatsApp / iletişim üzerinden fiyat öğrenir.
+              </p>
+            )}
+          </div>
+
+          <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${form.priceOnRequest ? "opacity-40 pointer-events-none" : ""}`}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Fiyat (TL) *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Fiyat (TL) {!form.priceOnRequest && "*"}</label>
               <input
                 type="number"
                 name="price"
@@ -393,7 +430,8 @@ function ProductFormContent() {
                 placeholder="0"
                 min="0"
                 step="0.01"
-                required
+                disabled={form.priceOnRequest}
+                required={!form.priceOnRequest}
               />
             </div>
             <div>
@@ -407,6 +445,7 @@ function ProductFormContent() {
                 placeholder="İndirimli gösterim için"
                 min="0"
                 step="0.01"
+                disabled={form.priceOnRequest}
               />
             </div>
             <div>

@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/components/providers";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin", "latin-ext"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
@@ -69,7 +62,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body
-        className={`${cormorant.variable} ${inter.variable} font-sans font-medium antialiased`}
+        className={`${montserrat.variable} font-sans antialiased`}
       >
         <Providers>
           <Header />

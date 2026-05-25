@@ -52,7 +52,6 @@ const contentTypes = [
 const sectionLabels: Record<string, string> = {
   "anasayfa:koleksiyon_baslik": "Koleksiyon Başlığı",
   "anasayfa:sticky": "Sticky Scroll Resmi",
-  "anasayfa:marka": "Marka Mesajı",
   "anasayfa:banner": "Banner (Her Gün Işıltı)",
   "anasayfa:guven": "Güven İkonları (3 kart)",
   "anasayfa:faq": "Sıkça Sorulan Sorular",

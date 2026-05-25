@@ -51,6 +51,7 @@ type ApiProduct = {
   about?: string;
   price: number;
   oldPrice?: number;
+  priceOnRequest?: boolean;
   category: string;
   categoryLabel: string;
   material: string;
@@ -76,6 +77,7 @@ function mapApiProductToProduct(apiProduct: ApiProduct): Product {
     about: apiProduct.about || "",
     price: apiProduct.price,
     oldPrice: apiProduct.oldPrice || undefined,
+    priceOnRequest: apiProduct.priceOnRequest === true,
     category: apiProduct.category as Product["category"],
     categoryLabel: apiProduct.categoryLabel || "",
     material: apiProduct.material || "",
@@ -426,20 +428,6 @@ export default function Home() {
               Tüm Ürünleri Gör
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* ADIM 6: İlham / Marka Mesajı Bölümü */}
-      <section className="py-16 bg-cream">
-        <div className="container mx-auto px-4 max-w-3xl text-center">
-          <div className="w-16 h-px bg-gold mx-auto mb-8" />
-          <p className="font-serif italic text-lg md:text-xl text-foreground leading-relaxed">
-            &ldquo;{content.marka?.quote || "Her parça bir hikaye anlatır. 40 yılı aşkın tecrübemizle, atölyemizden çıkan her mücevher, sevgiyle işlenmiş bir sanat eseridir. Kaliteyi hissedin, zarafeti yaşayın."}&rdquo;
-          </p>
-          <div className="w-16 h-px bg-gold mx-auto mt-8" />
-          <p className="mt-6 text-sm text-muted-foreground font-sans tracking-wider uppercase">
-            {content.marka?.author || "— Favian Jewellery"}
-          </p>
         </div>
       </section>
 

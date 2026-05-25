@@ -25,6 +25,7 @@ export type Product = {
   about: string;
   price: number;
   oldPrice?: number;
+  priceOnRequest?: boolean;
   category: "yuzuk" | "kolye" | "kupe" | "bileklik";
   categoryLabel: string;
   material: string;

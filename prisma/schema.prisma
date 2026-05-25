@@ -38,8 +38,9 @@ model Product {
   code          String?
   description   String?
   about         String?
-  price         Float
+  price         Float    @default(0)
   oldPrice      Float?
+  priceOnRequest Boolean @default(false)
   category      String
   categoryLabel String?
   material      String?

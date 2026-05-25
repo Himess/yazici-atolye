@@ -62,7 +62,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
           {/* Badges - Sol Üst */}
           <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
-            {product.oldPrice && (
+            {!product.priceOnRequest && product.oldPrice && (
               <span className="bg-gold text-white text-xs px-2 py-1 font-sans font-medium">
                 %{discountPercent}
               </span>
@@ -96,13 +96,21 @@ export function ProductCard({ product }: ProductCardProps) {
           </h3>
 
           <div className="flex items-center gap-2 mt-2">
-            <p className="text-sm font-sans font-medium text-foreground">
-              {formatPrice(product.price)}
-            </p>
-            {product.oldPrice && (
-              <span className="text-xs font-sans text-muted-foreground line-through">
-                {formatPrice(product.oldPrice)}
-              </span>
+            {product.priceOnRequest ? (
+              <p className="text-sm font-sans font-medium text-foreground">
+                Satıcıya Sor
+              </p>
+            ) : (
+              <>
+                <p className="text-sm font-sans font-medium text-foreground">
+                  {formatPrice(product.price)}
+                </p>
+                {product.oldPrice && (
+                  <span className="text-xs font-sans text-muted-foreground line-through">
+                    {formatPrice(product.oldPrice)}
+                  </span>
+                )}
+              </>
             )}
           </div>
         </div>

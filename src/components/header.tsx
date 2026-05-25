@@ -138,8 +138,8 @@ export function Header() {
               <Image
                 src="/images/favian-logo.png"
                 alt="Favian Jewellery"
-                width={350}
-                height={140}
+                width={450}
+                height={120}
                 className="h-[100px] md:h-[120px] w-auto"
                 priority
               />
@@ -311,8 +311,8 @@ export function Header() {
                     <Image
                       src="/images/favian-logo.png"
                       alt="Favian Jewellery"
-                      width={300}
-                      height={120}
+                      width={375}
+                      height={100}
                       className="h-[100px] w-auto"
                     />
                   </Link>
@@ -399,8 +399,8 @@ export function Header() {
             <Image
               src="/images/favian-logo.png"
               alt="Favian Jewellery"
-              width={250}
-              height={100}
+              width={300}
+              height={80}
               className="h-[80px] w-auto"
             />
           </Link>

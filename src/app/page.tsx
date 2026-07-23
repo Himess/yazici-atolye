@@ -191,6 +191,59 @@ const defaultInstagramImages = [
   "/images/kadin-alyans-1.png",
 ];
 
+/**
+ * Instagram grid karesi.
+ *
+ * Görseller admin > İçerikler'den yönetiliyor ve DB'de silinmiş/yanlış bir dosya
+ * yolu kalabiliyor (nitekim kaldı: /images/instagram-1..6.jpg hiç yüklenmemişti).
+ * Bu durumda kırık görsel yerine sitede kesin var olan bir görsele düşülür,
+ * böylece admin yanlış URL girse de grid bozulmuş görünmez.
+ */
+function InstagramTile({
+  src,
+  index,
+  href,
+}: {
+  src: string;
+  index: number;
+  href: string;
+}) {
+  const [failed, setFailed] = useState(false);
+  const finalSrc = failed ? defaultInstagramImages[index % defaultInstagramImages.length] : src;
+  const isRemote = finalSrc.startsWith("http");
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="relative aspect-square bg-beige overflow-hidden group"
+    >
+      {isRemote ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={finalSrc}
+          alt={`Instagram ${index + 1}`}
+          onError={() => setFailed(true)}
+          className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+        />
+      ) : (
+        <Image
+          src={finalSrc}
+          alt={`Instagram ${index + 1}`}
+          fill
+          sizes="(max-width: 768px) 33vw, 16vw"
+          onError={() => setFailed(true)}
+          className="object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+      )}
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+        <Instagram className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+      </div>
+    </a>
+  );
+}
+
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const testimonialRef = useRef<HTMLDivElement>(null);
@@ -691,32 +744,12 @@ export default function Home() {
           {/* Instagram Grid */}
           <div className="grid grid-cols-3 md:grid-cols-6 gap-1">
             {instagramImages.map((imgSrc: string, i: number) => (
-              <a
-                key={i}
+              <InstagramTile
+                key={`${imgSrc}-${i}`}
+                src={imgSrc}
+                index={i}
                 href={instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative aspect-square bg-beige overflow-hidden group"
-              >
-                {imgSrc.startsWith("http") ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={imgSrc}
-                    alt={`Instagram ${i + 1}`}
-                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                  />
-                ) : (
-                  <Image
-                    src={imgSrc}
-                    alt={`Instagram ${i + 1}`}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                )}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                  <Instagram className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-              </a>
+              />
             ))}
           </div>
         </div>

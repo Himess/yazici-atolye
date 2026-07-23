@@ -69,7 +69,7 @@ export default function SocialMediaSection() {
           </a>
 
           <a
-            href="https://instagram.com/favianjewellery"
+            href="https://instagram.com/favian.jewellery"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white rounded-lg hover:opacity-90 transition-opacity shadow-md font-sans font-semibold"

@@ -180,13 +180,15 @@ const defaultUretimItems = [
   { image: "/images/atolye-4.png", title: "Kalite Garantisi", description: "Sertifikalı malzeme, titiz işçilik" },
 ];
 
+// Sitede gerçekten var olan görseller — instagram-1..6.jpg dosyaları hiç
+// yüklenmemişti ve grid kırık görünüyordu. Admin > İçerikler'den değiştirilebilir.
 const defaultInstagramImages = [
-  "/images/instagram-1.jpg",
-  "/images/instagram-2.jpg",
-  "/images/instagram-3.jpg",
-  "/images/instagram-4.jpg",
-  "/images/instagram-5.jpg",
-  "/images/instagram-6.jpg",
+  "/images/yuzuk-1-main.jpg",
+  "/images/kolye-yonca-1.jpg",
+  "/images/kupe-1.png",
+  "/images/bileklik-1.png",
+  "/images/kolye-melek-kanadi-gold-1.jpg",
+  "/images/kadin-alyans-1.png",
 ];
 
 export default function Home() {
@@ -306,7 +308,7 @@ export default function Home() {
 
   // Social media URLs from settings, with fallbacks
   const facebookUrl = settings.facebookUrl || "https://facebook.com/favianjewellery";
-  const instagramUrl = settings.instagramUrl || "https://instagram.com/favianjewellery";
+  const instagramUrl = settings.instagramUrl || "https://instagram.com/favian.jewellery";
   const youtubeUrl = settings.youtubeUrl || "https://youtube.com/@favianjewellery";
   const tiktokUrl = settings.tiktokUrl || "https://tiktok.com/@favianjewellery";
 

@@ -448,6 +448,10 @@ function ProductFormContent() {
                 disabled={form.priceOnRequest}
               />
             </div>
+          </div>
+
+          {/* Kategori — fiyat tipinden bağımsız, "Satıcıya Sor" seçilse de düzenlenebilir */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
               <select

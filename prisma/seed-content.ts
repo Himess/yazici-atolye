@@ -15,7 +15,7 @@ const contents = [
   { page: 'anasayfa', section: 'uretim', key: 'title', value: 'ÜRETİMDEN SİZLERE', type: 'text' },
   { page: 'anasayfa', section: 'uretim', key: 'subtitle', value: '40 yılı aşkın tecrübemiz ile büyük kuyumculara toptan satış yapıyoruz. Şimdi aynı kaliteyi, aracısız fiyatlarla sizlere sunuyoruz.', type: 'textarea' },
   { page: 'anasayfa', section: 'uretim', key: 'items', value: '[{"image":"/images/atolye-3.png","title":"El İşçiliği","description":"Her parça, tek tek elle üretilir"},{"image":"/images/atolye-4.png","title":"Kalite Garantisi","description":"Sertifikalı malzeme, titiz işçilik"}]', type: 'textarea' },
-  { page: 'anasayfa', section: 'instagram', key: 'items', value: '["/images/instagram-1.jpg","/images/instagram-2.jpg","/images/instagram-3.jpg","/images/instagram-4.jpg","/images/instagram-5.jpg","/images/instagram-6.jpg"]', type: 'textarea' },
+  { page: 'anasayfa', section: 'instagram', key: 'items', value: '["/images/yuzuk-1-main.jpg","/images/kolye-yonca-1.jpg","/images/kupe-1.png","/images/bileklik-1.png","/images/kolye-melek-kanadi-gold-1.jpg","/images/kadin-alyans-1.png"]', type: 'textarea' },
   { page: 'hakkimizda', section: 'hero', key: 'image', value: '/images/atolye-usta-1.png', type: 'image' },
   { page: 'hakkimizda', section: 'hero', key: 'title', value: 'Üretimden Sizlere', type: 'text' },
   { page: 'hakkimizda', section: 'hero', key: 'subtitle', value: '40 yılı aşkın tecrübemiz ile büyük kuyumculara toptan satış yapıyoruz. Şimdi aynı kaliteyi, aracısız fiyatlarla sizlere sunuyoruz.', type: 'textarea' },

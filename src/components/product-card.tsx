@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Product, formatPrice, formatProductName } from "@/lib/products";
@@ -11,8 +11,19 @@ interface ProductCardProps {
   product: Product;
 }
 
+/** Kaydırma durduktan sonra 1. görsele dönme süresi (ms) */
+const IDLE_RESET_MS = 15000;
+
+/** Tıklama yerine kaydırma sayılması için gereken yatay hareket (px) */
+const SWIPE_THRESHOLD_PX = 10;
+
+function isUsableImage(src: string | undefined): src is string {
+  return !!src && (src.includes("/images/") || src.startsWith("http"));
+}
+
 export function ProductCard({ product }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorite = isFavorite(product.id);
 
@@ -20,8 +31,71 @@ export function ProductCard({ product }: ProductCardProps) {
     ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
     : 0;
 
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStartXRef = useRef(0);
+  const didSwipeRef = useRef(false);
+
+  // Kayıtlı tüm görseller sırasıyla — hoverImage varsa sona eklenir (mobilde
+  // hover olmadığı için aksi halde hiç görünmezdi). Tekrarlar ayıklanır.
+  const galleryImages = useMemo(() => {
+    const all = [...(product.images || []), product.hoverImage];
+    return Array.from(new Set(all.filter(isUsableImage)));
+  }, [product.images, product.hoverImage]);
+
+  const hasGallery = galleryImages.length > 1;
+
+  const clearIdleTimer = useCallback(() => {
+    if (idleTimerRef.current) {
+      clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = null;
+    }
+  }, []);
+
+  // 15 sn kaydırılmazsa ilk görsele geri dön
+  const scheduleReset = useCallback(() => {
+    clearIdleTimer();
+    idleTimerRef.current = setTimeout(() => {
+      const el = scrollerRef.current;
+      if (!el) return;
+      el.scrollTo({ left: 0, behavior: "smooth" });
+    }, IDLE_RESET_MS);
+  }, [clearIdleTimer]);
+
+  useEffect(() => clearIdleTimer, [clearIdleTimer]);
+
+  const handleScroll = () => {
+    const el = scrollerRef.current;
+    if (!el || el.clientWidth === 0) return;
+
+    const index = Math.round(el.scrollLeft / el.clientWidth);
+    setActiveIndex(index);
+
+    // İlk görseldeyken geri dönecek bir şey yok
+    if (index === 0) {
+      clearIdleTimer();
+    } else {
+      scheduleReset();
+    }
+  };
+
+  const goToIndex = (index: number) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
+  };
+
   return (
-    <Link href={`/urun/${product.id}`}>
+    <Link
+      href={`/urun/${product.id}`}
+      onClick={(e) => {
+        // Yatay kaydırma sonrası yanlışlıkla ürün sayfasına gitmeyi engelle
+        if (didSwipeRef.current) {
+          e.preventDefault();
+          didSwipeRef.current = false;
+        }
+      }}
+    >
       <div
         className="group cursor-pointer product-card bg-white"
         onMouseEnter={() => setIsHovered(true)}
@@ -29,29 +103,82 @@ export function ProductCard({ product }: ProductCardProps) {
       >
         {/* Image Container */}
         <div className="aspect-square bg-cream relative overflow-hidden">
-          {product.images[0] && (product.images[0].includes("/images/") || product.images[0].startsWith("http")) ? (
+          {galleryImages.length > 0 ? (
             <>
-              <Image
-                src={product.images[0]}
-                alt={product.name}
-                fill
-                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                className={`object-cover transition-all duration-500 ${
-                  isHovered && product.hoverImage
-                    ? "opacity-0 scale-105"
-                    : "opacity-100 scale-100"
-                }`}
-              />
+              {/* Kaydırılabilir galeri — mobilde swipe, masaüstünde sabit */}
+              <div
+                ref={scrollerRef}
+                onScroll={handleScroll}
+                onTouchStart={(e) => {
+                  touchStartXRef.current = e.touches[0].clientX;
+                  didSwipeRef.current = false;
+                }}
+                onTouchMove={(e) => {
+                  if (
+                    Math.abs(e.touches[0].clientX - touchStartXRef.current) >
+                    SWIPE_THRESHOLD_PX
+                  ) {
+                    didSwipeRef.current = true;
+                  }
+                }}
+                className="absolute inset-0 flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide overscroll-x-contain md:overflow-x-hidden"
+              >
+                {galleryImages.map((src, i) => (
+                  <div
+                    key={`${src}-${i}`}
+                    className="relative w-full h-full shrink-0 snap-center"
+                  >
+                    <Image
+                      src={src}
+                      alt={
+                        i === 0 ? product.name : `${product.name} - Görsel ${i + 1}`
+                      }
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                      className={`object-cover transition-all duration-500 ${
+                        i === 0 && isHovered && product.hoverImage
+                          ? "opacity-0 scale-105"
+                          : "opacity-100 scale-100"
+                      }`}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Masaüstü hover görseli (mobilde galeriye dahil olduğu için gizli) */}
               {product.hoverImage && (
                 <Image
                   src={product.hoverImage}
                   alt={`${product.name} - Detay`}
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                  className={`object-cover transition-all duration-500 ${
+                  className={`hidden md:block object-cover pointer-events-none transition-all duration-500 ${
                     isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
                   }`}
                 />
+              )}
+
+              {/* Görsel göstergeleri — yalnızca mobil */}
+              {hasGallery && (
+                <div className="md:hidden absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5">
+                  {galleryImages.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        goToIndex(i);
+                      }}
+                      aria-label={`Görsel ${i + 1}`}
+                      className={`h-1.5 rounded-full transition-all ${
+                        i === activeIndex
+                          ? "w-4 bg-gold"
+                          : "w-1.5 bg-white/70 border border-black/10"
+                      }`}
+                    />
+                  ))}
+                </div>
               )}
             </>
           ) : (

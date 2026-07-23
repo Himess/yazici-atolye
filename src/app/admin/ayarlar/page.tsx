@@ -281,7 +281,7 @@ export default function AdminSettingsPage() {
                 value={form.instagramUrl}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
-                placeholder="https://instagram.com/favianjewellery"
+                placeholder="https://instagram.com/favian.jewellery"
               />
             </div>
             <div>

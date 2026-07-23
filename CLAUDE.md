@@ -135,6 +135,49 @@ export function formatProductName(name: string): string
 - **Üretim bölümü temizliği:** "Usta ellerden, özenle işlenen parçalar" kartı tamamen kaldırıldı (defaults + seed + runtime filter)
 - **Mücevher Hakkında:** typo düzeltildi (Mucevher Hakkinda → Mücevher Hakkında, sonra ASCII genel temizliğinde tutarlı oldu)
 
+## Mobil Ürün Kartı Galerisi (2026-07-23)
+
+**İstek:** Mobilde ürüne tıklamadan, kart üzerinde kaydırarak diğer görselleri görebilmek.
+
+**Çözüm:** `src/components/product-card.tsx` — CSS scroll-snap tabanlı yatay galeri:
+- `product.images` sırasıyla + `hoverImage` sona eklenir (tekrarlar `Set` ile ayıklanır).
+  hoverImage mobilde hover olmadığı için aksi halde hiç görünmüyordu.
+- Mobil: `overflow-x-auto snap-x snap-mandatory` → native momentum scroll.
+  Masaüstü: `md:overflow-x-hidden` → kaydırma kapalı, mevcut hover cross-fade davranışı korunur.
+- **15 sn kaydırılmazsa 1. görsele döner** (`IDLE_RESET_MS`). Timer yalnızca index > 0 iken kurulur.
+- Nokta göstergeleri yalnızca mobilde (`md:hidden`), tıklanabilir.
+- Yatay kaydırma sonrası yanlışlıkla ürün sayfasına gitmeyi `didSwipeRef` + `preventDefault` engeller
+  (eşik: `SWIPE_THRESHOLD_PX = 10`).
+- `.scrollbar-hide` utility'si `globals.css`'e eklendi.
+
+**Veri durumu (2026-07-23, canlı API):** 122 üründen 88'inin 2+ görseli var → özellik ürünlerin %72'sinde çalışır.
+
+## Admin Kategori Bug'ı (2026-07-23) — ÇÖZÜLDÜ
+
+**Sorun:** Admin > Ürünler > Yeni'de "Satıcıya Sor" seçilince kategori değiştirilemiyordu;
+tüm ürünler varsayılan `yuzuk` olarak kaydediliyordu.
+
+**Kök neden:** `src/app/admin/urunler/new/page.tsx` — Fiyat, Eski Fiyat, **Kategori** ve
+Kategori Etiketi aynı grid `<div>` içindeydi. `priceOnRequest` true olunca bu div'e
+`opacity-40 pointer-events-none` uygulanıyor, fiyat alanlarıyla birlikte Kategori select'ini de kilitliyordu.
+
+**Çözüm:** Kategori + Kategori Etiketi ayrı bir grid'e taşındı; `pointer-events-none` yalnızca
+Fiyat / Eski Fiyat'a uygulanıyor.
+
+**Etkisi (canlı veriden ölçüldü):** "Satıcıya Sor" seçili 74 ürünün 72'si `yuzuk` kategorisindeydi.
+Yanlış kategorideki 17 ürünün tamamı "Satıcıya Sor": 8 küpe, 6 bileklik, 3 kolye.
+`bileklik` kategorisinde hiç ürün yoktu. Bu ürünler `scripts/fix-categories.mjs` ile düzeltildi.
+
+## Instagram (2026-07-23)
+
+- **Doğru handle:** `favian.jewellery` (nokta ile) — eski `favianjewellery` yanlıştı.
+  Güncellenen yerler: `page.tsx` instagramUrl fallback, `SocialMediaSection.tsx`, `admin/ayarlar` placeholder.
+- **Kırık grid:** `defaultInstagramImages` ve `prisma/seed-content.ts` `/images/instagram-1..6.jpg`
+  dosyalarını gösteriyordu ama bu dosyalar hiç yüklenmemişti (canlıda HTTP 404 doğrulandı).
+  Sitede gerçekten var olan 6 ürün görseliyle değiştirildi. Admin > İçerikler'den değiştirilebilir.
+- **Not:** Facebook / YouTube / TikTok hâlâ `favianjewellery` placeholder'ı kullanıyor —
+  gerçek hesaplar öğrenilince admin > Ayarlar'dan güncellenmeli.
+
 ## Yaygın Sorunlar & Çözümler
 
 - **Dev server kapanıyor:** `nohup npm run dev > dev.log 2>&1 &` + `disown` ile başlat — parent shell'den bağımsız çalışsın

@@ -38,21 +38,6 @@ export default function HakkimizdaPage() {
   // Helper to strip non-digit characters for tel: and wa.me links
   const phoneDigits = (val?: string) => val?.replace(/\D/g, "") || "";
 
-  // Parse atolye gorselleri from API or use defaults
-  const atolyeImages = (() => {
-    try {
-      return JSON.parse(content.atolye_gorselleri?.items || "[]");
-    } catch {
-      return [];
-    }
-  })();
-  const defaultAtolyeImages = [
-    { image: "/images/atolye-usta-1.png", alt: "Usta Çalışması" },
-    { image: "/images/atolye-3.png", alt: "Atölye Detay" },
-    { image: "/images/atolye-4.png", alt: "El İşçiliği" },
-    { image: "/images/atolye-kutu-1.png", alt: "Özel Paketleme" },
-  ];
-  const finalAtolyeImages = atolyeImages.length > 0 ? atolyeImages : defaultAtolyeImages;
 
   // Parse neden biz items from API or use defaults
   const iconMap: Record<string, React.ReactNode> = {
@@ -108,7 +93,7 @@ export default function HakkimizdaPage() {
               <h2 className="section-title">Hikayemiz</h2>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-12 mt-12 items-center">
+            <div className="mt-12 max-w-2xl mx-auto">
               <div>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
                   {content.hikaye?.p1 || "Favian Jewellery, 40 yılı aşkın süredir Türkiye'nin önde gelen kuyumcu markalarına toptan üretim yapmaktadır. Nesiller boyu aktarılan kuyumculuk sanatını, modern tasarımlarla buluşturuyoruz."}
@@ -120,37 +105,7 @@ export default function HakkimizdaPage() {
                   {content.hikaye?.p3 || "Her parçamız, usta ellerden çıkar ve sizin için özel olarak hazırlanır. El yapımı takılarımız, sizin özel anlarınıza anlam katar."}
                 </p>
               </div>
-              <div className="relative aspect-square">
-                <Image
-                  src={content.hikaye?.image || "/images/atolye.png"}
-                  alt="Favian Jewellery"
-                  fill
-                  className="object-cover"
-                />
-              </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Atolye Gorselleri */}
-      <section className="py-16 bg-[#F5F5F5]">
-        <div className="container mx-auto px-4">
-          <div className="section-line">
-            <h2 className="section-title">Atölyemizden Kareler</h2>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
-            {finalAtolyeImages.map((item: { image: string; alt: string }, index: number) => (
-              <div key={index} className="relative aspect-square overflow-hidden group">
-                <Image
-                  src={item.image || "/images/atolye.png"}
-                  alt={item.alt || "Atölye"}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            ))}
           </div>
         </div>
       </section>

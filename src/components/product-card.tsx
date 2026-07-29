@@ -21,6 +21,15 @@ function isUsableImage(src: string | undefined): src is string {
   return !!src && (src.includes("/images/") || src.startsWith("http"));
 }
 
+function isRemoteImage(src: string) {
+  return src.startsWith("http");
+}
+
+function getCompatibleImageSrc(src: string) {
+  if (!isRemoteImage(src)) return src;
+  return `/api/image-proxy?url=${encodeURIComponent(src)}`;
+}
+
 export function ProductCard({ product }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -128,34 +137,57 @@ export function ProductCard({ product }: ProductCardProps) {
                     key={`${src}-${i}`}
                     className="relative w-full h-full shrink-0 snap-center"
                   >
-                    <Image
-                      src={src}
-                      alt={
-                        i === 0 ? product.name : `${product.name} - Görsel ${i + 1}`
-                      }
-                      fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                      className={`object-cover transition-all duration-500 ${
-                        i === 0 && isHovered && product.hoverImage
-                          ? "opacity-0 scale-105"
-                          : "opacity-100 scale-100"
-                      }`}
-                    />
+                    {isRemoteImage(src) ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={getCompatibleImageSrc(src)}
+                        alt={i === 0 ? product.name : `${product.name} - Görsel ${i + 1}`}
+                        loading={i === 0 ? "eager" : "lazy"}
+                        className={`absolute inset-0 h-full w-full object-cover transition-all duration-500 ${
+                          i === 0 && isHovered && product.hoverImage
+                            ? "opacity-0 scale-105"
+                            : "opacity-100 scale-100"
+                        }`}
+                      />
+                    ) : (
+                      <Image
+                        src={src}
+                        alt={i === 0 ? product.name : `${product.name} - Görsel ${i + 1}`}
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                        className={`object-cover transition-all duration-500 ${
+                          i === 0 && isHovered && product.hoverImage
+                            ? "opacity-0 scale-105"
+                            : "opacity-100 scale-100"
+                        }`}
+                      />
+                    )}
                   </div>
                 ))}
               </div>
 
               {/* Masaüstü hover görseli (mobilde galeriye dahil olduğu için gizli) */}
               {product.hoverImage && (
-                <Image
-                  src={product.hoverImage}
-                  alt={`${product.name} - Detay`}
-                  fill
-                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                  className={`hidden md:block object-cover pointer-events-none transition-all duration-500 ${
-                    isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                  }`}
-                />
+                isRemoteImage(product.hoverImage) ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={getCompatibleImageSrc(product.hoverImage)}
+                    alt={`${product.name} - Detay`}
+                    className={`hidden md:block absolute inset-0 h-full w-full object-cover pointer-events-none transition-all duration-500 ${
+                      isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    }`}
+                  />
+                ) : (
+                  <Image
+                    src={product.hoverImage}
+                    alt={`${product.name} - Detay`}
+                    fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                    className={`hidden md:block object-cover pointer-events-none transition-all duration-500 ${
+                      isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    }`}
+                  />
+                )
               )}
 
               {/* Görsel göstergeleri — yalnızca mobil */}

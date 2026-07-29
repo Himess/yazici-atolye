@@ -218,22 +218,22 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* Product Info */}
         <div className="pt-4 pb-2">
-          <h3 className="text-[13px] font-sans font-medium text-foreground group-hover:text-gold transition-colors line-clamp-1">
+          <h3 className="text-base font-serif font-semibold text-foreground group-hover:text-gold transition-colors line-clamp-1">
             {formatProductName(product.name)}
           </h3>
 
           <div className="flex items-center gap-2 mt-2">
             {product.priceOnRequest ? (
-              <p className="text-sm font-sans font-medium text-foreground">
+              <p className="text-base font-serif font-semibold text-foreground">
                 Satıcıya Sor
               </p>
             ) : (
               <>
-                <p className="text-sm font-sans font-medium text-foreground">
+                <p className="text-base font-serif font-semibold text-foreground">
                   {formatPrice(product.price)}
                 </p>
                 {product.oldPrice && (
-                  <span className="text-xs font-sans text-muted-foreground line-through">
+                  <span className="text-sm font-serif text-muted-foreground line-through">
                     {formatPrice(product.oldPrice)}
                   </span>
                 )}

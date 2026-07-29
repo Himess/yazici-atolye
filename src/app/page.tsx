@@ -378,7 +378,7 @@ export default function Home() {
       {/* ALIŞVERİŞ KATEGORİLERİ */}
       <section className="py-16 bg-cream">
         <div className="container mx-auto px-4">
-          <h2 className="section-title mb-12">ALIŞVERİŞ KATEGORİLERİ</h2>
+          <h2 className="section-title mb-12">Alışveriş Kategorileri</h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {loading ? (
@@ -461,7 +461,7 @@ export default function Home() {
       {/* Öne Çıkan Ürünler */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="section-title mb-12">ÖNE ÇIKAN ÜRÜNLER</h2>
+          <h2 className="section-title mb-12">Öne Çıkan Ürünler</h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {loading ? (
@@ -489,7 +489,7 @@ export default function Home() {
       {/* Yüzükler */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="section-title mb-12">YÜZÜKLER</h2>
+          <h2 className="section-title mb-12">Yüzükler</h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {loading ? (
@@ -552,7 +552,7 @@ export default function Home() {
       {/* ADIM 7: Müşteri Yorumları — Yıldızlı Kartlar */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="section-title mb-8">MÜŞTERİ YORUMLARI</h2>
+          <h2 className="section-title mb-8">Müşteri Yorumları</h2>
 
           {/* Genel Puan */}
           <div className="text-center mb-10">
@@ -625,7 +625,7 @@ export default function Home() {
       {/* Sıkça Sorulan Sorular */}
       <section className="py-16 bg-cream">
         <div className="container mx-auto px-4 max-w-3xl">
-          <h2 className="section-title mb-4">SIKÇA SORULAN SORULAR</h2>
+          <h2 className="section-title mb-4">Sıkça Sorulan Sorular</h2>
           <p className="text-center text-muted-foreground mb-10 font-sans">
             Herhangi bir sorunuz varsa, SSS bölümümüze başvurun
           </p>
@@ -698,7 +698,7 @@ export default function Home() {
       {/* ADIM 8: BİZİ TAKİP EDİN */}
       <section className="py-16 bg-cream">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="section-title mb-10">BİZİ TAKİP EDİN</h2>
+          <h2 className="section-title mb-10">Bizi Takip Edin</h2>
 
           <div className="flex items-center justify-center gap-6 mb-12">
             <a

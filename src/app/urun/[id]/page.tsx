@@ -207,7 +207,7 @@ export default function UrunDetayPage() {
           <span className="text-stone-400">/</span>
           <Link href={`/urunler?kategori=${product.category}`} className="text-stone-500 hover:text-stone-900">{product.categoryLabel}</Link>
           <span className="text-stone-400">/</span>
-          <span className="font-sans font-bold text-stone-900 truncate max-w-[200px]">{formatProductName(product.name)}</span>
+          <span className="font-serif font-semibold text-stone-900 truncate max-w-[200px]">{formatProductName(product.name)}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
@@ -417,7 +417,7 @@ export default function UrunDetayPage() {
             <p className="text-sm text-stone-500 mb-2">Ürün Kodu: {product.code}</p>
 
             {/* Urun Adi */}
-            <h1 className="font-sans text-xl sm:text-2xl lg:text-3xl font-bold text-stone-900 mb-4">{formatProductName(product.name)}</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-stone-900 mb-4">{formatProductName(product.name)}</h1>
 
             {/* Renk Secimi */}
             {product.colorVariants && product.colorVariants.length > 0 && (
@@ -431,7 +431,7 @@ export default function UrunDetayPage() {
             {/* Fiyat Alani */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-6">
               {product.priceOnRequest ? (
-                <span className="text-xl sm:text-2xl font-semibold text-stone-900 tracking-wide">
+                <span className="font-serif text-2xl sm:text-3xl font-semibold text-stone-900 tracking-normal">
                   Satıcıya Sor
                 </span>
               ) : (
@@ -595,7 +595,7 @@ export default function UrunDetayPage() {
 
         {/* Mucevher Hakkinda */}
         <div className="mt-12 border-t border-stone-200 pt-8">
-          <h2 className="font-sans text-xl sm:text-2xl font-bold text-stone-900 mb-4">Mücevher Hakkında</h2>
+          <h2 className="font-serif text-2xl sm:text-3xl font-semibold text-stone-900 mb-4">Mücevher Hakkında</h2>
           <div className="prose prose-stone max-w-none">
             <p className="text-stone-600 leading-relaxed">{product.about}</p>
             <p className="text-stone-600 leading-relaxed mt-4">{product.description}</p>

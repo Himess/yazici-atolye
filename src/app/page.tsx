@@ -381,7 +381,6 @@ export default function Home() {
 
   // Dynamic content values with fallbacks
   const stickyImage = content.sticky?.image || "/images/kuyumcu-1.jpeg";
-  const bannerImage = content.banner?.image || "/images/kolye1-1.png";
   const uretimTitle = content.uretim?.title || "ÜRETİMDEN SİZLERE";
 
   return (
@@ -525,24 +524,6 @@ export default function Home() {
               Tüm Yüzükleri Gör
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* Banner */}
-      <section className="relative h-[400px] md:h-[500px] overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url('${bannerImage}')` }}
-        />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white px-4">
-          <p className="font-script text-4xl md:text-6xl mb-4">{content.banner?.title || "Her Gün Işılda"}</p>
-          <p className="text-sm tracking-wider mb-6 max-w-md font-sans">
-            {content.banner?.subtitle || "Eşsiz koleksiyonumuzu keşfedin"}
-          </p>
-          <Link href={content.banner?.buttonUrl || "/urunler"} className="btn-primary inline-block">
-            {content.banner?.buttonText || "Hemen Alışverişe Başla"}
-          </Link>
         </div>
       </section>
 

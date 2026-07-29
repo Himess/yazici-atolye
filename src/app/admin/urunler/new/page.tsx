@@ -23,6 +23,7 @@ interface ProductForm {
   images: string;
   hoverImage: string;
   featured: boolean;
+  homepageRing: boolean;
   inStock: boolean;
 }
 
@@ -43,6 +44,7 @@ const initialForm: ProductForm = {
   images: "",
   hoverImage: "",
   featured: false,
+  homepageRing: false,
   inStock: true,
 };
 
@@ -92,9 +94,13 @@ function ProductFormContent() {
     if (!editId) return;
     try {
       setLoading(true);
-      const res = await fetch(`/api/admin/products/${editId}`);
-      if (!res.ok) throw new Error("Ürün bulunamadı");
+      const [res, homepageRingRes] = await Promise.all([
+        fetch(`/api/admin/products/${editId}`),
+        fetch("/api/admin/homepage-rings").then((r) => r.ok ? r.json() : { productIds: [] }),
+      ]);
+      if (!res.ok) throw new Error("Urun bulunamadi");
       const product = await res.json();
+      const homepageRingIds = Array.isArray(homepageRingRes.productIds) ? homepageRingRes.productIds : [];
       setForm({
         name: product.name || "",
         slug: product.slug || "",
@@ -112,6 +118,7 @@ function ProductFormContent() {
         images: product.images || "",
         hoverImage: product.hoverImage || "",
         featured: product.featured || false,
+        homepageRing: homepageRingIds.includes(product.id),
         inStock: product.inStock !== false,
       });
       if (product.images) {
@@ -269,6 +276,18 @@ function ProductFormContent() {
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Kaydedilemedi");
+      }
+
+      const savedProduct = await res.json();
+      if (savedProduct?.id) {
+        await fetch("/api/admin/homepage-rings", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            productId: savedProduct.id,
+            enabled: form.category === "yuzuk" && form.homepageRing,
+          }),
+        });
       }
 
       router.push("/admin/urunler");
@@ -616,6 +635,17 @@ function ProductFormContent() {
                 className="w-4 h-4 rounded border-gray-300 text-[#C6A25A] focus:ring-[#C6A25A]"
               />
               <span className="text-sm text-gray-700">Öne Çıkan Ürün</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                name="homepageRing"
+                checked={form.homepageRing}
+                onChange={handleChange}
+                disabled={form.category !== "yuzuk"}
+                className="w-4 h-4 rounded border-gray-300 text-[#C6A25A] focus:ring-[#C6A25A] disabled:opacity-40"
+              />
+              <span className="text-sm text-gray-700">Ana Sayfa Yuzukler</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input

@@ -275,7 +275,7 @@ export default function Home() {
           fetch("/api/testimonials").then((r) => r.ok ? r.json() : []),
           fetch("/api/categories").then((r) => r.ok ? r.json() : []),
           fetch("/api/products?featured=true&limit=4").then((r) => r.ok ? r.json() : []),
-          fetch("/api/products?category=yuzuk&limit=4").then((r) => r.ok ? r.json() : []),
+          fetch("/api/products?homepageRing=true&limit=4").then((r) => r.ok ? r.json() : []),
           fetch("/api/settings").then((r) => r.ok ? r.json() : {}),
           fetch("/api/content?page=anasayfa").then((r) => r.ok ? r.json() : {}),
           fetch("/api/instagram").then((r) => r.ok ? r.json() : []),

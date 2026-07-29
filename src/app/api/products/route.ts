@@ -6,17 +6,55 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const featured = searchParams.get('featured');
     const category = searchParams.get('category');
+    const homepageRing = searchParams.get('homepageRing');
     const limit = searchParams.get('limit');
 
     const where: Record<string, unknown> = { isActive: true };
     if (featured === 'true') where.featured = true;
     if (category) where.category = category;
 
-    const products = await prisma.product.findMany({
-      where,
-      orderBy: { order: 'asc' },
-      take: limit ? parseInt(limit) : undefined,
-    });
+    const take = limit ? parseInt(limit) : undefined;
+
+    let products;
+    if (homepageRing === 'true') {
+      const content = await prisma.pageContent.findUnique({
+        where: {
+          page_section_key: {
+            page: 'anasayfa',
+            section: 'homepageRing',
+            key: 'productIds',
+          },
+        },
+      });
+      let ids: string[] = [];
+      try {
+        const parsed = JSON.parse(content?.value || '[]');
+        ids = Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+      } catch {
+        ids = [];
+      }
+
+      if (ids.length > 0) {
+        const selected = await prisma.product.findMany({
+          where: { isActive: true, category: 'yuzuk', id: { in: ids } },
+        });
+        products = selected
+          .sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
+          .slice(0, take);
+      } else {
+        products = await prisma.product.findMany({
+          where: { isActive: true, category: 'yuzuk' },
+          orderBy: { order: 'asc' },
+          take,
+        });
+      }
+    } else {
+      products = await prisma.product.findMany({
+        where,
+        orderBy: { order: 'asc' },
+        take,
+      });
+    }
 
     // Parse JSON fields — handle both JSON arrays and comma-separated strings
     const parseField = (val: string | null): string[] => {

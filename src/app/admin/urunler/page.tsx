@@ -25,14 +25,19 @@ export default function AdminProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [homepageRingIds, setHomepageRingIds] = useState<Set<string>>(new Set());
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
       const res = await fetch("/api/admin/products");
-      if (!res.ok) throw new Error("Veriler yüklenemedi");
-      const data = await res.json();
+      if (!res.ok) throw new Error("Veriler yuklenemedi");
+      const [data, homepageRingRes] = await Promise.all([
+        res.json(),
+        fetch("/api/admin/homepage-rings").then((r) => r.ok ? r.json() : { productIds: [] }),
+      ]);
       setProducts(data);
+      setHomepageRingIds(new Set(Array.isArray(homepageRingRes.productIds) ? homepageRingRes.productIds : []));
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
@@ -56,6 +61,37 @@ export default function AdminProductsPage() {
       alert(err instanceof Error ? err.message : "Silme işlemi başarısız");
     } finally {
       setDeleting(null);
+    }
+  };
+
+  const toggleHomepageRing = async (product: Product) => {
+    if (product.category !== "yuzuk") {
+      alert("Ana sayfa Yuzukler bolumu icin sadece yuzuk kategorisindeki urunler secilebilir.");
+      return;
+    }
+
+    const enabled = !homepageRingIds.has(product.id);
+    const previous = new Set(homepageRingIds);
+    const next = new Set(homepageRingIds);
+    if (enabled) {
+      next.add(product.id);
+    } else {
+      next.delete(product.id);
+    }
+    setHomepageRingIds(next);
+
+    try {
+      const res = await fetch("/api/admin/homepage-rings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: product.id, enabled }),
+      });
+      if (!res.ok) throw new Error("Guncellenemedi");
+      const data = await res.json();
+      setHomepageRingIds(new Set(Array.isArray(data.productIds) ? data.productIds : []));
+    } catch (err) {
+      setHomepageRingIds(previous);
+      alert(err instanceof Error ? err.message : "Ana sayfa yuzuk secimi guncellenemedi");
     }
   };
 
@@ -124,6 +160,9 @@ export default function AdminProductsPage() {
                   Öne Çıkan
                 </th>
                 <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Ana Sayfa Yuzuk
+                </th>
+                <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Durum
                 </th>
                 <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -167,6 +206,24 @@ export default function AdminProductsPage() {
                     )}
                   </td>
                   <td className="px-6 py-4 text-center">
+                    <button
+                      type="button"
+                      onClick={() => toggleHomepageRing(product)}
+                      className={`inline-flex items-center justify-center p-1 rounded transition-colors ${
+                        product.category === "yuzuk"
+                          ? "hover:bg-[#C6A25A]/10"
+                          : "cursor-not-allowed opacity-40"
+                      }`}
+                      title="Ana Sayfa Yuzukler"
+                    >
+                      {homepageRingIds.has(product.id) ? (
+                        <Star className="w-5 h-5 text-[#C6A25A] fill-[#C6A25A] mx-auto" />
+                      ) : (
+                        <Star className="w-5 h-5 text-gray-300 mx-auto" />
+                      )}
+                    </button>
+                  </td>
+                  <td className="px-6 py-4 text-center">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         product.inStock && product.isActive
@@ -204,7 +261,7 @@ export default function AdminProductsPage() {
               ))}
               {products.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
+                  <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
                     Henüz ürün eklenmemiş.
                   </td>
                 </tr>

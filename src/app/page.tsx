@@ -42,6 +42,15 @@ type SettingsData = {
   [key: string]: string | undefined;
 };
 
+type InstagramPost = {
+  id: string;
+  caption: string;
+  image: string;
+  permalink: string;
+  mediaType: string;
+  timestamp: string;
+};
+
 type ApiProduct = {
   id: string;
   slug: string;
@@ -203,10 +212,12 @@ function InstagramTile({
   src,
   index,
   href,
+  alt,
 }: {
   src: string;
   index: number;
   href: string;
+  alt?: string;
 }) {
   const [failed, setFailed] = useState(false);
   const finalSrc = failed ? defaultInstagramImages[index % defaultInstagramImages.length] : src;
@@ -223,14 +234,14 @@ function InstagramTile({
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={finalSrc}
-          alt={`Instagram ${index + 1}`}
+          alt={alt || `Instagram ${index + 1}`}
           onError={() => setFailed(true)}
           className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
         />
       ) : (
         <Image
           src={finalSrc}
-          alt={`Instagram ${index + 1}`}
+          alt={alt || `Instagram ${index + 1}`}
           fill
           sizes="(max-width: 768px) 33vw, 16vw"
           onError={() => setFailed(true)}
@@ -254,18 +265,20 @@ export default function Home() {
   const [ringProducts, setRingProducts] = useState<Product[]>([]);
   const [settings, setSettings] = useState<SettingsData>({});
   const [content, setContent] = useState<Record<string, Record<string, string>>>({});
+  const [instagramPosts, setInstagramPosts] = useState<InstagramPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [testimonialsRes, categoriesRes, featuredRes, ringsRes, settingsRes, contentRes] = await Promise.all([
+        const [testimonialsRes, categoriesRes, featuredRes, ringsRes, settingsRes, contentRes, instagramRes] = await Promise.all([
           fetch("/api/testimonials").then((r) => r.ok ? r.json() : []),
           fetch("/api/categories").then((r) => r.ok ? r.json() : []),
           fetch("/api/products?featured=true&limit=4").then((r) => r.ok ? r.json() : []),
           fetch("/api/products?category=yuzuk&limit=4").then((r) => r.ok ? r.json() : []),
           fetch("/api/settings").then((r) => r.ok ? r.json() : {}),
           fetch("/api/content?page=anasayfa").then((r) => r.ok ? r.json() : {}),
+          fetch("/api/instagram").then((r) => r.ok ? r.json() : []),
         ]);
 
         // Testimonials - filter active and sort by order
@@ -290,6 +303,7 @@ export default function Home() {
 
         // Settings
         setSettings(settingsRes || {});
+        setInstagramPosts(Array.isArray(instagramRes) ? instagramRes : []);
 
         // Content
         setContent(contentRes || {});
@@ -743,12 +757,13 @@ export default function Home() {
 
           {/* Instagram Grid */}
           <div className="grid grid-cols-3 md:grid-cols-6 gap-1">
-            {instagramImages.map((imgSrc: string, i: number) => (
+            {(instagramPosts.length > 0 ? instagramPosts : instagramImages).map((item: InstagramPost | string, i: number) => (
               <InstagramTile
-                key={`${imgSrc}-${i}`}
-                src={imgSrc}
+                key={`${typeof item === "string" ? item : item.id}-${i}`}
+                src={typeof item === "string" ? item : item.image}
                 index={i}
-                href={instagramUrl}
+                href={typeof item === "string" ? instagramUrl : item.permalink}
+                alt={typeof item === "string" ? undefined : item.caption}
               />
             ))}
           </div>

@@ -119,8 +119,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/taki-bakimi" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
-                  Takı Bakımı
+                <Link href="/urun-bakimi" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                  Ürün Bakımı
                 </Link>
               </li>
               <li>

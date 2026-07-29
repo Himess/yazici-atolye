@@ -142,30 +142,62 @@ export const infoPages = {
       },
     ],
   },
-  takiBakimi: {
-    title: "Takı Bakımı",
+  urunBakimi: {
+    title: "Ürün Bakımı",
     description:
-      "Takılarınızın parlaklığını ve formunu uzun süre korumak için düzenli ve doğru bakım önemlidir.",
+      "Pırlanta yüzük, altın yüzük ve rose gold ürünlerinizin parlaklığını uzun süre koruması için düzenli ve doğru bakım önemlidir.",
     sections: [
       {
-        title: "Günlük Kullanım",
+        title: "Pırlanta Yüzük Bakımı",
         body: [
-          "Takılarınızı parfüm, krem, temizlik ürünü, havuz suyu ve yoğun kimyasal temasından korumanızı öneririz.",
-          "Spor, duş, deniz ve uyku sırasında takıların çıkarılması ürün ömrünü uzatır.",
+          "Pırlanta yüzüklerde taşın parlaklığını korumak için krem, parfüm, sabun kalıntısı ve temizlik kimyasallarıyla yoğun temastan kaçınmanızı öneririz.",
+          "Taş yuvasının güvenliği için yüzüğünüzü darbe alabileceği spor, ağır iş, temizlik ve benzeri aktiviteler sırasında çıkarmanız daha sağlıklıdır.",
         ],
       },
       {
-        title: "Saklama",
+        title: "Gold ve Rose Gold Ürün Bakımı",
         body: [
-          "Takılarınızı ayrı bölmelerde, kuru ve kapalı bir kutuda saklayın.",
-          "Taşlı ürünlerin birbirine sürtmesi çizilmelere veya taş yuvalarında deformasyona neden olabilir.",
+          "Altın ve rose gold ürünler günlük kullanımda doğal olarak yüzeysel izler alabilir. Ürünü ayrı bir kutuda saklamak çizilmeleri azaltır.",
+          "Rose gold ürünlerde renk tonunun korunması için parfüm, dezenfektan, klorlu su ve yoğun kimyasal temasından kaçınılmalıdır.",
+          "Yumuşak ve kuru bir bezle nazikçe silmek günlük bakım için yeterlidir; aşındırıcı bez veya kimyasal temizleyici kullanılmamalıdır.",
         ],
       },
       {
-        title: "Temizlik",
+        title: "Profesyonel Bakım Hizmeti",
         body: [
-          "Yumuşak ve kuru bir bezle nazikçe silmek günlük bakım için yeterlidir.",
-          "Derin temizlik veya bakım gerektiren ürünlerde profesyonel destek almanız önerilir.",
+          "Ürünlerinizin detaylı temizliği, parlatılması ve taş kontrolleri için tarafımıza gönderebilirsiniz.",
+          "Bakım sürecinde ürün kontrol edilir; ihtiyaç duyulan temizlik, parlatma veya taş yuvası kontrolü hakkında size bilgi verilir.",
+          "Kullanım kaynaklı deformasyon, darbe, kırılma veya taş düşmesi gibi durumlarda işlem kapsamı ürün incelendikten sonra belirlenir.",
+        ],
+      },
+    ],
+  },
+  takiBakimi: {
+    title: "Ürün Bakımı",
+    description:
+      "Pırlanta yüzük, altın yüzük ve rose gold ürünlerinizin parlaklığını uzun süre koruması için düzenli ve doğru bakım önemlidir.",
+    sections: [
+      {
+        title: "Pırlanta Yüzük Bakımı",
+        body: [
+          "Pırlanta yüzüklerde taşın parlaklığını korumak için krem, parfüm, sabun kalıntısı ve temizlik kimyasallarıyla yoğun temastan kaçınmanızı öneririz.",
+          "Taş yuvasının güvenliği için yüzüğünüzü darbe alabileceği spor, ağır iş, temizlik ve benzeri aktiviteler sırasında çıkarmanız daha sağlıklıdır.",
+        ],
+      },
+      {
+        title: "Gold ve Rose Gold Ürün Bakımı",
+        body: [
+          "Altın ve rose gold ürünler günlük kullanımda doğal olarak yüzeysel izler alabilir. Ürünü ayrı bir kutuda saklamak çizilmeleri azaltır.",
+          "Rose gold ürünlerde renk tonunun korunması için parfüm, dezenfektan, klorlu su ve yoğun kimyasal temasından kaçınılmalıdır.",
+          "Yumuşak ve kuru bir bezle nazikçe silmek günlük bakım için yeterlidir; aşındırıcı bez veya kimyasal temizleyici kullanılmamalıdır.",
+        ],
+      },
+      {
+        title: "Profesyonel Bakım Hizmeti",
+        body: [
+          "Ürünlerinizin detaylı temizliği, parlatılması ve taş kontrolleri için tarafımıza gönderebilirsiniz.",
+          "Bakım sürecinde ürün kontrol edilir; ihtiyaç duyulan temizlik, parlatma veya taş yuvası kontrolü hakkında size bilgi verilir.",
+          "Kullanım kaynaklı deformasyon, darbe, kırılma veya taş düşmesi gibi durumlarda işlem kapsamı ürün incelendikten sonra belirlenir.",
         ],
       },
     ],

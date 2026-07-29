@@ -87,17 +87,17 @@ export function Footer() {
             <h4 className="text-xs font-sans font-bold uppercase tracking-[0.2em] mb-6">HİZMETLER</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                <Link href="/kullanim-kosullari" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
                   Kullanım Koşulları
                 </Link>
               </li>
               <li>
-                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                <Link href="/kargo-teslimat" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
                   Kargo &amp; Teslimat
                 </Link>
               </li>
               <li>
-                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                <Link href="/iade-degisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
                   İade &amp; Değişim
                 </Link>
               </li>
@@ -109,22 +109,22 @@ export function Footer() {
             <h4 className="text-xs font-sans font-bold uppercase tracking-[0.2em] mb-6">BİLGİLER</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                <Link href="/sss" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
                   SSS
                 </Link>
               </li>
               <li>
-                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                <Link href="/beden-olcu-bilgisi" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
                   Beden &amp; Ölçü Bilgisi
                 </Link>
               </li>
               <li>
-                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                <Link href="/taki-bakimi" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
                   Takı Bakımı
                 </Link>
               </li>
               <li>
-                <Link href="/iletisim" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
+                <Link href="/gizlilik-politikasi" className="text-sm font-sans text-foreground hover:text-gold transition-colors">
                   Gizlilik Politikası
                 </Link>
               </li>

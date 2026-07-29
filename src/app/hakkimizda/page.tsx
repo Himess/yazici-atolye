@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { MapPin, Phone, Mail, Clock, Award, Shield, Gem, Heart } from "lucide-react";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 
 interface SiteSettings {
   phone?: string;
@@ -38,28 +38,6 @@ export default function HakkimizdaPage() {
   // Helper to strip non-digit characters for tel: and wa.me links
   const phoneDigits = (val?: string) => val?.replace(/\D/g, "") || "";
 
-
-  // Parse neden biz items from API or use defaults
-  const iconMap: Record<string, React.ReactNode> = {
-    Award: <Award className="w-8 h-8 text-[#C4A574]" />,
-    Shield: <Shield className="w-8 h-8 text-[#C4A574]" />,
-    Gem: <Gem className="w-8 h-8 text-[#C4A574]" />,
-    Heart: <Heart className="w-8 h-8 text-[#C4A574]" />,
-  };
-  const nedenBizItems = (() => {
-    try {
-      return JSON.parse(content.neden_biz?.items || "[]");
-    } catch {
-      return [];
-    }
-  })();
-  const defaultNedenBizItems = [
-    { icon: "Award", title: "40 Yıllık Tecrübe", description: "Nesiller boyu aktarılan usta işçiliği" },
-    { icon: "Shield", title: "Sertifikalı Ürünler", description: "Tüm taşlar ve metaller sertifikalı" },
-    { icon: "Gem", title: "Uygun Fiyat", description: "Aracısız, doğrudan atölyeden size" },
-    { icon: "Heart", title: "El Yapımı", description: "Her parça özenle el işçiliği ile üretilir" },
-  ];
-  const finalNedenBizItems = nedenBizItems.length > 0 ? nedenBizItems : defaultNedenBizItems;
 
   return (
     <div className="min-h-screen bg-white">
@@ -106,29 +84,6 @@ export default function HakkimizdaPage() {
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Degerlerimiz */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="section-line">
-            <h2 className="section-title">Neden Biz?</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
-            {finalNedenBizItems.map((item: { icon: string; title: string; description: string }, index: number) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 bg-[#F5F5F5] rounded-full flex items-center justify-center">
-                  {iconMap[item.icon] || <Award className="w-8 h-8 text-[#C4A574]" />}
-                </div>
-                <h3 className="font-serif text-lg mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {item.description}
-                </p>
-              </div>
-            ))}
           </div>
         </div>
       </section>

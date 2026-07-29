@@ -7,6 +7,7 @@ export async function GET(request: NextRequest) {
     const featured = searchParams.get('featured');
     const category = searchParams.get('category');
     const homepageRing = searchParams.get('homepageRing');
+    const homepageAlyans = searchParams.get('homepageAlyans');
     const limit = searchParams.get('limit');
 
     const where: Record<string, unknown> = { isActive: true };
@@ -16,12 +17,13 @@ export async function GET(request: NextRequest) {
     const take = limit ? parseInt(limit) : undefined;
 
     let products;
-    if (homepageRing === 'true') {
+    if (homepageRing === 'true' || homepageAlyans === 'true') {
+      const section = homepageAlyans === 'true' ? 'homepageAlyans' : 'homepageRing';
       const content = await prisma.pageContent.findUnique({
         where: {
           page_section_key: {
             page: 'anasayfa',
-            section: 'homepageRing',
+            section,
             key: 'productIds',
           },
         },
@@ -41,6 +43,19 @@ export async function GET(request: NextRequest) {
         products = selected
           .sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
           .slice(0, take);
+      } else if (homepageAlyans === 'true') {
+        products = await prisma.product.findMany({
+          where: {
+            isActive: true,
+            category: 'yuzuk',
+            OR: [
+              { name: { contains: 'alyans', mode: 'insensitive' } },
+              { categoryLabel: { contains: 'alyans', mode: 'insensitive' } },
+            ],
+          },
+          orderBy: { order: 'asc' },
+          take,
+        });
       } else {
         products = await prisma.product.findMany({
           where: { isActive: true, category: 'yuzuk' },

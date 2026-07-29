@@ -26,18 +26,21 @@ export default function AdminProductsPage() {
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState<string | null>(null);
   const [homepageRingIds, setHomepageRingIds] = useState<Set<string>>(new Set());
+  const [homepageAlyansIds, setHomepageAlyansIds] = useState<Set<string>>(new Set());
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
       const res = await fetch("/api/admin/products");
       if (!res.ok) throw new Error("Veriler yuklenemedi");
-      const [data, homepageRingRes] = await Promise.all([
+      const [data, homepageRingRes, homepageAlyansRes] = await Promise.all([
         res.json(),
         fetch("/api/admin/homepage-rings").then((r) => r.ok ? r.json() : { productIds: [] }),
+        fetch("/api/admin/homepage-alyans").then((r) => r.ok ? r.json() : { productIds: [] }),
       ]);
       setProducts(data);
       setHomepageRingIds(new Set(Array.isArray(homepageRingRes.productIds) ? homepageRingRes.productIds : []));
+      setHomepageAlyansIds(new Set(Array.isArray(homepageAlyansRes.productIds) ? homepageAlyansRes.productIds : []));
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
@@ -92,6 +95,41 @@ export default function AdminProductsPage() {
     } catch (err) {
       setHomepageRingIds(previous);
       alert(err instanceof Error ? err.message : "Ana sayfa yuzuk secimi guncellenemedi");
+    }
+  };
+
+  const isAlyansProduct = (product: Product) =>
+    product.category === "yuzuk" &&
+    `${product.name} ${product.categoryLabel || ""}`.toLocaleLowerCase("tr-TR").includes("alyans");
+
+  const toggleHomepageAlyans = async (product: Product) => {
+    if (!isAlyansProduct(product)) {
+      alert("Ana sayfa Alyanslar bolumu icin sadece alyans yuzukler secilebilir.");
+      return;
+    }
+
+    const enabled = !homepageAlyansIds.has(product.id);
+    const previous = new Set(homepageAlyansIds);
+    const next = new Set(homepageAlyansIds);
+    if (enabled) {
+      next.add(product.id);
+    } else {
+      next.delete(product.id);
+    }
+    setHomepageAlyansIds(next);
+
+    try {
+      const res = await fetch("/api/admin/homepage-alyans", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: product.id, enabled }),
+      });
+      if (!res.ok) throw new Error("Guncellenemedi");
+      const data = await res.json();
+      setHomepageAlyansIds(new Set(Array.isArray(data.productIds) ? data.productIds : []));
+    } catch (err) {
+      setHomepageAlyansIds(previous);
+      alert(err instanceof Error ? err.message : "Ana sayfa alyans secimi guncellenemedi");
     }
   };
 
@@ -163,6 +201,9 @@ export default function AdminProductsPage() {
                   Ana Sayfa Yuzuk
                 </th>
                 <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Ana Sayfa Alyans
+                </th>
+                <th className="text-center px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Durum
                 </th>
                 <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -224,6 +265,24 @@ export default function AdminProductsPage() {
                     </button>
                   </td>
                   <td className="px-6 py-4 text-center">
+                    <button
+                      type="button"
+                      onClick={() => toggleHomepageAlyans(product)}
+                      className={`inline-flex items-center justify-center p-1 rounded transition-colors ${
+                        isAlyansProduct(product)
+                          ? "hover:bg-[#C6A25A]/10"
+                          : "cursor-not-allowed opacity-40"
+                      }`}
+                      title="Ana Sayfa Alyanslar"
+                    >
+                      {homepageAlyansIds.has(product.id) ? (
+                        <Star className="w-5 h-5 text-[#C6A25A] fill-[#C6A25A] mx-auto" />
+                      ) : (
+                        <Star className="w-5 h-5 text-gray-300 mx-auto" />
+                      )}
+                    </button>
+                  </td>
+                  <td className="px-6 py-4 text-center">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         product.inStock && product.isActive
@@ -261,7 +320,7 @@ export default function AdminProductsPage() {
               ))}
               {products.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
+                  <td colSpan={8} className="px-6 py-12 text-center text-gray-400">
                     Henüz ürün eklenmemiş.
                   </td>
                 </tr>

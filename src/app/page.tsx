@@ -263,6 +263,7 @@ export default function Home() {
   const [categoryImages, setCategoryImages] = useState<CategoryData[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [ringProducts, setRingProducts] = useState<Product[]>([]);
+  const [alyansProducts, setAlyansProducts] = useState<Product[]>([]);
   const [settings, setSettings] = useState<SettingsData>({});
   const [content, setContent] = useState<Record<string, Record<string, string>>>({});
   const [instagramPosts, setInstagramPosts] = useState<InstagramPost[]>([]);
@@ -271,11 +272,12 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [testimonialsRes, categoriesRes, featuredRes, ringsRes, settingsRes, contentRes, instagramRes] = await Promise.all([
+        const [testimonialsRes, categoriesRes, featuredRes, ringsRes, alyansRes, settingsRes, contentRes, instagramRes] = await Promise.all([
           fetch("/api/testimonials").then((r) => r.ok ? r.json() : []),
           fetch("/api/categories").then((r) => r.ok ? r.json() : []),
           fetch("/api/products?featured=true&limit=4").then((r) => r.ok ? r.json() : []),
           fetch("/api/products?homepageRing=true&limit=4").then((r) => r.ok ? r.json() : []),
+          fetch("/api/products?homepageAlyans=true&limit=4").then((r) => r.ok ? r.json() : []),
           fetch("/api/settings").then((r) => r.ok ? r.json() : {}),
           fetch("/api/content?page=anasayfa").then((r) => r.ok ? r.json() : {}),
           fetch("/api/instagram").then((r) => r.ok ? r.json() : []),
@@ -300,6 +302,10 @@ export default function Home() {
         // Ring products
         const ringsArray = Array.isArray(ringsRes) ? ringsRes : (ringsRes?.products || []);
         setRingProducts(ringsArray.map(mapApiProductToProduct));
+
+        // Alyans products
+        const alyansArray = Array.isArray(alyansRes) ? alyansRes : (alyansRes?.products || []);
+        setAlyansProducts(alyansArray.map(mapApiProductToProduct));
 
         // Settings
         setSettings(settingsRes || {});
@@ -522,6 +528,34 @@ export default function Home() {
           <div className="text-center mt-10">
             <Link href="/urunler?kategori=yuzuk" className="btn-outline inline-block">
               Tüm Yüzükleri Gör
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Alyanslar */}
+      <section className="py-16 bg-cream">
+        <div className="container mx-auto px-4">
+          <h2 className="section-title mb-12">Alyanslar</h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {loading ? (
+              <>
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </>
+            ) : alyansProducts.length > 0 ? (
+              alyansProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
+            ) : null}
+          </div>
+
+          <div className="text-center mt-10">
+            <Link href="/urunler?tip=alyans" className="btn-outline inline-block">
+              Tüm Alyansları Gör
             </Link>
           </div>
         </div>

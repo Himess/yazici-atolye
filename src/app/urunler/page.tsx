@@ -24,6 +24,7 @@ function UrunlerContent() {
   const aramaParam = searchParams.get("arama");
   const indirimliParam = searchParams.get("indirimli");
   const siralamaParam = searchParams.get("siralama");
+  const tipParam = searchParams.get("tip");
 
   const [selectedCategory, setSelectedCategory] = useState(kategoriParam || "all");
   const [sortBy, setSortBy] = useState(siralamaParam || "default");
@@ -101,6 +102,18 @@ function UrunlerContent() {
 
   if (indirimliParam === "true") {
     filteredProducts = filteredProducts.filter((p) => p.oldPrice);
+  }
+
+  if (tipParam === "alyans") {
+    filteredProducts = filteredProducts.filter((p) =>
+      p.category === "yuzuk" &&
+      `${p.name} ${p.categoryLabel}`.toLocaleLowerCase("tr-TR").includes("alyans")
+    );
+  } else if (tipParam === "pirlanta") {
+    filteredProducts = filteredProducts.filter((p) =>
+      `${p.name} ${p.description} ${p.material}`.toLocaleLowerCase("tr-TR").includes("pirlanta") ||
+      `${p.name} ${p.description} ${p.material}`.toLocaleLowerCase("tr-TR").includes("pırlanta")
+    );
   }
 
   // Sıralama

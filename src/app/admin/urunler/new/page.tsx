@@ -24,6 +24,7 @@ interface ProductForm {
   hoverImage: string;
   featured: boolean;
   homepageRing: boolean;
+  homepageAlyans: boolean;
   inStock: boolean;
 }
 
@@ -45,6 +46,7 @@ const initialForm: ProductForm = {
   hoverImage: "",
   featured: false,
   homepageRing: false,
+  homepageAlyans: false,
   inStock: true,
 };
 
@@ -94,13 +96,15 @@ function ProductFormContent() {
     if (!editId) return;
     try {
       setLoading(true);
-      const [res, homepageRingRes] = await Promise.all([
+      const [res, homepageRingRes, homepageAlyansRes] = await Promise.all([
         fetch(`/api/admin/products/${editId}`),
         fetch("/api/admin/homepage-rings").then((r) => r.ok ? r.json() : { productIds: [] }),
+        fetch("/api/admin/homepage-alyans").then((r) => r.ok ? r.json() : { productIds: [] }),
       ]);
       if (!res.ok) throw new Error("Urun bulunamadi");
       const product = await res.json();
       const homepageRingIds = Array.isArray(homepageRingRes.productIds) ? homepageRingRes.productIds : [];
+      const homepageAlyansIds = Array.isArray(homepageAlyansRes.productIds) ? homepageAlyansRes.productIds : [];
       setForm({
         name: product.name || "",
         slug: product.slug || "",
@@ -119,6 +123,7 @@ function ProductFormContent() {
         hoverImage: product.hoverImage || "",
         featured: product.featured || false,
         homepageRing: homepageRingIds.includes(product.id),
+        homepageAlyans: homepageAlyansIds.includes(product.id),
         inStock: product.inStock !== false,
       });
       if (product.images) {
@@ -286,6 +291,17 @@ function ProductFormContent() {
           body: JSON.stringify({
             productId: savedProduct.id,
             enabled: form.category === "yuzuk" && form.homepageRing,
+          }),
+        });
+        await fetch("/api/admin/homepage-alyans", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            productId: savedProduct.id,
+            enabled:
+              form.category === "yuzuk" &&
+              `${form.name} ${form.categoryLabel}`.toLocaleLowerCase("tr-TR").includes("alyans") &&
+              form.homepageAlyans,
           }),
         });
       }
@@ -646,6 +662,20 @@ function ProductFormContent() {
                 className="w-4 h-4 rounded border-gray-300 text-[#C6A25A] focus:ring-[#C6A25A] disabled:opacity-40"
               />
               <span className="text-sm text-gray-700">Ana Sayfa Yuzukler</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                name="homepageAlyans"
+                checked={form.homepageAlyans}
+                onChange={handleChange}
+                disabled={
+                  form.category !== "yuzuk" ||
+                  !`${form.name} ${form.categoryLabel}`.toLocaleLowerCase("tr-TR").includes("alyans")
+                }
+                className="w-4 h-4 rounded border-gray-300 text-[#C6A25A] focus:ring-[#C6A25A] disabled:opacity-40"
+              />
+              <span className="text-sm text-gray-700">Ana Sayfa Alyanslar</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input

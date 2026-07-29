@@ -56,7 +56,6 @@ const navItems = [
     hasDropdown: true,
     dropdownItems: [
       { name: "Yeni Sezon", href: "/urunler?siralama=yeni" },
-      { name: "Pırlanta Serisi", href: "/urunler?tip=pirlanta" },
       { name: "Alyans Koleksiyonu", href: "/urunler?tip=alyans" },
     ],
   },

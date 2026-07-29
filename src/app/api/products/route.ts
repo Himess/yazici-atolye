@@ -12,7 +12,15 @@ export async function GET(request: NextRequest) {
 
     const where: Record<string, unknown> = { isActive: true };
     if (featured === 'true') where.featured = true;
-    if (category) where.category = category;
+    if (category) {
+      where.category = category;
+      if (category === 'yuzuk') {
+        where.NOT = [
+          { name: { contains: 'alyans', mode: 'insensitive' } },
+          { categoryLabel: { contains: 'alyans', mode: 'insensitive' } },
+        ];
+      }
+    }
 
     const take = limit ? parseInt(limit) : undefined;
 
@@ -58,7 +66,14 @@ export async function GET(request: NextRequest) {
         });
       } else {
         products = await prisma.product.findMany({
-          where: { isActive: true, category: 'yuzuk' },
+          where: {
+            isActive: true,
+            category: 'yuzuk',
+            NOT: [
+              { name: { contains: 'alyans', mode: 'insensitive' } },
+              { categoryLabel: { contains: 'alyans', mode: 'insensitive' } },
+            ],
+          },
           orderBy: { order: 'asc' },
           take,
         });

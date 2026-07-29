@@ -18,6 +18,13 @@ type ApiCategory = {
   isActive: boolean;
 };
 
+function isAlyansProduct(product: Product) {
+  return (
+    product.category === "yuzuk" &&
+    `${product.name} ${product.categoryLabel}`.toLocaleLowerCase("tr-TR").includes("alyans")
+  );
+}
+
 function UrunlerContent() {
   const searchParams = useSearchParams();
   const kategoriParam = searchParams.get("kategori");
@@ -88,7 +95,10 @@ function UrunlerContent() {
 
   let filteredProducts = selectedCategory === "all"
     ? products
-    : products.filter((p) => p.category === selectedCategory);
+    : products.filter((p) =>
+        p.category === selectedCategory &&
+        (selectedCategory !== "yuzuk" || !isAlyansProduct(p))
+      );
 
   if (aramaParam) {
     const query = aramaParam.toLowerCase();
@@ -105,10 +115,7 @@ function UrunlerContent() {
   }
 
   if (tipParam === "alyans") {
-    filteredProducts = filteredProducts.filter((p) =>
-      p.category === "yuzuk" &&
-      `${p.name} ${p.categoryLabel}`.toLocaleLowerCase("tr-TR").includes("alyans")
-    );
+    filteredProducts = products.filter(isAlyansProduct);
   } else if (tipParam === "pirlanta") {
     filteredProducts = filteredProducts.filter((p) =>
       `${p.name} ${p.description} ${p.material}`.toLocaleLowerCase("tr-TR").includes("pirlanta") ||

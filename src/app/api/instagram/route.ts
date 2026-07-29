@@ -10,11 +10,55 @@ type InstagramMedia = {
   timestamp?: string;
 };
 
+const fallbackPostUrls = [
+  "https://www.instagram.com/p/DaiqkR4ANRj/",
+  "https://www.instagram.com/p/DaAwDIeDZJi/",
+  "https://www.instagram.com/p/DaIdQUBDUCO/",
+  "https://www.instagram.com/p/DbTAKr3gL9a/",
+  "https://www.instagram.com/p/DaVkluNgD2E/",
+  "https://www.instagram.com/p/DZOfSz3CtAX/",
+];
+
+async function getPostPreview(url: string, index: number) {
+  const res = await fetch(url, {
+    headers: {
+      "User-Agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
+      "Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+    },
+    next: { revalidate: 3600 },
+  });
+
+  if (!res.ok) return null;
+
+  const html = await res.text();
+  const image = html
+    .match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/)?.[1]
+    ?.replaceAll("&amp;", "&");
+  const caption = html
+    .match(/<meta[^>]+property="og:title"[^>]+content="([^"]*)"/)?.[1]
+    ?.replaceAll("&amp;", "&") || "";
+
+  if (!image) return null;
+
+  return {
+    id: `fallback-${index}`,
+    caption,
+    image,
+    permalink: url,
+    mediaType: "IMAGE",
+    timestamp: "",
+  };
+}
+
 export async function GET() {
   const token = process.env.INSTAGRAM_ACCESS_TOKEN;
 
   if (!token) {
-    return NextResponse.json([]);
+    const posts = (await Promise.all(
+      fallbackPostUrls.map((url, index) => getPostPreview(url, index))
+    )).filter(Boolean);
+
+    return NextResponse.json(posts);
   }
 
   const fields = [

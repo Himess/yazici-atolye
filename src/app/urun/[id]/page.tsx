@@ -13,6 +13,16 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { Heart, Share2, ShoppingBag, ZoomIn, ChevronLeft, ChevronRight, X, Play, Shield, FileText, Package } from "lucide-react";
 
+function isRemoteImage(src: string) {
+  return src.startsWith("http://") || src.startsWith("https://");
+}
+
+function getCompatibleImageSrc(src: string) {
+  return isRemoteImage(src)
+    ? `/api/image-proxy?url=${encodeURIComponent(src)}`
+    : src;
+}
+
 type Stone = {
   type: string;
   count: number;
@@ -233,13 +243,21 @@ export default function UrunDetayPage() {
                     className={`w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-lg overflow-hidden transition-all relative flex-shrink-0 ${selectedImage === index ? 'ring-2 ring-primary' : 'ring-1 ring-border hover:ring-2 hover:ring-accent'}`}
                     aria-label={`${product.name} - ${isHoverImage ? 'Kullanımda' : `Görsel ${index + 1}`}`}
                   >
-                    <Image
-                      src={img}
-                      alt={`${product.name} - ${isHoverImage ? 'Kullanımda' : `Görsel ${index + 1}`}`}
-                      fill
-                      sizes="80px"
-                      className="object-cover"
-                    />
+                    {isRemoteImage(img) ? (
+                      <img
+                        src={getCompatibleImageSrc(img)}
+                        alt={`${product.name} - ${isHoverImage ? 'Kullanımda' : `Görsel ${index + 1}`}`}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <Image
+                        src={img}
+                        alt={`${product.name} - ${isHoverImage ? 'Kullanımda' : `Görsel ${index + 1}`}`}
+                        fill
+                        sizes="80px"
+                        className="object-cover"
+                      />
+                    )}
                     {isHoverImage && (
                       <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
                         <span className="text-[6px] sm:text-[8px] bg-primary text-primary-foreground px-1 rounded">Kullanımda</span>
@@ -258,14 +276,22 @@ export default function UrunDetayPage() {
             <div className="flex-1 aspect-square bg-muted rounded-lg flex items-center justify-center relative min-w-0 overflow-hidden group">
               {allImages[selectedImage] ? (
                 <>
-                  <Image
-                    src={allImages[selectedImage]}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
-                    priority
-                  />
+                  {isRemoteImage(allImages[selectedImage]) ? (
+                    <img
+                      src={getCompatibleImageSrc(allImages[selectedImage])}
+                      alt={product.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <Image
+                      src={allImages[selectedImage]}
+                      alt={product.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover"
+                      priority
+                    />
+                  )}
                   {/* Kullanımda etiketi */}
                   {product.hoverImage && allImages[selectedImage] === product.hoverImage && (
                     <div className="absolute top-4 left-4 z-10">
@@ -344,13 +370,21 @@ export default function UrunDetayPage() {
 
               {/* Buyuk Resim */}
               <div className="relative max-w-[90vw] max-h-[90vh] w-full h-full" onClick={(e) => e.stopPropagation()}>
-                <Image
-                  src={allImages[selectedImage]}
-                  alt={product.name}
-                  fill
-                  sizes="90vw"
-                  className="object-contain"
-                />
+                {isRemoteImage(allImages[selectedImage]) ? (
+                  <img
+                    src={getCompatibleImageSrc(allImages[selectedImage])}
+                    alt={product.name}
+                    className="h-full w-full object-contain"
+                  />
+                ) : (
+                  <Image
+                    src={allImages[selectedImage]}
+                    alt={product.name}
+                    fill
+                    sizes="90vw"
+                    className="object-contain"
+                  />
+                )}
               </div>
 
               {/* Sag Ok */}

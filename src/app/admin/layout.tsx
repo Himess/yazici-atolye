@@ -12,6 +12,7 @@ import {
   Mail,
   FileText,
   Settings,
+  ShoppingCart,
   LogOut,
   Menu,
   X,
@@ -21,6 +22,7 @@ import {
 const menuItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Ürünler', href: '/admin/urunler', icon: Package },
+  { label: 'Siparişler', href: '/admin/siparisler', icon: ShoppingCart },
   { label: 'Kategoriler', href: '/admin/kategoriler', icon: FolderTree },
   { label: 'Slider', href: '/admin/slider', icon: Image },
   { label: 'Yorumlar', href: '/admin/yorumlar', icon: MessageSquareQuote },

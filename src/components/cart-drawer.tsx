@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/lib/cart-context";
 import { formatPrice, formatProductName } from "@/lib/products";
@@ -8,6 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { ShoppingBag, Trash2, Plus, Minus } from "lucide-react";
+
+function getImageSrc(src: string) {
+  return src.startsWith("http")
+    ? `/api/image-proxy?url=${encodeURIComponent(src)}`
+    : src;
+}
 
 export function CartDrawer() {
   const { items, removeFromCart, updateQuantity, totalPrice, isCartOpen, setIsCartOpen } = useCart();
@@ -43,12 +48,10 @@ export function CartDrawer() {
                     {/* Ürün Görseli */}
                     <div className="w-20 h-20 bg-background rounded-lg overflow-hidden flex-shrink-0 relative">
                       {item.product.images[0] && (item.product.images[0].includes("/images/") || item.product.images[0].startsWith("http")) ? (
-                        <Image
-                          src={item.product.images[0]}
+                        <img
+                          src={getImageSrc(item.product.images[0])}
                           alt={item.product.name}
-                          fill
-                          sizes="80px"
-                          className="object-cover"
+                          className="h-full w-full object-cover"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
@@ -119,9 +122,10 @@ export function CartDrawer() {
 
                 <Button
                   className="w-full bg-primary hover:bg-accent hover:text-accent-foreground text-primary-foreground py-6 transition-all duration-300"
-                  disabled
+                  onClick={() => setIsCartOpen(false)}
+                  asChild
                 >
-                  Ödemeye Geç (Yakında)
+                  <Link href="/odeme">Ödemeye Geç</Link>
                 </Button>
                 <Button
                   variant="outline"

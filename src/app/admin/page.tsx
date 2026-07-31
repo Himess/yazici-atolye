@@ -1,4 +1,4 @@
-import { Package, FolderTree, Image, MessageSquareQuote, Mail, ArrowRight, Clock, User } from 'lucide-react';
+import { Package, FolderTree, Image, MessageSquareQuote, Mail, ArrowRight, Clock, User, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
 
@@ -13,6 +13,7 @@ export default async function AdminDashboard() {
     testimonialCount,
     formCount,
     unreadFormCount,
+    orderCount,
     recentForms,
   ] = await Promise.all([
     prisma.product.count().catch(() => 0),
@@ -21,6 +22,7 @@ export default async function AdminDashboard() {
     prisma.testimonial.count().catch(() => 0),
     prisma.formSubmission.count().catch(() => 0),
     prisma.formSubmission.count({ where: { isRead: false } }).catch(() => 0),
+    prisma.order.count().catch(() => 0),
     prisma.formSubmission.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' },
@@ -40,6 +42,13 @@ export default async function AdminDashboard() {
       icon: Package,
       href: '/admin/urunler',
       color: 'from-[#C6A25A] to-[#A8862E]',
+    },
+    {
+      label: 'Siparişler',
+      value: orderCount,
+      icon: ShoppingCart,
+      href: '/admin/siparisler',
+      color: 'from-[#095246] to-[#073F36]',
     },
     {
       label: 'Kategoriler',

@@ -57,6 +57,47 @@ model Product {
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  orderItems    OrderItem[]
+}
+
+model Order {
+  id               String      @id @default(cuid())
+  orderNumber      String      @unique
+  status           String      @default("pending")
+  paymentStatus    String      @default("waiting")
+  paymentProvider  String      @default("paytr")
+  customerName     String
+  customerEmail    String
+  customerPhone    String
+  shippingAddress  String
+  shippingCity     String
+  shippingDistrict String?
+  notes            String?
+  subtotal         Float
+  shippingTotal    Float       @default(0)
+  total            Float
+  currency         String      @default("TRY")
+  paytrToken       String?
+  paytrStatus      String?
+  paytrTotalAmount Int?
+  paidAt           DateTime?
+  failedAt         DateTime?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  items            OrderItem[]
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  productId   String?
+  productName String
+  productCode String?
+  unitPrice   Float
+  quantity    Int
+  total       Float
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
 }
 
 model Slide {

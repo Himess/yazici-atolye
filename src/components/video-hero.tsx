@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, useCallback } from "react";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Slide {
   id: string;
@@ -164,9 +165,13 @@ function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
     setActiveIndex((prev) => (prev + 1) % tiles.length);
   }, [tiles.length]);
 
+  const prevSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev - 1 + tiles.length) % tiles.length);
+  }, [tiles.length]);
+
   useEffect(() => {
     if (tiles.length <= 1) return;
-    const timer = setInterval(nextSlide, 12000);
+    const timer = setInterval(nextSlide, 15000);
     return () => clearInterval(timer);
   }, [nextSlide, tiles.length]);
 
@@ -188,8 +193,25 @@ function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
       ))}
 
       {tiles.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
-          {tiles.map((_, index) => (
+        <>
+          <button
+            type="button"
+            onClick={prevSlide}
+            className="absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm transition-colors hover:bg-black/35"
+            aria-label="Önceki hero görsel"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            onClick={nextSlide}
+            className="absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm transition-colors hover:bg-black/35"
+            aria-label="Sonraki hero görsel"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+          <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+            {tiles.map((_, index) => (
             <button
               key={index}
               type="button"
@@ -199,8 +221,9 @@ function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
               }`}
               aria-label={`Hero görsel ${index + 1}`}
             />
-          ))}
-        </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

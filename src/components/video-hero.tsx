@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 interface Slide {
   id: string;
@@ -67,15 +66,6 @@ function slideToTile(slide: Slide, index: number): HeroTileData {
   };
 }
 
-function isRemoteImage(src: string) {
-  return src.startsWith("http");
-}
-
-function getCompatibleImageSrc(src: string) {
-  if (!isRemoteImage(src)) return src;
-  return `/api/image-proxy?url=${encodeURIComponent(src)}`;
-}
-
 function HeroImage({
   desktopSrc,
   mobileSrc,
@@ -91,51 +81,27 @@ function HeroImage({
 }) {
   const [desktopFailed, setDesktopFailed] = useState(false);
   const [mobileFailed, setMobileFailed] = useState(false);
-  const finalMobileSrc = getCompatibleImageSrc(mobileFailed ? fallbackSrc : mobileSrc);
-  const finalDesktopSrc = getCompatibleImageSrc(desktopFailed ? fallbackSrc : desktopSrc);
+  const finalMobileSrc = mobileFailed ? fallbackSrc : mobileSrc;
+  const finalDesktopSrc = desktopFailed ? fallbackSrc : desktopSrc;
 
   return (
     <>
-      {isRemoteImage(mobileFailed ? fallbackSrc : mobileSrc) ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={finalMobileSrc}
-          alt={alt}
-          className="absolute inset-0 h-full w-full object-cover md:hidden"
-          onError={() => setMobileFailed(true)}
-          fetchPriority={priority ? "high" : "auto"}
-        />
-      ) : (
-        <Image
-          src={finalMobileSrc}
-          alt={alt}
-          fill
-          priority={priority}
-          sizes="100vw"
-          className="object-cover md:hidden"
-          onError={() => setMobileFailed(true)}
-        />
-      )}
-      {isRemoteImage(desktopFailed ? fallbackSrc : desktopSrc) ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={finalDesktopSrc}
-          alt={alt}
-          className="absolute inset-0 hidden h-full w-full object-cover md:block"
-          onError={() => setDesktopFailed(true)}
-          fetchPriority={priority ? "high" : "auto"}
-        />
-      ) : (
-        <Image
-          src={finalDesktopSrc}
-          alt={alt}
-          fill
-          priority={priority}
-          sizes="100vw"
-          className="hidden object-cover md:block"
-          onError={() => setDesktopFailed(true)}
-        />
-      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={finalMobileSrc}
+        alt={alt}
+        className="absolute inset-0 h-full w-full object-cover md:hidden"
+        onError={() => setMobileFailed(true)}
+        fetchPriority={priority ? "high" : "auto"}
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={finalDesktopSrc}
+        alt={alt}
+        className="absolute inset-0 hidden h-full w-full object-cover md:block"
+        onError={() => setDesktopFailed(true)}
+        fetchPriority={priority ? "high" : "auto"}
+      />
     </>
   );
 }

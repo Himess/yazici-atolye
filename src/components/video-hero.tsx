@@ -88,7 +88,8 @@ export function VideoHero() {
     setTimeout(() => setIsAutoPlaying(true), 6000);
   };
 
-  const mobileSlides = visibleSlides.slice(0, 2);
+  const slidesWithMobileImages = visibleSlides.filter((slide) => slide.mobileImage);
+  const mobileSlides = (slidesWithMobileImages.length > 0 ? slidesWithMobileImages : visibleSlides).slice(0, 2);
   const activeSlide = visibleSlides[currentSlide] || visibleSlides[0];
 
   return (

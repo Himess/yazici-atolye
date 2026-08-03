@@ -52,6 +52,93 @@ const emptyForm: SlideForm = {
   isActive: true,
 };
 
+const CLIENT_UPLOAD_LIMIT = 3.6 * 1024 * 1024;
+const HERO_IMAGE_MAX_WIDTH = 2160;
+const HERO_IMAGE_MAX_HEIGHT = 3840;
+
+function getOptimizedFilename(filename: string) {
+  const name = filename.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "-");
+  return `${name || "slider-gorsel"}.webp`;
+}
+
+function canvasToBlob(canvas: HTMLCanvasElement, quality: number): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error("Gorsel optimize edilemedi"));
+          return;
+        }
+        resolve(blob);
+      },
+      "image/webp",
+      quality
+    );
+  });
+}
+
+async function loadImageElement(file: File): Promise<HTMLImageElement> {
+  const objectUrl = URL.createObjectURL(file);
+  const image = document.createElement("img");
+  image.src = objectUrl;
+  await image.decode();
+  URL.revokeObjectURL(objectUrl);
+  return image;
+}
+
+async function optimizeImageBeforeUpload(file: File): Promise<File> {
+  const shouldSkipProcessing = file.type === "image/gif" || file.type === "image/svg+xml";
+  if (shouldSkipProcessing) {
+    if (file.size > CLIENT_UPLOAD_LIMIT) {
+      throw new Error("GIF/SVG dosyalari tarayicida kucultulemiyor. Slider icin JPG, PNG veya WebP yukleyin.");
+    }
+    return file;
+  }
+
+  if (!file.type.startsWith("image/")) return file;
+  if (file.size <= CLIENT_UPLOAD_LIMIT) return file;
+
+  const source = await loadImageElement(file);
+  let width = source.naturalWidth;
+  let height = source.naturalHeight;
+  const ratio = Math.min(1, HERO_IMAGE_MAX_WIDTH / width, HERO_IMAGE_MAX_HEIGHT / height);
+  width = Math.max(1, Math.round(width * ratio));
+  height = Math.max(1, Math.round(height * ratio));
+
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("Gorsel islenemedi");
+
+  const render = () => {
+    canvas.width = width;
+    canvas.height = height;
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = "high";
+    context.clearRect(0, 0, width, height);
+    context.drawImage(source, 0, 0, width, height);
+  };
+
+  for (const quality of [0.94, 0.9, 0.86, 0.82, 0.78, 0.72]) {
+    render();
+    const blob = await canvasToBlob(canvas, quality);
+    if (blob.size <= CLIENT_UPLOAD_LIMIT) {
+      return new File([blob], getOptimizedFilename(file.name), { type: "image/webp" });
+    }
+  }
+
+  for (let scale = 0.92; scale >= 0.7; scale -= 0.06) {
+    width = Math.max(1, Math.round(width * scale));
+    height = Math.max(1, Math.round(height * scale));
+    render();
+    const blob = await canvasToBlob(canvas, 0.82);
+    if (blob.size <= CLIENT_UPLOAD_LIMIT) {
+      return new File([blob], getOptimizedFilename(file.name), { type: "image/webp" });
+    }
+  }
+
+  throw new Error("Gorsel 4MB altina dusurulemedi. Daha kucuk boyutlu bir JPG/PNG deneyin.");
+}
+
 export default function AdminSliderPage() {
   const [slides, setSlides] = useState<Slide[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,11 +182,12 @@ export default function AdminSliderPage() {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const formData = new FormData();
-    formData.append("file", files[0]);
-    formData.append("folder", "slider");
-
     try {
+      const uploadFile = await optimizeImageBeforeUpload(files[0]);
+      const formData = new FormData();
+      formData.append("file", uploadFile);
+      formData.append("folder", "slider");
+
       const res = await fetch("/api/admin/upload", {
         method: "POST",
         body: formData,

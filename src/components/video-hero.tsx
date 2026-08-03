@@ -128,7 +128,7 @@ function HeroTile({
     <Link
       href={tile.href}
       className={`group relative block w-full overflow-hidden bg-neutral-100 ${
-        isPrimary ? "aspect-[4/5] md:aspect-[16/9]" : "aspect-[2/1] md:aspect-[21/8]"
+        isPrimary ? "aspect-[4/5] md:aspect-[16/9]" : "aspect-[5/3] md:aspect-[21/8]"
       }`}
     >
       <HeroImage

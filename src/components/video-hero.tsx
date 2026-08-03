@@ -45,7 +45,7 @@ export function VideoHero() {
         if (!res.ok) throw new Error("Failed to fetch slides");
         const data: Slide[] = await res.json();
         const activeSlides = data
-          .filter((slide) => slide.isActive && slide.image)
+          .filter((slide) => slide.isActive && (slide.image || slide.mobileImage))
           .sort((a, b) => a.order - b.order);
         setSlides(activeSlides);
       } catch (error) {
@@ -148,7 +148,7 @@ export function VideoHero() {
             }`}
           >
             <Image
-              src={slide.image}
+              src={slide.image || slide.mobileImage || "/images/hero.png"}
               alt={slide.title || "Favian Jewellery banner"}
               fill
               priority={index === 0}

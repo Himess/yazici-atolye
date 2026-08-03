@@ -142,8 +142,11 @@ export default function AdminSliderPage() {
   };
 
   const handleSave = async () => {
-    if (!form.image.trim()) {
-      alert("Görsel URL zorunludur");
+    const desktopImage = form.image.trim() || form.mobileImage.trim();
+    const mobileImage = form.mobileImage.trim() || null;
+
+    if (!desktopImage) {
+      alert("Desktop veya mobil görselden en az biri zorunludur");
       return;
     }
 
@@ -152,8 +155,8 @@ export default function AdminSliderPage() {
       const payload = {
         title: form.title || null,
         subtitle: form.subtitle || null,
-        image: form.image,
-        mobileImage: form.mobileImage || null,
+        image: desktopImage,
+        mobileImage,
         buttonText: form.buttonText || null,
         buttonUrl: form.buttonUrl || null,
         overlay: form.overlay,
@@ -276,7 +279,7 @@ export default function AdminSliderPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Desktop Görsel URL *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Desktop Görsel URL</label>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -318,7 +321,7 @@ export default function AdminSliderPage() {
                   />
                 </label>
               </div>
-              <p className="mt-1 text-xs text-gray-400">Boş kalırsa mobilde desktop görsel kullanılır.</p>
+              <p className="mt-1 text-xs text-gray-400">Desktop boşsa bu görsel desktop için de kullanılır.</p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Buton Metni</label>
@@ -381,13 +384,13 @@ export default function AdminSliderPage() {
           </div>
 
           {/* Image Preview */}
-          {form.image && (
+          {(form.image || form.mobileImage) && (
             <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
               <div>
                 <p className="mb-2 text-xs font-medium text-gray-500">Desktop önizleme</p>
                 <div className="relative w-full max-w-md aspect-[16/9] rounded-lg overflow-hidden bg-gray-100">
                   <Image
-                    src={form.image}
+                    src={form.image || form.mobileImage}
                     alt="Desktop slayt önizleme"
                     fill
                     className="object-cover"

@@ -251,10 +251,10 @@ export function VideoHero() {
   }, []);
 
   const { carouselTiles, secondaryTile } = useMemo(() => {
-    const heroSlides = slides.slice(0, 3);
+    const heroSlides = slides.slice(0, 2);
     const mappedHero = heroSlides.map(slideToTile);
     const carousel = mappedHero.length > 0 ? mappedHero : [fallbackTiles[0]];
-    const secondary = slides[3] ? slideToTile(slides[3], 1) : fallbackTiles[1];
+    const secondary = slides[2] ? slideToTile(slides[2], 1) : fallbackTiles[1];
 
     return {
       carouselTiles: carousel,

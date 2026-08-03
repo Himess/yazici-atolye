@@ -102,7 +102,7 @@ export function VideoHero() {
           return (
             <div
               key={slide.id}
-              className="relative h-[72svh] min-h-[560px] w-full overflow-hidden bg-black"
+              className="relative aspect-[9/16] w-full overflow-hidden bg-black"
             >
               <Image
                 src={image}

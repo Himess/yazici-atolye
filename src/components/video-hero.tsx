@@ -166,7 +166,7 @@ function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
 
   useEffect(() => {
     if (tiles.length <= 1) return;
-    const timer = setInterval(nextSlide, 5000);
+    const timer = setInterval(nextSlide, 12000);
     return () => clearInterval(timer);
   }, [nextSlide, tiles.length]);
 

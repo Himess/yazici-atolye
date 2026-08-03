@@ -71,6 +71,11 @@ function isRemoteImage(src: string) {
   return src.startsWith("http");
 }
 
+function getCompatibleImageSrc(src: string) {
+  if (!isRemoteImage(src)) return src;
+  return `/api/image-proxy?url=${encodeURIComponent(src)}`;
+}
+
 function HeroImage({
   desktopSrc,
   mobileSrc,
@@ -86,12 +91,12 @@ function HeroImage({
 }) {
   const [desktopFailed, setDesktopFailed] = useState(false);
   const [mobileFailed, setMobileFailed] = useState(false);
-  const finalMobileSrc = mobileFailed ? fallbackSrc : mobileSrc;
-  const finalDesktopSrc = desktopFailed ? fallbackSrc : desktopSrc;
+  const finalMobileSrc = getCompatibleImageSrc(mobileFailed ? fallbackSrc : mobileSrc);
+  const finalDesktopSrc = getCompatibleImageSrc(desktopFailed ? fallbackSrc : desktopSrc);
 
   return (
     <>
-      {isRemoteImage(finalMobileSrc) ? (
+      {isRemoteImage(mobileFailed ? fallbackSrc : mobileSrc) ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={finalMobileSrc}
@@ -111,7 +116,7 @@ function HeroImage({
           onError={() => setMobileFailed(true)}
         />
       )}
-      {isRemoteImage(finalDesktopSrc) ? (
+      {isRemoteImage(desktopFailed ? fallbackSrc : desktopSrc) ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={finalDesktopSrc}

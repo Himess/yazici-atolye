@@ -128,7 +128,7 @@ function HeroTile({
     <Link
       href={tile.href}
       className={`group relative block w-full overflow-hidden bg-neutral-100 ${
-        isPrimary ? "aspect-[9/13] md:aspect-[16/9]" : "aspect-[16/9] md:aspect-[21/8]"
+        isPrimary ? "aspect-[4/5] md:aspect-[16/9]" : "aspect-[2/1] md:aspect-[21/8]"
       }`}
     >
       <HeroImage
@@ -139,7 +139,7 @@ function HeroTile({
         priority={priority}
       />
       <div className={`absolute inset-0 ${overlayClass}`} />
-      <div className={`absolute inset-x-0 z-10 flex justify-center px-6 ${isPrimary ? "bottom-10" : "bottom-7"}`}>
+      <div className={`absolute inset-x-0 z-10 flex justify-center px-6 ${isPrimary ? "bottom-8" : "bottom-5"}`}>
         <div className="text-center">
           {tile.subtitle && (
             <p className={`mb-3 text-xs uppercase tracking-[0.18em] ${tile.overlay === "light" ? "text-black/70" : "text-white/85"}`}>
@@ -147,7 +147,7 @@ function HeroTile({
             </p>
           )}
           <span
-            className={`inline-flex min-h-11 min-w-52 items-center justify-center border px-7 py-3 text-xs font-medium uppercase tracking-[0.18em] transition-colors group-hover:bg-white group-hover:text-black ${textClass}`}
+            className={`inline-flex min-h-10 min-w-48 items-center justify-center border px-6 py-2.5 text-[11px] font-medium uppercase tracking-[0.18em] transition-colors group-hover:bg-white group-hover:text-black ${textClass}`}
           >
             {tile.title}
           </span>

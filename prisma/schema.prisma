@@ -32,32 +32,32 @@ model SiteSettings {
 }
 
 model Product {
-  id            String   @id @default(cuid())
-  slug          String   @unique
-  name          String
-  code          String?
-  description   String?
-  about         String?
-  price         Float    @default(0)
-  oldPrice      Float?
-  priceOnRequest Boolean @default(false)
-  category      String
-  categoryLabel String?
-  material      String?
-  weight        String?
-  purity        String?
-  stones        String?
-  images        String?
-  hoverImage    String?
-  colorVariants String?
-  defaultColor  String?
-  featured      Boolean  @default(false)
-  inStock       Boolean  @default(true)
-  order         Int      @default(0)
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  orderItems    OrderItem[]
+  id             String      @id @default(cuid())
+  slug           String      @unique
+  name           String
+  code           String?
+  description    String?
+  about          String?
+  price          Float       @default(0)
+  oldPrice       Float?
+  priceOnRequest Boolean     @default(false)
+  category       String
+  categoryLabel  String?
+  material       String?
+  weight         String?
+  purity         String?
+  stones         String?
+  images         String?
+  hoverImage     String?
+  colorVariants  String?
+  defaultColor   String?
+  featured       Boolean     @default(false)
+  inStock        Boolean     @default(true)
+  order          Int         @default(0)
+  isActive       Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  orderItems     OrderItem[]
 }
 
 model Order {
@@ -101,15 +101,16 @@ model OrderItem {
 }
 
 model Slide {
-  id         String  @id @default(cuid())
-  title      String?
-  subtitle   String?
-  image      String
-  buttonText String?
-  buttonUrl  String?
-  overlay    String  @default("dark")
-  order      Int     @default(0)
-  isActive   Boolean @default(true)
+  id          String  @id @default(cuid())
+  title       String?
+  subtitle    String?
+  image       String
+  mobileImage String?
+  buttonText  String?
+  buttonUrl   String?
+  overlay     String  @default("dark")
+  order       Int     @default(0)
+  isActive    Boolean @default(true)
 }
 
 model Category {

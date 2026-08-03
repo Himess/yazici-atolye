@@ -20,6 +20,7 @@ interface Slide {
   title: string | null;
   subtitle: string | null;
   image: string;
+  mobileImage: string | null;
   buttonText: string | null;
   buttonUrl: string | null;
   overlay: string;
@@ -31,6 +32,7 @@ interface SlideForm {
   title: string;
   subtitle: string;
   image: string;
+  mobileImage: string;
   buttonText: string;
   buttonUrl: string;
   overlay: string;
@@ -42,6 +44,7 @@ const emptyForm: SlideForm = {
   title: "",
   subtitle: "",
   image: "",
+  mobileImage: "",
   buttonText: "",
   buttonUrl: "",
   overlay: "dark",
@@ -88,7 +91,7 @@ export default function AdminSliderPage() {
     }));
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "image" | "mobileImage") => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
@@ -107,7 +110,7 @@ export default function AdminSliderPage() {
       }
       const data = await res.json();
       if (data.url) {
-        setForm((prev) => ({ ...prev, image: data.url }));
+        setForm((prev) => ({ ...prev, [field]: data.url }));
       }
     } catch (err) {
       alert(err instanceof Error ? err.message : "Görsel yüklenirken hata oluştu");
@@ -123,6 +126,7 @@ export default function AdminSliderPage() {
       title: slide.title || "",
       subtitle: slide.subtitle || "",
       image: slide.image,
+      mobileImage: slide.mobileImage || "",
       buttonText: slide.buttonText || "",
       buttonUrl: slide.buttonUrl || "",
       overlay: slide.overlay,
@@ -149,6 +153,7 @@ export default function AdminSliderPage() {
         title: form.title || null,
         subtitle: form.subtitle || null,
         image: form.image,
+        mobileImage: form.mobileImage || null,
         buttonText: form.buttonText || null,
         buttonUrl: form.buttonUrl || null,
         overlay: form.overlay,
@@ -271,7 +276,7 @@ export default function AdminSliderPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Görsel URL *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Desktop Görsel URL *</label>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -286,11 +291,34 @@ export default function AdminSliderPage() {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleImageUpload}
+                    onChange={(e) => handleImageUpload(e, "image")}
                     className="hidden"
                   />
                 </label>
               </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Mobil Görsel URL</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  name="mobileImage"
+                  value={form.mobileImage}
+                  onChange={handleChange}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
+                  placeholder="/images/slider-mobile-1.jpg"
+                />
+                <label className="inline-flex items-center gap-1 px-3 py-2 border border-gray-300 rounded-lg cursor-pointer hover:border-[#C6A25A] hover:bg-[#C6A25A]/5 transition-colors">
+                  <ImagePlus className="w-4 h-4 text-gray-400" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageUpload(e, "mobileImage")}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+              <p className="mt-1 text-xs text-gray-400">Boş kalırsa mobilde desktop görsel kullanılır.</p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Buton Metni</label>
@@ -324,6 +352,7 @@ export default function AdminSliderPage() {
               >
                 <option value="dark">Koyu (Dark)</option>
                 <option value="light">Açık (Light)</option>
+                <option value="none">Yok</option>
               </select>
             </div>
             <div>
@@ -353,26 +382,50 @@ export default function AdminSliderPage() {
 
           {/* Image Preview */}
           {form.image && (
-            <div className="mt-4 relative w-full max-w-md aspect-[16/9] rounded-lg overflow-hidden bg-gray-100">
-              <Image
-                src={form.image}
-                alt="Slayt önizleme"
-                fill
-                className="object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                }}
-              />
-              <div className={`absolute inset-0 flex flex-col items-start justify-center p-6 ${form.overlay === "dark" ? "bg-gradient-to-t from-black/60 via-black/30 to-black/10" : "bg-gradient-to-r from-white/90 via-white/60 to-transparent"}`}>
-                {form.title && (
-                  <p className={`text-xl font-bold tracking-wide ${form.overlay === "dark" ? "text-white" : "text-gray-900"}`}>{form.title}</p>
-                )}
-                {form.subtitle && (
-                  <p className={`text-xs tracking-wider mt-1 ${form.overlay === "dark" ? "text-white/80" : "text-gray-600"}`}>{form.subtitle}</p>
-                )}
-                {form.buttonText && (
-                  <span className="inline-block bg-[#C6A25A] text-white px-4 py-1.5 text-xs tracking-wider uppercase mt-3">{form.buttonText}</span>
-                )}
+            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+              <div>
+                <p className="mb-2 text-xs font-medium text-gray-500">Desktop önizleme</p>
+                <div className="relative w-full max-w-md aspect-[16/9] rounded-lg overflow-hidden bg-gray-100">
+                  <Image
+                    src={form.image}
+                    alt="Desktop slayt önizleme"
+                    fill
+                    className="object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                  <div className={`absolute inset-0 flex flex-col items-start justify-center p-6 ${form.overlay === "none" ? "" : form.overlay === "dark" ? "bg-gradient-to-t from-black/60 via-black/30 to-black/10" : "bg-gradient-to-r from-white/90 via-white/60 to-transparent"}`}>
+                    {form.title && (
+                      <p className={`text-xl font-bold tracking-wide ${form.overlay === "dark" ? "text-white" : "text-gray-900"}`}>{form.title}</p>
+                    )}
+                    {form.subtitle && (
+                      <p className={`text-xs tracking-wider mt-1 ${form.overlay === "dark" ? "text-white/80" : "text-gray-600"}`}>{form.subtitle}</p>
+                    )}
+                    {form.buttonText && (
+                      <span className="inline-block bg-[#C6A25A] text-white px-4 py-1.5 text-xs tracking-wider uppercase mt-3">{form.buttonText}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div>
+                <p className="mb-2 text-xs font-medium text-gray-500">Mobil önizleme</p>
+                <div className="relative aspect-[9/16] rounded-lg overflow-hidden bg-gray-100">
+                  <Image
+                    src={form.mobileImage || form.image}
+                    alt="Mobil slayt önizleme"
+                    fill
+                    className="object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                  <div className={`absolute inset-0 flex items-end justify-center p-5 ${form.overlay === "none" ? "" : form.overlay === "dark" ? "bg-gradient-to-t from-black/45 via-black/10 to-transparent" : "bg-gradient-to-t from-white/70 via-white/20 to-transparent"}`}>
+                    {form.buttonText && (
+                      <span className={`border px-4 py-2 text-[10px] tracking-widest uppercase ${form.overlay === "dark" ? "border-white text-white" : "border-gray-900 text-gray-900"}`}>{form.buttonText}</span>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -417,7 +470,7 @@ export default function AdminSliderPage() {
               />
               <div
                 className={`absolute inset-0 ${
-                  slide.overlay === "dark" ? "bg-black/30" : "bg-white/30"
+                  slide.overlay === "none" ? "" : slide.overlay === "dark" ? "bg-black/30" : "bg-white/30"
                 }`}
               />
               {/* Status Badge */}
@@ -453,6 +506,9 @@ export default function AdminSliderPage() {
                   Buton: {slide.buttonText} &rarr; {slide.buttonUrl}
                 </p>
               )}
+              <p className="text-xs text-gray-400 mt-1">
+                Mobil görsel: {slide.mobileImage ? "Var" : "Yok"}
+              </p>
 
               {/* Actions */}
               <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">

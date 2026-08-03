@@ -21,15 +21,6 @@ type Testimonial = {
   createdAt: string;
 };
 
-type CategoryData = {
-  id: string;
-  name: string;
-  slug: string;
-  image: string;
-  order: number;
-  isActive: boolean;
-};
-
 type SettingsData = {
   phone?: string;
   email?: string;
@@ -125,12 +116,6 @@ function SkeletonCard() {
         <div className="h-4 bg-gray-200 rounded w-1/2" />
       </div>
     </div>
-  );
-}
-
-function SkeletonCategory() {
-  return (
-    <div className="animate-pulse aspect-square bg-gray-200" />
   );
 }
 
@@ -260,7 +245,6 @@ export default function Home() {
   const testimonialRef = useRef<HTMLDivElement>(null);
 
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [categoryImages, setCategoryImages] = useState<CategoryData[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [ringProducts, setRingProducts] = useState<Product[]>([]);
   const [alyansProducts, setAlyansProducts] = useState<Product[]>([]);
@@ -272,9 +256,8 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [testimonialsRes, categoriesRes, featuredRes, ringsRes, alyansRes, settingsRes, contentRes, instagramRes] = await Promise.all([
+        const [testimonialsRes, featuredRes, ringsRes, alyansRes, settingsRes, contentRes, instagramRes] = await Promise.all([
           fetch("/api/testimonials").then((r) => r.ok ? r.json() : []),
-          fetch("/api/categories").then((r) => r.ok ? r.json() : []),
           fetch("/api/products?featured=true&limit=4").then((r) => r.ok ? r.json() : []),
           fetch("/api/products?homepageRing=true&limit=4").then((r) => r.ok ? r.json() : []),
           fetch("/api/products?homepageAlyans=true&limit=4").then((r) => r.ok ? r.json() : []),
@@ -288,12 +271,6 @@ export default function Home() {
           ? testimonialsRes.filter((t: Testimonial) => t.isActive).sort((a: Testimonial, b: Testimonial) => a.order - b.order)
           : [];
         setTestimonials(activeTestimonials);
-
-        // Categories - filter active and sort by order
-        const activeCategories = Array.isArray(categoriesRes)
-          ? categoriesRes.filter((c: CategoryData) => c.isActive).sort((a: CategoryData, b: CategoryData) => a.order - b.order)
-          : [];
-        setCategoryImages(activeCategories);
 
         // Featured products
         const featuredArray = Array.isArray(featuredRes) ? featuredRes : (featuredRes?.products || []);
@@ -394,46 +371,30 @@ export default function Home() {
       {/* Hero Video */}
       <VideoHero />
 
-      {/* ALIŞVERİŞ KATEGORİLERİ */}
-      <section className="py-16 bg-cream">
+      {/* Öne Çıkan Ürünler */}
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="section-title mb-12">Alışveriş Kategorileri</h2>
+          <h2 className="section-title mb-12">Öne Çıkan Ürünler</h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {loading ? (
               <>
-                <SkeletonCategory />
-                <SkeletonCategory />
-                <SkeletonCategory />
-                <SkeletonCategory />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
               </>
-            ) : categoryImages.length > 0 ? (
-              categoryImages.map((cat) => (
-                <Link key={cat.id} href={`/urunler?kategori=${cat.slug}`} className="group relative aspect-square overflow-hidden bg-beige">
-                  {cat.image && (cat.image.startsWith("http") ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={cat.image}
-                      alt={cat.name}
-                      className="object-cover w-full h-full group-hover:scale-[1.02] transition-transform duration-500"
-                    />
-                  ) : (
-                    <Image
-                      src={cat.image}
-                      alt={cat.name}
-                      fill
-                      className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                    />
-                  ))}
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
-                    <span className="font-script text-2xl md:text-3xl text-white drop-shadow-lg">
-                      {cat.name}
-                    </span>
-                  </div>
-                </Link>
+            ) : featuredProducts.length > 0 ? (
+              featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
               ))
             ) : null}
+          </div>
+
+          <div className="text-center mt-10">
+            <Link href="/urunler" className="btn-primary inline-block">
+              Tüm Ürünleri Gör
+            </Link>
           </div>
         </div>
       </section>
@@ -476,34 +437,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      {/* Öne Çıkan Ürünler */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="section-title mb-12">Öne Çıkan Ürünler</h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {loading ? (
-              <>
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-              </>
-            ) : featuredProducts.length > 0 ? (
-              featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
-            ) : null}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link href="/urunler" className="btn-primary inline-block">
-              Tüm Ürünleri Gör
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* Yüzükler */}
       <section className="py-16 bg-white">

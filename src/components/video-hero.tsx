@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import Link from "next/link";
 
 interface Slide {
@@ -157,6 +157,55 @@ function HeroTile({
   );
 }
 
+function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const nextSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % tiles.length);
+  }, [tiles.length]);
+
+  useEffect(() => {
+    if (tiles.length <= 1) return;
+    const timer = setInterval(nextSlide, 5000);
+    return () => clearInterval(timer);
+  }, [nextSlide, tiles.length]);
+
+  useEffect(() => {
+    if (activeIndex >= tiles.length) setActiveIndex(0);
+  }, [activeIndex, tiles.length]);
+
+  return (
+    <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-100 md:aspect-[16/9]">
+      {tiles.map((tile, index) => (
+        <div
+          key={tile.id}
+          className={`absolute inset-0 transition-opacity duration-700 ${
+            index === activeIndex ? "z-10 opacity-100" : "z-0 opacity-0"
+          }`}
+        >
+          <HeroTile tile={tile} variant="primary" priority={index === 0} />
+        </div>
+      ))}
+
+      {tiles.length > 1 && (
+        <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+          {tiles.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setActiveIndex(index)}
+              className={`h-1.5 rounded-full transition-all ${
+                index === activeIndex ? "w-7 bg-white" : "w-1.5 bg-white/55"
+              }`}
+              aria-label={`Hero görsel ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function VideoHero() {
   const [slides, setSlides] = useState<Slide[]>([]);
 
@@ -178,15 +227,22 @@ export function VideoHero() {
     fetchSlides();
   }, []);
 
-  const tiles = useMemo(() => {
-    const mapped = slides.slice(0, 2).map(slideToTile);
-    return mapped.length >= 2 ? mapped : [...mapped, ...fallbackTiles.slice(mapped.length)].slice(0, 2);
+  const { carouselTiles, secondaryTile } = useMemo(() => {
+    const heroSlides = slides.slice(0, 3);
+    const mappedHero = heroSlides.map(slideToTile);
+    const carousel = mappedHero.length > 0 ? mappedHero : [fallbackTiles[0]];
+    const secondary = slides[3] ? slideToTile(slides[3], 1) : fallbackTiles[1];
+
+    return {
+      carouselTiles: carousel,
+      secondaryTile: secondary,
+    };
   }, [slides]);
 
   return (
     <section className="bg-white">
-      <HeroTile tile={tiles[0]} variant="primary" priority />
-      <HeroTile tile={tiles[1]} variant="secondary" />
+      <HeroCarousel tiles={carouselTiles} />
+      <HeroTile tile={secondaryTile} variant="secondary" />
     </section>
   );
 }

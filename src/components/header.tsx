@@ -287,7 +287,7 @@ export function Header() {
 
       {/* 2d. Mobil Header - Hamburger + Logo + Sepet */}
       <div className="lg:hidden sticky top-0 z-50 bg-white border-b border-border">
-        <div className="flex items-center justify-between px-4 h-24">
+        <div className="flex items-center justify-between px-4 h-20">
           {/* Hamburger */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
@@ -400,7 +400,7 @@ export function Header() {
               alt="Favian Jewellery"
               width={300}
               height={80}
-              className="h-[80px] w-auto"
+              className="h-[62px] w-auto"
             />
           </Link>
 

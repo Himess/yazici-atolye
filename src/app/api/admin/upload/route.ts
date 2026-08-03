@@ -13,11 +13,11 @@ const ALLOWED_TYPES = [
 // GIF ve SVG islenmez — GIF animasyonlu olabilir, SVG vektör
 const SKIP_PROCESSING = ['image/gif', 'image/svg+xml'];
 
-const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+const MAX_FILE_SIZE = 12 * 1024 * 1024; // 12MB
 
 // Folder bazli max boyutlar — orijinalden kucukse buyutmez
 const FOLDER_LIMITS: Record<string, { width: number; height: number; quality: number }> = {
-  slider:      { width: 1920, height: 1080, quality: 85 },
+  slider:      { width: 2160, height: 3840, quality: 92 },
   urunler:     { width: 1200, height: 1200, quality: 85 },
   kategoriler: { width: 800,  height: 800,  quality: 80 },
   genel:       { width: 1600, height: 1600, quality: 85 },
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
 
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, error: 'Dosya boyutu 4MB\'dan buyuk olamaz. Lutfen daha kucuk bir dosya secin.' },
+        { success: false, error: 'Dosya boyutu 12MB\'dan buyuk olamaz. Lutfen daha kucuk bir dosya secin.' },
         { status: 400 }
       );
     }

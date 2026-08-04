@@ -119,11 +119,11 @@ export function Header() {
       {/* 2a. Üst İnce Bar (Announcement Bar) */}
       <div className="bg-beige text-dark">
         <div className="container mx-auto px-4 py-2 flex items-center justify-between">
-          <span className="text-[11px] tracking-[0.15em] uppercase font-sans font-medium">
-            30 GÜN İADE GARANTİSİ
+          <span className="text-[9px] sm:text-[11px] tracking-[0.15em] uppercase font-sans font-medium">
+            İSTEK ÜZERİNE HAZIRLANIR
           </span>
-          <span className="text-[11px] tracking-[0.15em] uppercase font-sans font-medium">
-            24 SAAT İÇİNDE KARGODA
+          <span className="text-[9px] sm:text-[11px] tracking-[0.15em] uppercase font-sans font-medium">
+            7-10 GÜN İÇİNDE TESLİMAT
           </span>
         </div>
       </div>

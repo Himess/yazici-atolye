@@ -374,7 +374,9 @@ export default function Home() {
       {/* Öne Çıkan Ürünler */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="section-title mb-12">Öne Çıkan Ürünler</h2>
+          <h2 className="mb-12 text-center font-serif text-[26px] font-normal uppercase tracking-[0.28em] text-foreground md:text-[34px]">
+            Favian Seçkisi
+          </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {loading ? (

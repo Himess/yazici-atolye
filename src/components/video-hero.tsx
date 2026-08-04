@@ -32,8 +32,8 @@ const fallbackTiles: HeroTileData[] = [
     id: "fallback-primary",
     title: "Ürünleri İncele",
     subtitle: "Favian Jewellery",
-    desktopImage: "/images/hero.png",
-    mobileImage: "/images/hero.png",
+    desktopImage: "",
+    mobileImage: "",
     href: "/urunler",
     overlay: "none",
   },
@@ -41,8 +41,8 @@ const fallbackTiles: HeroTileData[] = [
     id: "fallback-secondary",
     title: "Kolyeler",
     subtitle: "Yeni Seçkiler",
-    desktopImage: "/images/kolye-yonca-1.jpg",
-    mobileImage: "/images/kolye-yonca-1.jpg",
+    desktopImage: "",
+    mobileImage: "",
     href: "/urunler?kategori=kolye",
     overlay: "dark",
   },
@@ -87,23 +87,39 @@ function HeroImage({
 
   return (
     <>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={finalMobileSrc}
-        alt={alt}
-        className="absolute inset-0 h-full w-full object-cover md:hidden"
-        onError={() => setMobileFailed(true)}
-        fetchPriority={priority ? "high" : "auto"}
-      />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={finalDesktopSrc}
-        alt={alt}
-        className="absolute inset-0 hidden h-full w-full object-cover md:block"
-        onError={() => setDesktopFailed(true)}
-        fetchPriority={priority ? "high" : "auto"}
-      />
+      {finalMobileSrc && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={finalMobileSrc}
+          alt={alt}
+          className="absolute inset-0 h-full w-full object-cover md:hidden"
+          onError={() => setMobileFailed(true)}
+          fetchPriority={priority ? "high" : "auto"}
+        />
+      )}
+      {finalDesktopSrc && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={finalDesktopSrc}
+          alt={alt}
+          className="absolute inset-0 hidden h-full w-full object-cover md:block"
+          onError={() => setDesktopFailed(true)}
+          fetchPriority={priority ? "high" : "auto"}
+        />
+      )}
     </>
+  );
+}
+
+function HeroPlaceholder({ variant }: { variant: "primary" | "secondary" }) {
+  const isPrimary = variant === "primary";
+
+  return (
+    <div
+      className={`w-full bg-neutral-100 ${
+        isPrimary ? "aspect-[4/5] md:aspect-[16/9]" : "aspect-[5/3] md:aspect-[21/8]"
+      }`}
+    />
   );
 }
 
@@ -231,6 +247,7 @@ function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
 
 export function VideoHero() {
   const [slides, setSlides] = useState<Slide[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     async function fetchSlides() {
@@ -244,6 +261,8 @@ export function VideoHero() {
         setSlides(activeSlides);
       } catch (error) {
         console.error("Error fetching hero slides:", error);
+      } finally {
+        setLoaded(true);
       }
     }
 
@@ -251,16 +270,30 @@ export function VideoHero() {
   }, []);
 
   const { carouselTiles, secondaryTile } = useMemo(() => {
+    if (!loaded) {
+      return {
+        carouselTiles: [],
+        secondaryTile: null,
+      };
+    }
+
     const heroSlides = slides.slice(0, 3);
     const mappedHero = heroSlides.map(slideToTile);
-    const carousel = mappedHero.length > 0 ? mappedHero : [fallbackTiles[0]];
-    const secondary = slides[3] ? slideToTile(slides[3], 1) : fallbackTiles[1];
 
     return {
-      carouselTiles: carousel,
-      secondaryTile: secondary,
+      carouselTiles: mappedHero,
+      secondaryTile: slides[3] ? slideToTile(slides[3], 1) : null,
     };
-  }, [slides]);
+  }, [loaded, slides]);
+
+  if (!loaded || carouselTiles.length === 0 || !secondaryTile) {
+    return (
+      <section className="bg-white">
+        <HeroPlaceholder variant="primary" />
+        <HeroPlaceholder variant="secondary" />
+      </section>
+    );
+  }
 
   return (
     <section className="bg-white">

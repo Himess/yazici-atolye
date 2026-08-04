@@ -472,7 +472,7 @@ export default function Home() {
       </section>
 
       {/* Alyanslar */}
-      <section className="py-16 bg-cream">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <h2 className={editorialSectionTitleClass}>Alyanslar</h2>
 

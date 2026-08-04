@@ -200,7 +200,7 @@ function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
             className="absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm transition-colors hover:bg-black/35"
             aria-label="Önceki hero görsel"
           >
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-6 w-6" />
           </button>
           <button
             type="button"
@@ -208,7 +208,7 @@ function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
             className="absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm transition-colors hover:bg-black/35"
             aria-label="Sonraki hero görsel"
           >
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-6 w-6" />
           </button>
           <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
             {tiles.map((_, index) => (

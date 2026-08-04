@@ -120,7 +120,7 @@ export function Header() {
       <div className="bg-beige text-dark">
         <div className="container mx-auto px-4 py-2 flex items-center justify-between">
           <span className="text-[9px] sm:text-[11px] tracking-[0.15em] uppercase font-sans font-medium">
-            İSTEK ÜZERİNE HAZIRLANIR
+            ONLINE SİPARİŞ
           </span>
           <span className="text-[9px] sm:text-[11px] tracking-[0.15em] uppercase font-sans font-medium">
             7-10 GÜN İÇİNDE TESLİMAT

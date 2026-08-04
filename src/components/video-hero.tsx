@@ -48,6 +48,8 @@ const fallbackTiles: HeroTileData[] = [
   },
 ];
 
+const primaryHeroTitles = ["Küpeler", "Yüzükler", "Ürünleri İncele"];
+
 function hasUsableImage(slide: Slide) {
   return Boolean((slide.mobileImage || slide.image || "").trim());
 }
@@ -278,7 +280,13 @@ export function VideoHero() {
     }
 
     const heroSlides = slides.slice(0, 3);
-    const mappedHero = heroSlides.map(slideToTile);
+    const mappedHero = heroSlides.map((slide, index) => {
+      const tile = slideToTile(slide, index);
+      return {
+        ...tile,
+        title: primaryHeroTitles[index] || tile.title,
+      };
+    });
 
     return {
       carouselTiles: mappedHero,

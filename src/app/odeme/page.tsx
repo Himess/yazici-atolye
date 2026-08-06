@@ -29,7 +29,7 @@ const initialForm: CustomerForm = {
 };
 
 export default function CheckoutPage() {
-  const { items, totalPrice } = useCart();
+  const { items } = useCart();
   const [form, setForm] = useState<CustomerForm>(initialForm);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -40,11 +40,26 @@ export default function CheckoutPage() {
     () => items.filter((item) => !item.product.priceOnRequest && item.product.price > 0),
     [items]
   );
+  const nonPayableItems = useMemo(
+    () => items.filter((item) => item.product.priceOnRequest || item.product.price <= 0),
+    [items]
+  );
+  const payableTotal = payableItems.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
+  const hasNonPayableItems = nonPayableItems.length > 0;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
     setError("");
+
+    if (hasNonPayableItems) {
+      setError("Sepetinizde fiyat bilgisi olmayan urunler var. Online odeme icin bu urunleri sepetten ayirin veya bizimle iletisime gecin.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const response = await fetch("/api/checkout/paytr", {
@@ -121,6 +136,13 @@ export default function CheckoutPage() {
             </div>
           )}
 
+          {hasNonPayableItems && (
+            <div className="mb-6 border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              Sepetinizde fiyat bilgisi olmayan urunler var. Bu urunler icin online odeme baslatilamaz;
+              lutfen fiyatli urunlerle ayri odeme yapin veya bizimle iletisime gecin.
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <label className="block text-sm text-stone-600">
@@ -194,7 +216,7 @@ export default function CheckoutPage() {
 
             <Button
               type="submit"
-              disabled={loading || payableItems.length === 0}
+              disabled={loading || payableItems.length === 0 || hasNonPayableItems}
               className="h-12 w-full rounded-none bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LockKeyhole className="h-4 w-4" />}
@@ -213,7 +235,7 @@ export default function CheckoutPage() {
                   <p className="mt-1 text-stone-500">Adet: {item.quantity}</p>
                 </div>
                 <p className="font-medium text-stone-900">
-                  {item.product.priceOnRequest ? "Satıcıya Sor" : formatPrice(item.product.price * item.quantity)}
+                  {item.product.priceOnRequest || item.product.price <= 0 ? "Satıcıya Sor" : formatPrice(item.product.price * item.quantity)}
                 </p>
               </div>
             ))}
@@ -221,7 +243,7 @@ export default function CheckoutPage() {
           <div className="mt-5 space-y-3 text-sm">
             <div className="flex justify-between">
               <span className="text-stone-500">Ara Toplam</span>
-              <span className="font-medium text-stone-900">{formatPrice(totalPrice)}</span>
+              <span className="font-medium text-stone-900">{formatPrice(payableTotal)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-stone-500">Kargo</span>
@@ -229,7 +251,7 @@ export default function CheckoutPage() {
             </div>
             <div className="flex justify-between border-t border-border pt-3 text-base">
               <span className="font-semibold text-stone-900">Toplam</span>
-              <span className="font-semibold text-stone-900">{formatPrice(totalPrice)}</span>
+              <span className="font-semibold text-stone-900">{formatPrice(payableTotal)}</span>
             </div>
           </div>
         </aside>

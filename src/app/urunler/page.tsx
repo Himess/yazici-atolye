@@ -43,6 +43,14 @@ function UrunlerContent() {
   const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
+    setSelectedCategory(kategoriParam || "all");
+  }, [kategoriParam]);
+
+  useEffect(() => {
+    setSortBy(siralamaParam || "default");
+  }, [siralamaParam]);
+
+  useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
       setFetchError(false);

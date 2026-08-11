@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { isPublicProductHidden } from '@/lib/public-product-visibility';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
@@ -8,7 +9,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       where: { OR: [{ slug }, { id: slug }] },
     });
 
-    if (!product) {
+    if (!product || isPublicProductHidden(product)) {
       return NextResponse.json({ error: 'Ürün bulunamadı' }, { status: 404 });
     }
 

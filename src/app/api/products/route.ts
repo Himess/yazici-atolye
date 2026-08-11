@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { filterPublicProducts } from '@/lib/public-product-visibility';
 
 export async function GET(request: NextRequest) {
   try {
@@ -49,8 +50,7 @@ export async function GET(request: NextRequest) {
           where: { isActive: true, category: 'yuzuk', id: { in: ids } },
         });
         products = selected
-          .sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
-          .slice(0, take);
+          .sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
       } else if (homepageAlyans === 'true') {
         products = await prisma.product.findMany({
           where: {
@@ -62,7 +62,6 @@ export async function GET(request: NextRequest) {
             ],
           },
           orderBy: { order: 'asc' },
-          take,
         });
       } else {
         products = await prisma.product.findMany({
@@ -75,14 +74,12 @@ export async function GET(request: NextRequest) {
             ],
           },
           orderBy: { order: 'asc' },
-          take,
         });
       }
     } else {
       products = await prisma.product.findMany({
         where,
         orderBy: { order: 'asc' },
-        take,
       });
     }
 
@@ -97,7 +94,10 @@ export async function GET(request: NextRequest) {
       }
     };
 
-    const parsed = products.map(p => ({
+    const visibleProducts = filterPublicProducts(products);
+    const limitedProducts = take ? visibleProducts.slice(0, take) : visibleProducts;
+
+    const parsed = limitedProducts.map(p => ({
       ...p,
       images: parseField(p.images),
       stones: parseField(p.stones),

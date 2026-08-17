@@ -20,6 +20,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://favianjewellery.com"),
   title: {
     default: "Favian Jewellery | El Yapımı Takılar & Mücevherat",
     template: "%s | Favian Jewellery",
@@ -42,18 +43,35 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Favian Jewellery" }],
   creator: "Favian Jewellery",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     type: "website",
     locale: "tr_TR",
+    url: "https://favianjewellery.com",
     siteName: "Favian Jewellery",
     title: "Favian Jewellery | El Yapımı Takılar & Mücevherat",
     description:
       "Özel tasarım el yapımı takılar, nişan yüzükleri, alyanslar ve mücevherat.",
+    images: [
+      {
+        url: "/images/favian-link-preview.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Favian Jewellery",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Favian Jewellery | El Yapımı Takılar",
     description: "Özel tasarım el yapımı takılar ve mücevherat.",
+    images: ["/images/favian-link-preview.jpg"],
   },
   robots: {
     index: true,

@@ -842,7 +842,7 @@ export function Footer() {
                 <span>+90 (212) 123 45 67</span>
               </li>
               <li className="flex items-center gap-2">
-                <span>info@yaziciatolye.com</span>
+                <span>info@favianjewellery.com</span>
               </li>
             </ul>
           </div>

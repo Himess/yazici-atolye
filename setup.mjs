@@ -460,7 +460,7 @@ export default function IletisimPage() {
                   <span className="text-xl">✉️</span>
                   <div>
                     <h4 className="font-semibold">E-posta</h4>
-                    <p className="text-zinc-600">info@yaziciatolye.com</p>
+                    <p className="text-zinc-600">info@favianjewellery.com</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="admin@favianjewellery.com"
+                  placeholder="info@favianjewellery.com"
                   className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#C6A25A]/50 focus:border-[#C6A25A]/50 transition-all"
                 />
               </div>

@@ -9,14 +9,14 @@ async function main() {
   // Admin kullanıcı
   const hashedPassword = await bcrypt.hash('admin123', 10);
   await prisma.admin.upsert({
-    where: { email: 'admin@yaziciatolye.com' },
+    where: { email: 'info@favianjewellery.com' },
     update: {},
     create: {
-      email: 'admin@yaziciatolye.com',
+      email: 'info@favianjewellery.com',
       password: hashedPassword,
     },
   });
-  console.log('Admin user created: admin@yaziciatolye.com / admin123');
+  console.log('Admin user created: info@favianjewellery.com / admin123');
 
   // Kategoriler
   const categories = [
@@ -42,7 +42,7 @@ async function main() {
     create: {
       id: 'settings',
       phone: '+90 (212) 123 45 67',
-      email: 'info@yaziciatolye.com',
+      email: 'info@favianjewellery.com',
       address: 'İstanbul, Türkiye',
       workingHours: 'Pzt-Cmt 10:00-19:00',
       instagramUrl: 'https://instagram.com/yaziciatolye',

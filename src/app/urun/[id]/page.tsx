@@ -5,7 +5,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { formatPrice, formatProductName, GoldColor } from "@/lib/products";
+import { formatPrice, formatProductName, type GoldColor, type Product as CatalogProduct } from "@/lib/products";
 import { ColorSelector } from "@/components/color-selector";
 import { useCart } from "@/lib/cart-context";
 import { useFavorites } from "@/lib/favorites-context";
@@ -23,15 +23,6 @@ function getCompatibleImageSrc(src: string) {
     : src;
 }
 
-type Stone = {
-  type: string;
-  count: number;
-  carat: number;
-  color: string;
-  clarity: string;
-  shape: string;
-};
-
 type ColorVariant = {
   color: GoldColor;
   label: string;
@@ -39,29 +30,7 @@ type ColorVariant = {
   images: string[];
 };
 
-type Product = {
-  id: string;
-  slug: string;
-  code: string;
-  name: string;
-  description: string;
-  about: string;
-  price: number;
-  oldPrice?: number;
-  priceOnRequest?: boolean;
-  category: string;
-  categoryLabel: string;
-  material: string;
-  weight: string;
-  purity: string;
-  stones: Stone[];
-  images: string[];
-  hoverImage?: string;
-  featured: boolean;
-  inStock: boolean;
-  colorVariants: ColorVariant[];
-  defaultColor: GoldColor;
-};
+type Product = CatalogProduct & { slug: string; colorVariants: ColorVariant[] };
 
 type SiteSettings = {
   phone?: string;
@@ -141,6 +110,17 @@ export default function UrunDetayPage() {
     return product.hoverImage ? [...product.images, product.hoverImage] : product.images;
   }, [product, currentVariant]);
 
+  useEffect(() => {
+    if (selectedImage >= allImages.length) {
+      setSelectedImage(0);
+    }
+  }, [allImages.length, selectedImage]);
+
+  const handleColorChange = (color: GoldColor) => {
+    setSelectedColor(color);
+    setSelectedImage(0);
+  };
+
   // Klavye sag/sol ok destegi
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -157,7 +137,7 @@ export default function UrunDetayPage() {
 
   const handleAddToCart = () => {
     if (product) {
-      addToCart(product as any, quantity);
+      addToCart(product, quantity);
     }
   };
 
@@ -458,7 +438,7 @@ export default function UrunDetayPage() {
               <ColorSelector
                 variants={product.colorVariants}
                 selectedColor={currentColor}
-                onColorChange={setSelectedColor}
+                onColorChange={handleColorChange}
               />
             )}
 

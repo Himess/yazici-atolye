@@ -6,6 +6,15 @@ import { ArrowLeft, Save, Loader2, ImagePlus, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
+type VariantColor = "white" | "gold" | "rose";
+
+interface VariantForm {
+  color: VariantColor;
+  label: string;
+  available: boolean;
+  images: string;
+}
+
 interface ProductForm {
   name: string;
   slug: string;
@@ -22,6 +31,7 @@ interface ProductForm {
   purity: string;
   images: string;
   hoverImage: string;
+  defaultColor: VariantColor;
   featured: boolean;
   homepageRing: boolean;
   homepageAlyans: boolean;
@@ -44,6 +54,7 @@ const initialForm: ProductForm = {
   purity: "",
   images: "",
   hoverImage: "",
+  defaultColor: "white",
   featured: false,
   homepageRing: false,
   homepageAlyans: false,
@@ -56,6 +67,69 @@ const categoryOptions = [
   { value: "kupe", label: "Küpe" },
   { value: "bileklik", label: "Bileklik" },
 ];
+
+const variantOptions: Array<{ color: VariantColor; label: string }> = [
+  { color: "white", label: "Platin" },
+  { color: "gold", label: "Gold" },
+  { color: "rose", label: "Rose" },
+];
+
+const initialColorVariants = (): VariantForm[] =>
+  variantOptions.map((variant) => ({
+    ...variant,
+    available: variant.color === "white",
+    images: "",
+  }));
+
+function parseImageList(value: unknown): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+  }
+  if (typeof value !== "string") return [];
+
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) {
+      return parsed.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+    }
+  } catch {
+    // Comma separated fallback below.
+  }
+
+  return value.split(",").map((s) => s.trim()).filter(Boolean);
+}
+
+function parseVariantList(value: unknown): VariantForm[] {
+  const base = initialColorVariants();
+  if (!value) return base;
+
+  let parsed: unknown = value;
+  if (typeof value === "string") {
+    try {
+      parsed = JSON.parse(value);
+    } catch {
+      return base;
+    }
+  }
+
+  if (!Array.isArray(parsed)) return base;
+
+  return base.map((fallback) => {
+    const saved = parsed.find((item) => {
+      return item && typeof item === "object" && (item as { color?: unknown }).color === fallback.color;
+    }) as Partial<VariantForm & { images: unknown }> | undefined;
+
+    if (!saved) return fallback;
+
+    return {
+      color: fallback.color,
+      label: typeof saved.label === "string" && saved.label.trim() ? saved.label : fallback.label,
+      available: saved.available === true,
+      images: parseImageList(saved.images).join(", "),
+    };
+  });
+}
 
 function generateSlug(name: string): string {
   return name
@@ -91,6 +165,12 @@ function ProductFormContent() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [imagePreview, setImagePreview] = useState<string[]>([]);
+  const [colorVariants, setColorVariants] = useState<VariantForm[]>(initialColorVariants);
+  const [variantPreviews, setVariantPreviews] = useState<Record<VariantColor, string[]>>({
+    white: [],
+    gold: [],
+    rose: [],
+  });
 
   const loadProduct = useCallback(async () => {
     if (!editId) return;
@@ -121,23 +201,22 @@ function ProductFormContent() {
         purity: product.purity || "",
         images: product.images || "",
         hoverImage: product.hoverImage || "",
+        defaultColor: product.defaultColor || "white",
         featured: product.featured || false,
         homepageRing: homepageRingIds.includes(product.id),
         homepageAlyans: homepageAlyansIds.includes(product.id),
         inStock: product.inStock !== false,
       });
+      const parsedVariants = parseVariantList(product.colorVariants);
+      setColorVariants(parsedVariants);
+      setVariantPreviews({
+        white: parseImageList(parsedVariants.find((v) => v.color === "white")?.images),
+        gold: parseImageList(parsedVariants.find((v) => v.color === "gold")?.images),
+        rose: parseImageList(parsedVariants.find((v) => v.color === "rose")?.images),
+      });
+
       if (product.images) {
-        let imgs: string[] = [];
-        if (typeof product.images === 'string') {
-          try {
-            const parsed = JSON.parse(product.images);
-            imgs = Array.isArray(parsed) ? parsed : product.images.split(",").map((s: string) => s.trim()).filter(Boolean);
-          } catch {
-            imgs = product.images.split(",").map((s: string) => s.trim()).filter(Boolean);
-          }
-        } else if (Array.isArray(product.images)) {
-          imgs = product.images;
-        }
+        const imgs = parseImageList(product.images);
         setImagePreview(imgs);
         setForm(prev => ({ ...prev, images: imgs.join(", ") }));
       }
@@ -234,6 +313,64 @@ function ProductFormContent() {
     setForm((prev) => ({ ...prev, images: updated.join(", ") }));
   };
 
+  const updateVariant = (color: VariantColor, updates: Partial<VariantForm>) => {
+    setColorVariants((prev) =>
+      prev.map((variant) =>
+        variant.color === color ? { ...variant, ...updates } : variant
+      )
+    );
+  };
+
+  const updateVariantImages = (color: VariantColor, urls: string[]) => {
+    updateVariant(color, { images: urls.join(", "), available: true });
+    setVariantPreviews((prev) => ({ ...prev, [color]: urls }));
+  };
+
+  const handleVariantImagesChange = (color: VariantColor, value: string) => {
+    updateVariant(color, { images: value, available: true });
+    setVariantPreviews((prev) => ({ ...prev, [color]: parseImageList(value) }));
+  };
+
+  const handleVariantImageUpload = async (color: VariantColor, e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const uploadedUrls: string[] = [];
+
+    for (const file of Array.from(files)) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "urunler");
+
+      try {
+        const res = await fetch("/api/admin/upload", {
+          method: "POST",
+          body: formData,
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || "YÃ¼klenemedi");
+        }
+        const data = await res.json();
+        if (data.url) uploadedUrls.push(data.url);
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "GÃ¶rsel yÃ¼klenirken hata oluÅŸtu");
+      }
+    }
+
+    if (uploadedUrls.length > 0) {
+      updateVariantImages(color, [...variantPreviews[color], ...uploadedUrls]);
+    }
+
+    e.target.value = "";
+  };
+
+  const removeVariantImage = (color: VariantColor, index: number) => {
+    const updated = [...variantPreviews[color]];
+    updated.splice(index, 1);
+    updateVariantImages(color, updated);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -249,6 +386,15 @@ function ProductFormContent() {
 
     try {
       setSaving(true);
+      const variantPayload = colorVariants
+        .map((variant) => ({
+          color: variant.color,
+          label: variant.label,
+          available: variant.available || variant.color === form.defaultColor,
+          images: parseImageList(variant.images),
+        }))
+        .filter((variant) => variant.available || variant.images.length > 0 || variant.color === form.defaultColor);
+
       const payload = {
         name: form.name,
         slug: form.slug || generateSlug(form.name),
@@ -265,6 +411,8 @@ function ProductFormContent() {
         purity: form.purity || null,
         images: form.images || null,
         hoverImage: form.hoverImage || null,
+        colorVariants: JSON.stringify(variantPayload),
+        defaultColor: form.defaultColor,
         featured: form.featured,
         inStock: form.inStock,
       };
@@ -632,6 +780,109 @@ function ProductFormContent() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
                 placeholder="/images/urun-hover.jpg"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Renk Varyantlari */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-3">
+            Renk VaryantlarÄ±
+          </h2>
+          <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Ana Renk</label>
+              <select
+                name="defaultColor"
+                value={form.defaultColor}
+                onChange={handleChange}
+                className="w-full md:w-64 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
+              >
+                {variantOptions.map((variant) => (
+                  <option key={variant.color} value={variant.color}>
+                    {variant.label}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-2 text-xs text-gray-500">
+                Ana sayfa ve Ã¼rÃ¼n kartlarÄ± sadece yukarÄ±daki ana gÃ¶rselleri kullanÄ±r. Bu bÃ¶lÃ¼mdeki gÃ¶rseller yalnÄ±zca Ã¼rÃ¼n detayÄ±ndaki renk seÃ§imlerinde gÃ¶rÃ¼nÃ¼r.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4">
+              {colorVariants.map((variant) => (
+                <div key={variant.color} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={variant.available || variant.color === form.defaultColor}
+                        disabled={variant.color === form.defaultColor}
+                        onChange={(e) => updateVariant(variant.color, { available: e.target.checked })}
+                        className="w-4 h-4 rounded border-gray-300 text-[#C6A25A] focus:ring-[#C6A25A] disabled:opacity-40"
+                      />
+                      <span className="text-sm font-semibold text-gray-900">{variant.label}</span>
+                    </label>
+                    {variant.color === form.defaultColor && (
+                      <span className="text-xs px-2 py-1 rounded-full bg-[#C6A25A]/10 text-[#8B6D2F]">
+                        Ana renk
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {variant.label} GÃ¶rsel URL&apos;leri
+                      </label>
+                      <input
+                        type="text"
+                        value={variant.images}
+                        onChange={(e) => handleVariantImagesChange(variant.color, e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C6A25A] focus:border-[#C6A25A] outline-none transition-colors text-sm"
+                        placeholder="/images/urun-gold-1.jpg, /images/urun-gold-2.jpg"
+                      />
+                    </div>
+
+                    <label className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[#C6A25A] hover:bg-[#C6A25A]/5 transition-colors">
+                      <ImagePlus className="w-5 h-5 text-gray-400" />
+                      <span className="text-sm text-gray-500">{variant.label} gÃ¶rselleri yÃ¼kle</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => handleVariantImageUpload(variant.color, e)}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {variantPreviews[variant.color].length > 0 && (
+                      <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+                        {variantPreviews[variant.color].map((url, i) => (
+                          <div key={`${variant.color}-${url}-${i}`} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden group">
+                            <Image
+                              src={url}
+                              alt={`${variant.label} gÃ¶rsel ${i + 1}`}
+                              fill
+                              className="object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = "none";
+                              }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeVariantImage(variant.color, i)}
+                              className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

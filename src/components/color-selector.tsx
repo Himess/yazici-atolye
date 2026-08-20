@@ -12,29 +12,30 @@ const colorStyles: Record<GoldColor, { bg: string; ring: string; label: string }
   white: {
     bg: "bg-gradient-to-br from-gray-100 to-gray-300",
     ring: "ring-gray-400",
-    label: "Beyaz Altın",
+    label: "Platin",
   },
   gold: {
     bg: "bg-gradient-to-br from-yellow-300 to-yellow-500",
     ring: "ring-yellow-500",
-    label: "Sarı Altın",
+    label: "Gold",
   },
   rose: {
     bg: "bg-gradient-to-br from-rose-300 to-rose-400",
     ring: "ring-rose-400",
-    label: "Rose Gold",
+    label: "Rose",
   },
 };
 
 export function ColorSelector({ variants, selectedColor, onColorChange }: ColorSelectorProps) {
   return (
     <div className="mb-6">
-      <h3 className="text-sm font-medium text-stone-700 mb-3">Altın Rengi</h3>
+      <h3 className="text-sm font-medium text-stone-700 mb-3">Renk Secimi</h3>
       <div className="flex gap-3">
         {variants.map((variant) => {
           const style = colorStyles[variant.color];
           const isSelected = selectedColor === variant.color;
           const isDisabled = !variant.available;
+          const label = variant.label || style.label;
 
           return (
             <button
@@ -46,7 +47,7 @@ export function ColorSelector({ variants, selectedColor, onColorChange }: ColorS
                 ${isSelected ? "ring-2 " + style.ring + " bg-stone-50" : "hover:bg-stone-50"}
                 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
               `}
-              title={isDisabled ? "Mevcut değil" : variant.label}
+              title={isDisabled ? "Mevcut degil" : label}
             >
               <div
                 className={`
@@ -56,7 +57,7 @@ export function ColorSelector({ variants, selectedColor, onColorChange }: ColorS
                 `}
               />
               <span className={`text-xs ${isSelected ? "font-medium text-stone-900" : "text-stone-600"}`}>
-                {variant.label}
+                {label}
               </span>
               {isDisabled && (
                 <span className="absolute -top-1 -right-1 text-[10px] bg-stone-200 text-stone-500 px-1.5 py-0.5 rounded-full">

@@ -235,7 +235,7 @@ export default function CheckoutPage() {
                   <p className="mt-1 text-stone-500">Adet: {item.quantity}</p>
                 </div>
                 <p className="font-medium text-stone-900">
-                  {item.product.priceOnRequest || item.product.price <= 0 ? "Satıcıya Sor" : formatPrice(item.product.price * item.quantity)}
+                  {item.product.priceOnRequest || item.product.price <= 0 ? "Ürün Hakkında Bilgi Al" : formatPrice(item.product.price * item.quantity)}
                 </p>
               </div>
             ))}

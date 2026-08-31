@@ -949,3 +949,90 @@ No text, no logo, no watermark.
 - Urun detay sayfasinda Platin / Gold / Rose butonlari olacak. Kullanici bu butonlara basinca detay galerisindeki gorseller o renk icin panelden yuklenen gorsellerle degisecek.
 - Admin urun formuna "Renk Varyantlari" bolumu eklendi: ana renk secimi, Platin/Gold/Rose icin ayri URL ve ayri coklu gorsel yukleme alanlari var.
 - Teknik not: `Product.colorVariants` mevcut Prisma alaninda JSON string olarak tutuluyor, `defaultColor` ana rengi belirliyor. Yeni migration gerekmedi.
+
+## 2026-08-20 - Yeni Yuzuk Isim Notlari
+
+- Kullanici tasli Platin ve Gold varyantli bir yuzuk icin isim istedi.
+- Daha once sitede kullanildigi soylenen isimler: Liora, Arel, Mira, Elara, Luna, Vera.
+- Yeni onerilen isimler: Alin Tasli Yuzuk, Nora Tasli Yuzuk, Sera Tasli Yuzuk, Dora Tasli Yuzuk, Rina Tasli Yuzuk, Iris Tasli Yuzuk, Selin Tasli Yuzuk, Alya Tasli Yuzuk.
+- Son ek onerilen isim: Narin Tasli Yuzuk.
+
+## Favian'i Hatirla - Ana Devam Notu
+
+- Favian Jewellery projesinin ana not dosyasi: `C:\Users\User\Desktop\LİLİTHBROWNE\lilith!\yazici-atolye\CLAUDE.md`.
+- Kullanici "Favian'i hatirla", "kaldigimiz yerden devam", "saveledigini oku" gibi bir sey derse once bu dosya okunacak.
+- PayTR kuyum sertifikasi istedigi icin odeme konusu simdilik beklemede. Sitede satis akisi su an "Saticiya Sor" mantigina yakin ilerliyor; kullanici bu akisi simdilik okey buluyor.
+- Tum mail adresleri `info@favianjewellery.com` olacak sekilde ayarlandi.
+- Link preview/favicon icin kullanilan Favian gorseli `IMG_4767.jpg.jpeg` baz alindi; site linki atilinca siyah-beyaz ucgen yerine Favian gorseli cikmasi hedeflendi.
+- Bes tas yuzuk icin referans HEIC dosyalari `C:\Users\User\Downloads\IMG_9515.HEIC` - `IMG_9519.HEIC`; uretilen/studyo gorselleri `C:\Users\User\Desktop\favian-görseller` ve `C:\Users\User\Desktop\yeni ürünler favıan\beştaş` tarafina kondu.
+- Video/reels icin genel karar: kalite onemli oldugu icin background degistirme zorunlu degil; basit isik/renk ayarlari galeriden veya Instagram icinden yapilabilir. CapCut sadece gerekiyorsa, basit reels icin sart degil.
+- Instagram Business hesap kalacak. Trend/telifli muzik kisitlari Business hesapta olabilir; kalite icin mumkunse final yuklemeyi Instagram icinden yapip sesi oradan eklemek daha mantikli.
+- Urun renk varyanti karari: tek urun kaydi olacak; Platin/Gold/Rose ayri urun acilmayacak. Ana sayfa kartinda sadece ana urun gorselleri, urun detayinda renk butonuna basinca o renge ait manuel yuklenen galeri gorunecek.
+- Bu renk varyanti ozelligi commit/push edildi: `39280c9 Add product color variant galleries`.
+- Son isim notlari: Liora/Arel/Mira/Elara/Luna/Vera kullanilmis. Yeni oneriler arasinda Alin, Nora, Sera, Dora, Rina, Iris, Selin, Alya ve son olarak Narin Tasli Yuzuk var.
+
+## 2026-08-26 - Alyans7 AI Varyasyon Uretimleri
+
+- Kullanici `C:\Users\User\Desktop\yeni ürünler favıan\alyanslar 3\alyans7` klasorundeki genis tas kanalli platin alyans referanslarindan daha zarif, tasli, platin alyans varyasyonlari istedi.
+- Uretilen ilk set ayni klasore kaydedildi:
+  - `alyans7-zarif-platin-varyasyon-01.png`
+  - `alyans7-zarif-platin-varyasyon-02.png`
+  - `alyans7-zarif-platin-frontview-03.png`
+  - `alyans7-zarif-platin-varyasyon-04.png`
+- Degerlendirme: `02` ve `04` daha kullanilabilir; `03` duz frontview urun karti icin uygun.
+- Sonra kullanici `alyans7-zarif-platin-varyasyon-04.png` ile attigi Favian iki tasli sari altin/mavi tas referansini birlikte kullanarak farkli model varyasyonlari istedi.
+- Uretilen ikinci set ayni klasore kaydedildi:
+  - `alyans7-favian-iki-tas-platin-model-01.png`
+  - `alyans7-favian-iki-tas-platin-model-02.png`
+  - `alyans7-favian-iki-tas-platin-model-03.png`
+  - `alyans7-favian-iki-tas-platin-model-04.png`
+- Degerlendirme: `01` ve `04` en iyi duranlar; `02` daha narin, `03` daha butik/tasarim hissinde.
+- Stil notu: Beyaz studio background `#FFFFFF`, platin metal, zarif tasli alyans/yuzuk dili, urun katalog cekimi, tek urun, propsuz, logosuz.
+
+## 2026-08-26 - FAVIAN f6-f10 Side ve Top AI Gorselleri
+
+- Kullanici `C:\Users\User\Desktop\FAVIAN` klasorundeki yeni `f6`, `f7`, `f8`, `f9`, `f10` yuzukleri icin tek tek ugrasmamak adina side aci ve yukaridan/top-down gorseller istedi.
+- Her klasordeki ana gorsel referans alindi; `f10` icin klasordeki iki referans birlikte kullanildi.
+- Uretilen ve ilgili klasorlere kaydedilen dosyalar:
+  - `C:\Users\User\Desktop\FAVIAN\f6\f6-side-ai.png`
+  - `C:\Users\User\Desktop\FAVIAN\f6\f6-top-ai.png`
+  - `C:\Users\User\Desktop\FAVIAN\f7\f7-side-ai.png`
+  - `C:\Users\User\Desktop\FAVIAN\f7\f7-top-ai.png`
+  - `C:\Users\User\Desktop\FAVIAN\f8\f8-side-ai.png`
+  - `C:\Users\User\Desktop\FAVIAN\f8\f8-top-ai.png`
+  - `C:\Users\User\Desktop\FAVIAN\f9\f9-side-ai.png`
+  - `C:\Users\User\Desktop\FAVIAN\f9\f9-top-ai.png`
+  - `C:\Users\User\Desktop\FAVIAN\f10\f10-side-ai.png`
+  - `C:\Users\User\Desktop\FAVIAN\f10\f10-top-ai.png`
+- Not: AI, bazi side/top acilarda referans tas dizilimini ufak simetriklestirebilir; yine de katalogda ek aci olarak kullanilabilecek beyaz studyo gorselleri alindi.
+
+## 2026-08-26 - Yuzuk Manken Elde Yakin Cekim Promptu
+
+- Kullanici yeni topladigi 6-7 model icin yuzukleri mankenin parmaginda veya elde tutarken uretmek istiyor.
+- Higgs/Nano Banana icin genel kural: `#image1 #image2 #image3` ayni fiziksel urunun farkli acilari olarak verilecek; yuzuk degismeyecek, sadece sahne/poz/kamera degisecek.
+- Ozellikle istenen sahne: yakin cekim, bir elin isaret parmagi ucu ve bas parmagi ucu ile yuzugu nazikce tutmasi; protez/akrilik tirnak gorunsun.
+
+Prompt:
+
+```text
+#image1 #image2 #image3 are reference photos of the EXACT SAME physical ring from different angles.
+
+Create a realistic macro close-up lifestyle photo of the same ring being held delicately between the model's thumb tip and index finger tip.
+The fingers hold the ring gently from the sides, near the fingertips.
+
+The ring must stay identical to the reference images:
+same metal color, same stone layout, same stone shapes, same prongs, same band thickness, same proportions, same craftsmanship.
+
+Show elegant feminine hands with clean glossy acrylic/prosthetic nails.
+Nails should be neat, medium length, nude / milky white manicure.
+Focus on the ring and fingertips.
+Soft daylight, premium jewelry photography, shallow depth of field.
+Background softly blurred, light neutral indoor setting.
+
+Do not redesign the ring.
+Do not add or remove stones.
+Do not change the metal color.
+Do not change the ring proportions.
+Do not create a different ring.
+No extra jewelry, no text, no logo, no watermark.
+```

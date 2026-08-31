@@ -257,7 +257,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center gap-2 mt-2">
             {product.priceOnRequest ? (
               <p className="text-base font-serif font-semibold text-foreground">
-                Satıcıya Sor
+                Ürün Hakkında Bilgi Al
               </p>
             ) : (
               <>

@@ -101,7 +101,7 @@ export const infoPages = {
         ],
       },
       {
-        title: "Satıcıya Sor ne anlama geliyor?",
+        title: "Ürün Hakkında Bilgi Al ne anlama geliyor?",
         body: [
           "Bazı ürünlerde fiyat; ölçü, materyal, taş seçimi veya güncel piyasa koşullarına göre değişebilir. Bu ürünlerde fiyat bilgisi için bizimle iletişime geçebilirsiniz.",
         ],

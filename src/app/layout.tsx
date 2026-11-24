@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Montserrat } from "next/font/google";
+import { Gilda_Display, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/components/providers";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const hanken = Hanken_Grotesk({
+  variable: "--font-hanken",
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500"],
   display: "swap",
 });
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const gilda = Gilda_Display({
+  variable: "--font-gilda",
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
+  weight: "400",
   display: "swap",
 });
 
@@ -87,7 +87,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body
-        className={`${montserrat.variable} ${cormorant.variable} font-sans antialiased`}
+        className={`${hanken.variable} ${gilda.variable} font-sans antialiased`}
       >
         <Providers>
           <Header />

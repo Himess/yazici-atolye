@@ -1036,3 +1036,123 @@ Do not change the ring proportions.
 Do not create a different ring.
 No extra jewelry, no text, no logo, no watermark.
 ```
+
+## 2026-08-31 - Saticiya Sor Metni Degisti
+
+- Kullanici urun detay sayfasindaki `Saticiya Sor` ifadesinin urun sayfasinda guven vermedigini soyledi.
+- Musteri tarafinda gorunen metinler `Urun Hakkinda Bilgi Al` olarak degistirildi.
+- Degisen yerler:
+  - Urun detay sayfasindaki fiyat yerine gorunen buyuk metin.
+  - Urun detay sayfasindaki alttaki WhatsApp aksiyon butonu.
+  - Urun kartlarinda/fiyat alaninda fiyat gizliyken gorunen metin.
+  - Odeme/sepet ozetinde fiyat bilgisi olmayan urun metni.
+  - SSS/info sayfasindaki baslik.
+- Admin paneldeki ic ayar adi `Saticiya Sor (Fiyat Gizli)` olarak birakildi; bu kullanicinin panelde fiyat gizleme secenegi olarak kalacak.
+- Build gecti ve degisiklik pushlandi.
+- Commit: `e6c6102 Rename seller inquiry copy`.
+
+## 2026-09-07 - FAVIAN f15 Yeni Yuzuk Lifestyle Gorselleri
+
+Kullanici `C:\Users\User\Desktop\FAVIAN\f15` klasorune yeni yuzugun studio frontview acisini ve karakter/elde yakin cekim referanslarini koydu.
+
+Referans klasor:
+
+```text
+C:\Users\User\Desktop\FAVIAN\f15
+```
+
+Referans dosyalar:
+
+```text
+hf_20260905_115712_60bdcf82-6684-4c81-b608-71ceaeea9b64.png
+hf_20260907_120823_3f7b8415-7447-4dcb-a18b-afecaa31280f.png
+hf_20260907_121539_8bb544ad-42f6-47c9-9f4d-c8e90377302e.png
+hf_20260907_121929_9c47beda-3f88-47e7-a180-d4d90a5b1cec.png
+hf_20260907_122252_6607b3ea-bc31-4d71-8677-9aab9d295a47.png
+hf_20260907_122343_80e90f01-4c19-4af2-be91-c70c29e2cc9d.png
+```
+
+Yuzuk ozeti:
+
+```text
+Ince rose-gold/gold bant.
+Ustte marquise/leaf formunda berrak tas dizilimi.
+Kucuk yuvarlak accent taslar var.
+Zarif, narin, yaprak/cicek hissi veren tas kompozisyonu.
+Referanslarda elde/parmakta ve parmak ucunda tutulan yakin cekimler var.
+```
+
+Uretim hedefi:
+
+```text
+Ayni yuzuk kalacak.
+Farkli yakin cekim lifestyle sahneleri uretilecek.
+AI oldugu kesinlikle belli olmayacak.
+El, cilt, tirnak, tas ve metal gercek fotograf gibi duracak.
+Yuzuk tasarimi, tas sayisi, metal rengi ve oranlar degismeyecek.
+```
+
+Uretilen 3 alternatif gorsel:
+
+```text
+C:\Users\User\Desktop\FAVIAN\f15\f15-closeup-warm-window-stone-table.png
+C:\Users\User\Desktop\FAVIAN\f15\f15-closeup-black-satin-hand.png
+C:\Users\User\Desktop\FAVIAN\f15\f15-closeup-held-cream-studio.png
+```
+
+Degerlendirme:
+
+```text
+1. f15-closeup-warm-window-stone-table.png
+   Sicak pencere isigi, dogal tas/mermerimsi yuzey, elde yuzuk.
+   Dogal ve urun sayfasi icin kullanisli.
+
+2. f15-closeup-black-satin-hand.png
+   Siyah saten/kumas ustunde luks yakin cekim.
+   En premium duran alternatiflerden biri.
+
+3. f15-closeup-held-cream-studio.png
+   Krem studiomsu sahnede parmak ucunda tutulmus yuzuk.
+   Genel olarak kullanilabilir ama tas formunda ufak AI yorumu olabilir; lifestyle ek aci olarak degerlendirilebilir.
+```
+
+Kullanilan genel prompt mantigi:
+
+```text
+Use the reference images as the exact same physical ring.
+Create a new ultra-realistic close-up lifestyle jewellery photo.
+Keep the exact same delicate rose-gold ring with the same marquise/leaf-shaped clear stones and tiny round accent stones.
+Change only the hand pose, scene, lighting and composition.
+Keep ring design, stone layout, number and shape of stones, metal color and proportions identical.
+Avoid AI-looking skin, plastic fingers, extra fingers, distorted nails, redesigned ring, added/missing stones, changed metal color, text, logo, watermark, CGI render.
+```
+
+Not:
+
+```text
+Gorseller built-in imagegen ile uretildi.
+Orijinal imagegen ciktilari C:\Users\User\.codex\generated_images\... altinda, final kopyalar f15 klasorunde.
+```
+
+## 2026-09-20 - Favian Devam Checkpointi
+
+```text
+f15 yuzuk icin 3 lifestyle gorsel hazirlandi; f15-closeup-black-satin-hand.png premium duran alternatiflerden biri.
+Urun detay sayfasindaki danisman/WhatsApp akisi sadelestiriliyor.
+Commit edilmemis mevcut kodda fiyat gizliyken baslik "Fiyat ve Detay Icin Sor" oldu.
+Tek WhatsApp aksiyonu "Urun Danismanina Sor" olarak birakildi; mesaj tas, olcu, ayar ve teslimat detaylarini soruyor.
+E-posta butonu, ikinci WhatsApp butonu ve stok satiri kaldirildi.
+CLAUDE.md ve src/app/urun/[id]/page.tsx degisiklikleri commit edilmedi.
+public/images/favian-hero-clean.png ve tmp/ untracked durumda.
+Kullanicinin mevcut degisiklikleri korunacak; test edilmeden commit/push yapilmayacak.
+```
+
+## 2026-11-24 – Burato tarzı yeni tasarım
+
+- Müşteri arayüzü Gilda Display + Hanken Grotesk ve yeni `base/shell/sand/ink/blush/gold/line` tokenlarına geçirildi; admin görünümü korunuyor.
+- Ana sayfa sırası: slider hero, yeni gelenler, değerler, kategori kutuları, yüzükler, editoryal, alyanslar, güven, diğer takılar ve öne çıkanlar.
+- Kaldırılan eski ana sayfa bloklarının bileşen/verileri silinmedi; yalnızca ana sayfada render edilmiyor.
+- Yeni `PageContent` bölümleri: `duyuru`, `degerler`, `kategori_1`–`kategori_4`, `editoryal`, `one_cikan_1`–`one_cikan_3`.
+- Ortak anahtarlar: `image`, `title`, `subtitle`, `p1`–`p4`, `cap`, `buttonText`, `buttonUrl`; duyuru anahtarı `text`.
+- `admin/icerikler` içindeki `image` tipleri mevcut Supabase `ImageUploader` ile yükleme ve önizleme destekliyor.
+- Yüzük ve alyans seçimleri mevcut `homepageRing.productIds` / `homepageAlyans.productIds` akışını kullanmaya devam ediyor.

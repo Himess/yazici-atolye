@@ -30,6 +30,47 @@ const contents = [
 async function main() {
   console.log('Seeding PageContent...');
 
+  const productImage = async (slug: string, index = 1) => {
+    const product = await prisma.product.findUnique({ where: { slug }, select: { images: true } });
+    try {
+      const images = JSON.parse(product?.images || '[]');
+      return images[index] || images[0] || '';
+    } catch { return ''; }
+  };
+  const dynamic = [
+    { section:'duyuru', key:'text', value:'Online sipariş · 7–10 gün içinde teslimat · Sertifikalı doğal taşlar', type:'text' },
+    { section:'degerler', key:'title', value:'Değerlerimiz, Vizyonumuz', type:'text' },
+    { section:'degerler', key:'p1', value:'Takıyı bir gün için değil, bir ömür için yapıyoruz.', type:'textarea' },
+    { section:'degerler', key:'p2', value:'Her parça atölyemizde **usta ellerde** şekilleniyor; tasarım, döküm, mıhlama ve cila aynı çatı altında.', type:'textarea' },
+    { section:'degerler', key:'p3', value:'Taşlarımızı tek tek seçiyoruz: **sertifikalı doğal taşlar**, **14 ayar altın**.', type:'textarea' },
+    { section:'degerler', key:'p4', value:'Sade çizgi, ince işçilik.\nHer gün takılsın diye.', type:'textarea' },
+    { section:'editoryal', key:'image', value:await productImage('ruby-kalp-kolye-'), type:'image' },
+    { section:'editoryal', key:'title', value:'Işığı Taşıyan, İnce Zincirler', type:'text' },
+    { section:'editoryal', key:'p1', value:'Tek bir taş, ince bir zincir. Gün boyu takılsın diye hafif tasarladık; taşın ışığı ise akşama kadar sizinle.', type:'textarea' },
+    { section:'editoryal', key:'buttonText', value:'Kolyeleri keşfet', type:'text' },
+    { section:'editoryal', key:'buttonUrl', value:'/urunler?kategori=kolye', type:'url' },
+  ];
+  const categories = [
+    ['kategori_1','rohan-yuzuk','Yüzükler','{adet} model · tektaş, beştaş, su yolu','/urunler?kategori=yuzuk'],
+    ['kategori_2','dorika-necklace-','Kolyeler','{adet} model · ince zincirde tek taş','/urunler?kategori=kolye'],
+    ['kategori_3','platin-alyans','Alyanslar','{adet} model · kadın ve erkek','/#alyans'],
+    ['kategori_4','kupe-3','Küpeler & Bileklikler','{adet} model','/urunler?kategori=kupe'],
+  ];
+  for (const [section,slug,title,subtitle,buttonUrl] of categories) dynamic.push(
+    {section,key:'image',value:await productImage(slug),type:'image'}, {section,key:'title',value:title,type:'text'},
+    {section,key:'subtitle',value:subtitle,type:'text'}, {section,key:'buttonText',value:'Şimdi incele',type:'text'}, {section,key:'buttonUrl',value:buttonUrl,type:'url'}
+  );
+  const featured = [
+    ['one_cikan_1',await productImage('rohan-yuzuk'),'Rohan Yüzük','','Yüzüğü incele','/urun/rohan-yuzuk'],
+    ['one_cikan_2',await productImage('platin-alyans',0),'Platinium by Favian','Yakında · Pt950','Haber ver','/urun/platin-alyans'],
+    ['one_cikan_3','/images/atolye-usta-1.png','Özel Tasarım','','Bize yazın','/hakkimizda'],
+  ];
+  for (const [section,image,title,cap,buttonText,buttonUrl] of featured) dynamic.push(
+    {section,key:'image',value:image,type:'image'}, {section,key:'title',value:title,type:'text'}, {section,key:'cap',value:cap,type:'text'},
+    {section,key:'buttonText',value:buttonText,type:'text'}, {section,key:'buttonUrl',value:buttonUrl,type:'url'}
+  );
+  contents.push(...dynamic.map((item) => ({ page:'anasayfa', ...item })));
+
   for (const item of contents) {
     await prisma.pageContent.upsert({
       where: {

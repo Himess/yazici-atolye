@@ -8,6 +8,7 @@ export type User = {
   name: string;
   phone?: string;
 };
+type StoredUser = User & { password: string };
 
 type AuthContextType = {
   user: User | null;
@@ -31,20 +32,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const savedUser = localStorage.getItem("yazici-user");
     if (savedUser) {
       try {
-        setUser(JSON.parse(savedUser));
-      } catch (e) {
+        const parsed = JSON.parse(savedUser) as User;
+        queueMicrotask(() => setUser(parsed));
+      } catch {
         console.error("Failed to parse user from localStorage");
       }
     }
-    setIsLoading(false);
+    queueMicrotask(() => setIsLoading(false));
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     // Simulated login - in production, this would call an API
     // For now, check localStorage for registered users
-    const users = JSON.parse(localStorage.getItem("yazici-users") || "[]");
+    const users = JSON.parse(localStorage.getItem("yazici-users") || "[]") as StoredUser[];
     const foundUser = users.find(
-      (u: any) => u.email === email && u.password === password
+      (u) => u.email === email && u.password === password
     );
 
     if (foundUser) {
@@ -68,10 +70,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string
   ): Promise<boolean> => {
     // Simulated registration - in production, this would call an API
-    const users = JSON.parse(localStorage.getItem("yazici-users") || "[]");
+    const users = JSON.parse(localStorage.getItem("yazici-users") || "[]") as StoredUser[];
 
     // Check if email already exists
-    if (users.find((u: any) => u.email === email)) {
+    if (users.find((u) => u.email === email)) {
       return false;
     }
 

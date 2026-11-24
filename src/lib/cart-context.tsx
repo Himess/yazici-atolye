@@ -32,12 +32,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const savedCart = localStorage.getItem("yazici-cart");
     if (savedCart) {
       try {
-        setItems(JSON.parse(savedCart));
-      } catch (e) {
+        const parsed = JSON.parse(savedCart) as CartItem[];
+        queueMicrotask(() => setItems(parsed));
+      } catch {
         console.error("Failed to parse cart from localStorage");
       }
     }
-    setIsLoaded(true);
+    queueMicrotask(() => setIsLoaded(true));
   }, []);
 
   // Save cart to localStorage whenever it changes

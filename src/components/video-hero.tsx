@@ -193,9 +193,7 @@ function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
     return () => clearInterval(timer);
   }, [nextSlide, tiles.length]);
 
-  useEffect(() => {
-    if (activeIndex >= tiles.length) setActiveIndex(0);
-  }, [activeIndex, tiles.length]);
+  const visibleIndex = activeIndex < tiles.length ? activeIndex : 0;
 
   return (
     <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-100 md:aspect-[16/9]">
@@ -203,7 +201,7 @@ function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
         <div
           key={tile.id}
           className={`absolute inset-0 transition-opacity duration-700 ${
-            index === activeIndex ? "z-10 opacity-100" : "z-0 opacity-0"
+            index === visibleIndex ? "z-10 opacity-100" : "z-0 opacity-0"
           }`}
         >
           <HeroTile tile={tile} variant="primary" priority={index === 0} />
@@ -235,7 +233,7 @@ function HeroCarousel({ tiles }: { tiles: HeroTileData[] }) {
               type="button"
               onClick={() => setActiveIndex(index)}
               className={`h-1.5 rounded-full transition-all ${
-                index === activeIndex ? "w-7 bg-white" : "w-1.5 bg-white/55"
+                index === visibleIndex ? "w-7 bg-white" : "w-1.5 bg-white/55"
               }`}
               aria-label={`Hero görsel ${index + 1}`}
             />

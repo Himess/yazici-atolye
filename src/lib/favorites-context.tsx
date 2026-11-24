@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { Product } from "./products";
 
 type FavoritesContextType = {
   favorites: string[];
@@ -23,12 +22,13 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     const savedFavorites = localStorage.getItem("yazici-favorites");
     if (savedFavorites) {
       try {
-        setFavorites(JSON.parse(savedFavorites));
-      } catch (e) {
+        const parsed = JSON.parse(savedFavorites) as string[];
+        queueMicrotask(() => setFavorites(parsed));
+      } catch {
         console.error("Failed to parse favorites from localStorage");
       }
     }
-    setIsLoaded(true);
+    queueMicrotask(() => setIsLoaded(true));
   }, []);
 
   // Save to localStorage whenever favorites change

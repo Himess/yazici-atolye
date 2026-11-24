@@ -7,7 +7,7 @@ import * as THREE from "three";
 
 // Basit yüzük geometrisi (demo için)
 function SimpleRing({ autoRotate = true }: { autoRotate?: boolean }) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<THREE.Group>(null);
 
   useFrame((state, delta) => {
     if (autoRotate && meshRef.current) {
@@ -16,7 +16,7 @@ function SimpleRing({ autoRotate = true }: { autoRotate?: boolean }) {
   });
 
   return (
-    <group ref={meshRef as any}>
+    <group ref={meshRef}>
       {/* Ana halka */}
       <mesh castShadow receiveShadow>
         <torusGeometry args={[1, 0.15, 32, 100]} />

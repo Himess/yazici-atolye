@@ -11,6 +11,7 @@ import {
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 interface PageContent {
   id: string;
@@ -57,6 +58,16 @@ const sectionLabels: Record<string, string> = {
   "anasayfa:faq": "Sıkça Sorulan Sorular",
   "anasayfa:uretim": "Üretimden Sizlere",
   "anasayfa:instagram": "Instagram Grid (6 resim)",
+  "anasayfa:degerler": "Ana Sayfa – Değerlerimiz",
+  "anasayfa:kategori_1": "Ana Sayfa – Kategori Kutusu 1",
+  "anasayfa:kategori_2": "Ana Sayfa – Kategori Kutusu 2",
+  "anasayfa:kategori_3": "Ana Sayfa – Kategori Kutusu 3",
+  "anasayfa:kategori_4": "Ana Sayfa – Kategori Kutusu 4",
+  "anasayfa:editoryal": "Ana Sayfa – Editoryal",
+  "anasayfa:one_cikan_1": "Ana Sayfa – Öne Çıkan 1",
+  "anasayfa:one_cikan_2": "Ana Sayfa – Öne Çıkan 2",
+  "anasayfa:one_cikan_3": "Ana Sayfa – Öne Çıkan 3",
+  "anasayfa:duyuru": "Duyuru Şeridi",
   "hakkimizda:hero": "Hakkımızda - Hero",
   "hakkimizda:hikaye": "Hakkımızda - Hikayemiz",
   "hakkimizda:atolye_gorselleri": "Hakkımızda - Atölye Görselleri",
@@ -75,6 +86,8 @@ const keyLabels: Record<string, string> = {
   p1: "Paragraf 1",
   p2: "Paragraf 2",
   p3: "Paragraf 3",
+  p4: "Paragraf 4",
+  cap: "Üst Etiket",
 };
 
 const pageLabels: Record<string, string> = {
@@ -356,7 +369,12 @@ export default function AdminContentPage() {
             </div>
             <div className="md:col-span-3">
               <label className="block text-sm font-medium text-gray-700 mb-1">Değer</label>
-              {form.type === "textarea" || form.type === "html" ? (
+              {form.type === "image" ? (
+                <div className="grid gap-3 md:grid-cols-[1fr_260px]">
+                  <input type="text" name="value" value={form.value} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Görsel URL" />
+                  <ImageUploader value={form.value} onChange={(value) => setForm((prev) => ({ ...prev, value }))} folder="icerikler" label="Yükle / önizle" aspectRatio="aspect-video" />
+                </div>
+              ) : form.type === "textarea" || form.type === "html" ? (
                 <textarea
                   name="value"
                   value={form.value}
@@ -453,7 +471,12 @@ export default function AdminContentPage() {
                                   {content.type}
                                 </span>
                               </div>
-                              {content.type === "textarea" || content.type === "html" ? (
+                              {content.type === "image" ? (
+                                <div className="grid gap-3 md:grid-cols-[1fr_220px]">
+                                  <input type="text" defaultValue={content.value} onBlur={(e) => { if (e.target.value !== content.value) handleInlineUpdate(content, e.target.value); }} className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm" />
+                                  <ImageUploader value={content.value} onChange={(value) => handleInlineUpdate(content, value)} folder="icerikler" label="Yükle / önizle" aspectRatio="aspect-video" />
+                                </div>
+                              ) : content.type === "textarea" || content.type === "html" ? (
                                 <textarea
                                   defaultValue={content.value}
                                   onBlur={(e) => {

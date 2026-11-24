@@ -70,7 +70,7 @@ export default function Demo360Page() {
             {materialColors.map((color) => (
               <button
                 key={color.id}
-                onClick={() => setSelectedColor(color.id as any)}
+                onClick={() => setSelectedColor(color.id as "gold" | "silver" | "rosegold" | "original")}
                 className={`w-8 h-8 rounded-full border-2 transition-all ${
                   selectedColor === color.id
                     ? "border-primary scale-110"
@@ -116,8 +116,8 @@ export default function Demo360Page() {
             <ul className="text-sm text-muted-foreground space-y-2">
               <li>• Bu demo basit bir 3D geometri kullanıyor (Three.js ile oluşturuldu)</li>
               <li>• Gerçek ürünler için .glb/.gltf formatında 3D model dosyası gerekli</li>
-              <li>• Modeller Blender, Sketchfab veya CGTrader'dan edinilebilir</li>
-              <li>• React Three Fiber ile Next.js'e entegre edildi</li>
+              <li>• Modeller Blender, Sketchfab veya CGTrader&apos;dan edinilebilir</li>
+              <li>• React Three Fiber ile Next.js&apos;e entegre edildi</li>
             </ul>
           </div>
         </div>

@@ -1,0 +1,207 @@
+<!doctype html>
+<!--
+  FAVIAN YENİ ANA SAYFA — TASARIM REFERANSI (Claude, 2026-11-24)
+  Kullanıcının onayladığı tasarım budur. Burato (buratogioielli.com) vitrin dili, gerçek Favian ürünleriyle.
+  Bu dosya sadece referans: Next.js bileşenlerine çevrilecek (bkz. CODEX_YENI_TASARIM.md).
+  Yerelde denemek için: public/ altına geçici kopyala, http://localhost:3000/anasayfa-referans.html aç
+  (ürünleri /api/products'tan çeker). Commit'e public kopyasını EKLEME.
+-->
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Favian — yeni ana sayfa referansı</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Hanken+Grotesk:wght@300;400;500&display=swap">
+<style>
+/* TASARIM TOKENLARI */
+:root{
+  --base:#fffdfa;   /* sayfa zemini */
+  --shell:#fcf8f3;  /* alternatif bölüm zemini */
+  --sand:#f4ece4;   /* ürün görsel kutusu zemini */
+  --ink:#2a2118;    /* ana yazı */
+  --muted:#6d6259;  /* ikincil yazı */
+  --blush:#d9ab98;  /* duyuru şeridi */
+  --gold:#a88655;   /* Favian altını: ikon halkaları, ince vurgular */
+  --line:#e9e0d6;
+  --serif:"Gilda Display",Georgia,serif;               /* başlıklar, ürün adları */
+  --sans:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif; /* gövde, etiketler */
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--base);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+.wrap{max-width:1440px;margin-inline:auto;padding-inline:24px}
+.cap{font-size:12px;letter-spacing:.24em;text-transform:uppercase}
+.serif{font-family:var(--serif);font-weight:400;margin:0;text-wrap:balance}
+.pill{display:inline-flex;align-items:center;border:1px solid currentColor;border-radius:999px;padding:11px 26px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;transition:.25s}
+.pill.d:hover{background:#fff;color:var(--ink);border-color:#fff}
+.pill.s{background:var(--ink);color:var(--base)}
+.ul{font-size:12px;letter-spacing:.24em;text-transform:uppercase;border-bottom:1px solid currentColor;padding-bottom:3px}
+/* duyuru şeridi */
+.promo{background:var(--blush);color:#fff;text-align:center;font-size:12px;letter-spacing:.2em;text-transform:uppercase;padding:10px}
+/* header: hero üstünde şeffaf + beyaz; hero geçilince sabit, açık zemin, koyu yazı */
+.top{position:absolute;left:0;right:0;z-index:30;color:#fff;transition:background .3s,color .3s}
+.top.solid{position:fixed;top:0;background:var(--base);color:var(--ink);border-bottom:1px solid var(--line)}
+.r1{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-block:14px 6px}
+.r1 .l{display:flex;gap:22px;align-items:center;font-size:12px;letter-spacing:.14em}
+.logo img{height:44px;width:auto;filter:invert(1)} .top.solid .logo img{filter:none}
+.r1 .r{display:flex;justify-content:flex-end;align-items:center;gap:16px}
+.search{display:flex;align-items:center;gap:8px;border:1px solid currentColor;border-radius:999px;padding:6px 16px 6px 12px;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.ic{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.2}
+.r2{display:flex;justify-content:center;gap:30px;padding-block:6px 14px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500}
+.burger{display:none}
+/* hero */
+.hero{position:relative;color:#fff;background:#3a2f26}
+.hero img{width:100%;height:clamp(560px,52vw,820px);object-fit:cover;object-position:50% 28%}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(20,14,9,.35),rgba(20,14,9,.18) 40%,rgba(20,14,9,.38))}
+.hero .c{position:absolute;inset:0;z-index:1;display:grid;place-items:center;text-align:center;padding:150px 20px 40px}
+.hero .c>div{display:grid;gap:22px;justify-items:center;max-width:860px}
+.hero h1{font-size:clamp(40px,5vw,72px);line-height:1.08}.hero p{margin:0;font-size:16px;letter-spacing:.06em}
+/* bölümler */
+.sec{padding-block:clamp(56px,6vw,90px)}
+.sh{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+.sh h2{font-size:clamp(32px,3.4vw,50px);line-height:1.1}
+/* yatay ürün şeridi: masaüstü 4 kart, mobil ~1.6 kart */
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 42px)/4);gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.card{scroll-snap-align:start;display:grid;gap:10px;min-width:0;position:relative;align-content:start}
+.card .ph{position:relative;display:block;background:var(--sand);aspect-ratio:4/5;overflow:hidden}
+.card .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s}
+.card .ph img+img{opacity:0}.card:hover .ph img+img{opacity:1}   /* hover: 2. görsel */
+.tag{position:absolute;top:12px;left:12px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:var(--base);padding:4px 8px;z-index:2}
+.card .k{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:300;margin-top:4px}
+.card .n{font-family:var(--serif);font-size:22px;line-height:1.2}.card .p{font-size:14px}
+.bar{display:flex;gap:8px;justify-content:center;margin-top:30px}
+.bar button{width:46px;height:2px;background:var(--line)}.bar button.on{background:var(--ink)}
+/* değerler metni */
+.vision{text-align:center}.vision .wrap{max-width:900px;display:grid;gap:22px;justify-items:center}
+.vision h2{font-size:clamp(34px,3.6vw,52px)}
+.vision p{margin:0;font-family:var(--serif);font-size:20px;line-height:1.55}
+.vision b{font-weight:400;border-bottom:1px solid var(--gold)}
+/* 2x2 kategori kutuları */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.tile{position:relative;color:#fff;overflow:hidden;background:#3a2f26}
+.tile img{width:100%;aspect-ratio:4/3.4;object-fit:cover;transition:transform 1.4s}.tile:hover img{transform:scale(1.04)}
+.tile:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(20,14,9,.55),rgba(20,14,9,0) 55%)}
+.tile .t{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:clamp(20px,3vw,40px);display:grid;gap:10px;justify-items:start}
+.tile h3{font-size:clamp(32px,3.4vw,48px);line-height:1}.tile p{margin:0;font-size:15px}
+/* editoryal ikili */
+.edit{display:grid;grid-template-columns:1fr 1fr;background:var(--shell)}
+.edit img{width:100%;height:100%;object-fit:cover;min-height:560px;max-height:780px}
+.edit .t{padding:clamp(40px,6vw,96px);display:grid;gap:20px;align-content:center}
+.edit h2{font-size:clamp(40px,5vw,76px);line-height:1.02}
+.edit p{margin:0;font-family:var(--serif);font-size:18px;line-height:1.6;max-width:44ch}
+/* güven ikonları */
+.values{background:#f3e9e1}.values .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;text-align:center;padding-block:64px}
+.values .v{display:grid;gap:12px;justify-items:center}
+.dot{width:76px;height:76px;border-radius:50%;background:var(--gold);display:grid;place-items:center;color:#fff;font-size:10px;letter-spacing:.14em;text-transform:uppercase;text-align:center;line-height:1.3}
+.values h3{font-size:24px}.values p{margin:0;font-size:14px;color:var(--muted)}
+/* üçlü öne çıkan */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.trio .tile img{aspect-ratio:3/4.2}
+/* footer */
+footer{background:var(--shell);border-top:1px solid var(--line)}
+.fg{display:grid;grid-template-columns:1.3fr 1fr;gap:60px;padding-block:64px 40px}
+.news h4{margin:0 0 22px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;font-weight:400;color:var(--muted)}
+.news form{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px}
+.news input{border:0;border-bottom:1px solid var(--muted);background:none;padding:10px 0;font:inherit;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+.news .full{grid-column:1/-1}
+.fl{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.fl h5{margin:0 0 12px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500}
+.fl ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.legal{border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-block:18px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:1000px){
+  .r1 .l .h,.search span,.r1 .r .h,.r2{display:none}.burger{display:inline-flex}.search{border:0;padding:0}
+  .logo img{height:34px}.rail{grid-auto-columns:62%}
+  .tiles,.edit,.trio,.fg,.values .wrap{grid-template-columns:1fr}.edit img{min-height:0}
+}
+</style>
+</head>
+<body>
+<div class="promo">Online sipariş · 7–10 gün içinde teslimat · Sertifikalı doğal taşlar</div>
+<div style="position:relative">
+<header class="top" id="hdr"><div class="wrap r1">
+  <div class="l"><button class="burger" aria-label="Menü"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button><span class="h">TR</span><a class="h" href="/iletisim">SİZİN İÇİN</a></div>
+  <a class="logo" href="/"><img src="/images/favian-logo.png" alt="FAVIAN"></a>
+  <div class="r"><a class="search" href="/urunler"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span>Ürün ara</span></a>
+    <a class="h" href="/iletisim" aria-label="Mağaza"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.2"/></svg></a>
+    <a class="h" href="/favoriler" aria-label="Favoriler"><svg class="ic" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></svg></a>
+    <a href="#" aria-label="Sepet"><svg class="ic" viewBox="0 0 24 24"><path d="M5.5 8h13l-1 12h-11z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></a></div></div>
+  <nav class="r2"><a href="/urunler">Mağaza</a><a href="/urunler?kategori=yuzuk">Yüzükler</a><a href="#alyans">Alyanslar</a><a href="/urunler?tip=ozel">Özel Tasarım</a><a href="/hakkimizda">Atölye</a></nav>
+</header>
+<!-- HERO: admin > Slider'daki ilk aktif slide (image / mobileImage / title / subtitle / buttonText / buttonUrl) -->
+<section class="hero"><img src="/images/hero.png" alt=""><div class="c"><div>
+  <span class="cap">Pırlanta ve altın · El yapımı</span>
+  <h1 class="serif">Her Gün İçin<br>Pırlanta ve Altın Takılar</h1>
+  <p>Atölyemizde tek tek işlenen tektaşlar, alyanslar ve ince zincirler.</p>
+  <a class="pill d" href="#yeni">Koleksiyonu keşfet</a></div></div></section>
+</div>
+
+<section class="sec" id="yeni"><div class="wrap"><div class="sh"><h2 class="serif">Yeni Gelenler</h2><a class="ul" href="/urunler?siralama=yeni">Tümünü gör</a></div><div class="rail" id="r1"></div><div class="bar" data-for="r1"></div></div></section>
+
+<!-- metinler admin > İçerikler (anasayfa:degerler) -->
+<section class="sec vision" style="padding-top:10px"><div class="wrap"><span class="cap">Favian · El yapımı mücevher</span><h2 class="serif">Değerlerimiz, Vizyonumuz</h2>
+<p>Takıyı bir gün için değil, bir ömür için yapıyoruz.</p>
+<p>Her parça atölyemizde <b>usta ellerde</b> şekilleniyor; tasarım, döküm, mıhlama ve cila aynı çatı altında.</p>
+<p>Taşlarımızı tek tek seçiyoruz: <b>sertifikalı doğal taşlar</b>, <b>14 ayar altın</b>.</p>
+<p>Sade çizgi, ince işçilik.<br>Her gün takılsın diye.</p></div></section>
+
+<!-- 2x2 KATEGORİ: görsel + başlık + alt yazı + link admin'den (Category.image veya anasayfa:kategori_kutulari) -->
+<section class="tiles" id="tiles"></section>
+
+<section class="sec" style="background:var(--shell)"><div class="wrap"><div class="sh"><h2 class="serif">Yüzükler</h2><a class="ul" href="/urunler?kategori=yuzuk">Tüm yüzükler</a></div><div class="rail" id="r2"></div><div class="bar" data-for="r2"></div></div></section>
+
+<!-- EDİTORYAL: anasayfa:editoryal (image, title, p1, buttonText, buttonUrl) -->
+<section class="edit"><img id="editImg" src="" alt=""><div class="t"><h2 class="serif">Işığı Taşıyan,<br>İnce Zincirler</h2><p>Tek bir taş, ince bir zincir. Gün boyu takılsın diye hafif tasarladık; taşın ışığı ise akşama kadar sizinle.</p><a class="ul" href="/urunler?kategori=kolye" style="justify-self:start">Kolyeleri keşfet</a></div></section>
+
+<section class="sec" id="alyans"><div class="wrap"><div class="sh"><h2 class="serif">Alyanslar</h2><a class="ul" href="/urunler?kategori=yuzuk">Tüm alyanslar</a></div><div class="rail" id="r3"></div><div class="bar" data-for="r3"></div></div></section>
+
+<!-- GÜVEN: mevcut anasayfa:guven içeriği bu görünüme taşınacak -->
+<section class="values"><div class="wrap">
+  <div class="v"><span class="dot">El<br>yapımı</span><h3 class="serif">Atölye üretimi</h3><p>Her parça kendi atölyemizde, ustalarımızın elinde üretilir.</p></div>
+  <div class="v"><span class="dot">Anti<br>alerjik</span><h3 class="serif">Hafif ve rahat</h3><p>Gün boyu rahat takılsın diye cilde dost malzemeler.</p></div>
+  <div class="v"><span class="dot">Sertifika</span><h3 class="serif">Doğal taşlar</h3><p>Taşlarımız sertifikasıyla birlikte teslim edilir.</p></div></div></section>
+
+<section class="sec" style="background:var(--shell)"><div class="wrap"><div class="sh"><h2 class="serif">Kolye, Küpe ve Bileklik</h2><a class="ul" href="/urunler">Tümünü gör</a></div><div class="rail" id="r4"></div><div class="bar" data-for="r4"></div></div></section>
+
+<!-- ÜÇLÜ ÖNE ÇIKAN: anasayfa:one_cikan (3 kutu: image, title, cap, buttonText, buttonUrl) -->
+<section class="trio" id="trio"></section>
+
+<footer><div class="wrap fg">
+  <div class="news"><h4>Bize ulaşın, bültenimize katılın</h4><form onsubmit="event.preventDefault()"><input placeholder="Ad"><input placeholder="Soyad"><input class="full" placeholder="E-posta"><button class="pill s" style="justify-self:start">Kaydol</button></form></div>
+  <div class="fl"><div><h5>Bilgi</h5><ul><li><a href="/kargo-teslimat">Kargo</a></li><li><a href="/iade-degisim">İade ve değişim</a></li><li><a href="/sss">Sıkça sorulanlar</a></li><li><a href="/beden-olcu-bilgisi">Beden ve ölçü</a></li><li><a href="/taki-bakimi">Takı bakımı</a></li></ul></div>
+  <div><h5>Favian</h5><ul><li><a href="/hakkimizda">Hakkımızda</a></li><li><a href="/iletisim">İletişim</a></li><li>Instagram</li><li>TikTok</li></ul></div></div></div>
+  <div class="wrap legal"><span>© 2026 Favian Jewellery · info@favianjewellery.com</span><span>Kullanım koşulları · Gizlilik politikası</span></div></footer>
+
+<script>
+(async()=>{
+const all=(await fetch('/api/products').then(r=>r.json())).filter(p=>p.isActive!==false&&p.images&&p.images.length);
+const T=s=>(s||'').trim().split(/\s+/).map(w=>w===w.toLocaleUpperCase('tr-TR')&&w.length<5?w:w.charAt(0).toLocaleUpperCase('tr-TR')+w.slice(1)).join(' ');
+const catTR={yuzuk:'Yüzük',kolye:'Kolye',kupe:'Küpe',bileklik:'Bileklik'};
+const isBand=p=>/alyans/i.test(p.name);
+const kind=p=>{const m=(p.material||'').replace(/sari/i,'sarı');return((isBand(p)?'Alyans':catTR[p.category]||'')+(m?' · '+m:'')).toUpperCase()};
+const price=p=>p.price>0&&!p.priceOnRequest?p.price.toLocaleString('tr-TR')+' ₺':'Fiyat için danışın';
+const card=(p,tag)=>`<article class="card"><a class="ph" href="/urun/${p.slug}">${tag?`<span class="tag">${tag}</span>`:''}<img src="${p.images[0]}" alt="${T(p.name)}" loading="lazy">${p.images[1]?`<img src="${p.images[1]}" alt="" loading="lazy">`:''}</a><span class="k">${kind(p)}</span><a class="n" href="/urun/${p.slug}">${T(p.name)}</a><span class="p">${price(p)}</span></article>`;
+const g=s=>all.find(p=>p.slug===s); const life=(p,i=1)=>p?(p.images[i]||p.images[0]):'';
+const byNew=[...all].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+const rings=all.filter(p=>p.category==='yuzuk'&&!isBand(p)&&p.images.length>1);
+const bands=all.filter(isBand), others=all.filter(p=>p.category!=='yuzuk');
+r1.innerHTML=byNew.slice(0,12).map(p=>card(p,'Yeni')).join('');
+r2.innerHTML=rings.slice(0,14).map(p=>card(p,p.featured?'Çok satan':'')).join('');
+r3.innerHTML=bands.slice(0,14).map(p=>card(p,'')).join('');
+r4.innerHTML=others.map(p=>card(p,p.featured?'Çok satan':'')).join('');
+const n={yuzuk:all.filter(p=>p.category==='yuzuk'&&!isBand(p)).length,alyans:bands.length,kolye:all.filter(p=>p.category==='kolye').length,kk:all.filter(p=>p.category==='kupe'||p.category==='bileklik').length};
+const rohan=g('rohan-yuzuk'),plat=g('platin-alyans'),dorika=g('dorika-necklace-'),ariel=g('kupe-3');
+const tile=(href,img,h,sub,btn,cap)=>`<a class="tile" href="${href}"><img src="${img}" alt=""><div class="t">${cap?`<span class="cap">${cap}</span>`:''}<h3 class="serif">${h}</h3>${sub?`<p>${sub}</p>`:''}<span class="pill d">${btn}</span></div></a>`;
+tiles.innerHTML=tile('/urunler?kategori=yuzuk',life(rohan),'Yüzükler',n.yuzuk+' model · tektaş, beştaş, su yolu','Şimdi incele')
+ +tile('/urunler?kategori=kolye',life(dorika),'Kolyeler',n.kolye+' model · ince zincirde tek taş','Şimdi incele')
+ +tile('#alyans',life(plat),'Alyanslar',n.alyans+' model · kadın ve erkek','Şimdi incele')
+ +tile('/urunler?kategori=kupe',life(ariel),'Küpeler & Bileklikler',n.kk+' model','Şimdi incele');
+editImg.src=life(g('ruby-kalp-kolye-'));
+trio.innerHTML=tile('/urun/rohan-yuzuk',life(rohan),'Rohan Yüzük','','Yüzüğü incele')
+ +tile('/urun/platin-alyans',life(plat,0),'Platinium<br>by Favian','','Haber ver','Yakında · Pt950')
+ +tile('/hakkimizda','/images/atolye-usta-1.png','Özel Tasarım','','Bize yazın');
+document.querySelectorAll('.bar').forEach(b=>{const r=document.getElementById(b.dataset.for),k=4;b.innerHTML='<button class="on"></button><button></button><button></button><button></button>';const bs=[...b.children];bs.forEach((x,i)=>x.onclick=()=>r.scrollTo({left:(r.scrollWidth-r.clientWidth)*i/(k-1),behavior:'smooth'}));r.addEventListener('scroll',()=>{const j=Math.round(r.scrollLeft/Math.max(1,r.scrollWidth-r.clientWidth)*(k-1));bs.forEach((x,i)=>x.classList.toggle('on',i===j))})});
+const hdr=document.getElementById('hdr'),hero=document.querySelector('.hero');const f=()=>hdr.classList.toggle('solid',hero.getBoundingClientRect().bottom<90);addEventListener('scroll',f);f();
+})();
+</script>
+</body>
+</html>

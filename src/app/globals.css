@@ -3,35 +3,42 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Favian Jewellery - Glamira-inspired Typography */
 :root {
+  --base: #fffdfa;
+  --shell: #fcf8f3;
+  --sand: #f4ece4;
+  --ink: #2a2118;
+  --muted-text: #6d6259;
+  --blush: #d9ab98;
+  --gold: #a88655;
+  --line: #e9e0d6;
   /* Brand Colors */
-  --cream-bg: #F5F1EA;
-  --beige-section: #E9E1D6;
-  --gold-accent: #C6A25A;
-  --dark-text: #2B2B2B;
+  --cream-bg: var(--shell);
+  --beige-section: var(--sand);
+  --gold-accent: var(--gold);
+  --dark-text: var(--ink);
   --pure-white: #FFFFFF;
 
   /* Theme Variables */
   --radius: 0.25rem;
-  --background: #F5F1EA;
-  --foreground: #2B2B2B;
+  --background: var(--base);
+  --foreground: var(--ink);
   --card: #FFFFFF;
   --card-foreground: #2B2B2B;
   --popover: #FFFFFF;
   --popover-foreground: #2B2B2B;
   --primary: #2B2B2B;
   --primary-foreground: #FFFFFF;
-  --secondary: #E9E1D6;
+  --secondary: var(--sand);
   --secondary-foreground: #2B2B2B;
-  --muted: #E9E1D6;
-  --muted-foreground: #6B6B6B;
-  --accent: #C6A25A;
+  --muted: var(--sand);
+  --muted-foreground: var(--muted-text);
+  --accent: var(--gold);
   --accent-foreground: #FFFFFF;
   --destructive: #DC2626;
-  --border: #D4CFC7;
-  --input: #D4CFC7;
-  --ring: #C6A25A;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--gold);
   --chart-1: #2B2B2B;
   --chart-2: #C6A25A;
   --chart-3: #6B6B6B;
@@ -50,8 +57,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-montserrat);
-  --font-serif: var(--font-cormorant);
+  --font-sans: var(--font-hanken);
+  --font-serif: var(--font-gilda);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -90,12 +97,12 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   /* Custom Brand Colors */
-  --color-cream: #F5F1EA;
-  --color-beige: #E9E1D6;
-  --color-gold: #C6A25A;
-  --color-dark: #2B2B2B;
-  --color-light: #F5F1EA;
-  --color-warm-gray: #6B6B6B;
+  --color-cream: var(--shell);
+  --color-beige: var(--sand);
+  --color-gold: var(--gold);
+  --color-dark: var(--ink);
+  --color-light: var(--base);
+  --color-warm-gray: var(--muted-text);
 }
 
 @layer base {
@@ -104,29 +111,34 @@
   }
   body {
     @apply bg-background text-foreground font-sans font-normal antialiased;
+    font-size: 15px;
+    line-height: 1.55;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-semibold text-foreground;
+    @apply font-serif font-normal text-foreground;
   }
 }
 
 /* Decorative cursive class — kept as alias to Montserrat to match Glamira's single-font system */
 .font-script {
-  font-family: var(--font-montserrat), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: var(--font-hanken), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 500;
   letter-spacing: 0.02em;
 }
 
 /* Custom Button Styles */
 .btn-primary {
-  @apply bg-gold text-white px-8 py-3 text-sm tracking-wider uppercase transition-all duration-300 font-sans font-medium;
+  @apply bg-dark text-white px-8 py-3 text-xs uppercase transition-all duration-300 font-sans font-medium rounded-full;
+  letter-spacing: .24em;
 }
 .btn-primary:hover {
   @apply bg-dark;
 }
 
 .btn-outline {
-  @apply bg-transparent border border-dark text-dark px-8 py-3 text-sm tracking-wider uppercase transition-all duration-300 font-sans font-medium;
+  @apply bg-transparent border border-dark text-dark px-8 py-3 text-xs uppercase transition-all duration-300 font-sans font-medium rounded-full;
+  letter-spacing: .24em;
 }
 .btn-outline:hover {
   @apply bg-dark text-white;
@@ -152,8 +164,16 @@
   @apply transition-all duration-300;
 }
 .product-card:hover {
-  @apply shadow-lg;
+  box-shadow: none;
 }
+
+.favian-wrap { max-width: 1440px; margin-inline: auto; padding-inline: 24px; }
+.favian-cap { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; }
+.favian-link { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; border-bottom: 1px solid currentColor; padding-bottom: 3px; }
+.favian-pill { display:inline-flex; align-items:center; border:1px solid currentColor; border-radius:999px; padding:11px 26px; font-size:12px; letter-spacing:.24em; text-transform:uppercase; transition:.25s; }
+.favian-rail { display:grid; grid-auto-flow:column; grid-auto-columns:calc((100% - 42px)/4); gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
+.favian-rail::-webkit-scrollbar { display:none; }
+@media(max-width:1000px){ .favian-wrap{padding-inline:16px}.favian-rail{grid-auto-columns:62%} }
 
 /* Discount Badge */
 .discount-badge {

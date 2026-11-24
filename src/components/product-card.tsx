@@ -9,6 +9,7 @@ import { Heart } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
+  tag?: string;
 }
 
 /** Kaydırma durduktan sonra 1. görsele dönme süresi (ms) */
@@ -30,7 +31,7 @@ function getCompatibleImageSrc(src: string) {
   return `/api/image-proxy?url=${encodeURIComponent(src)}`;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, tag }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -106,12 +107,12 @@ export function ProductCard({ product }: ProductCardProps) {
       }}
     >
       <div
-        className="group cursor-pointer product-card bg-white"
+        className="group cursor-pointer product-card bg-transparent"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Image Container */}
-        <div className="aspect-square bg-cream relative overflow-hidden">
+        <div className="aspect-[4/5] bg-[var(--sand)] relative overflow-hidden">
           {galleryImages.length > 0 ? (
             <>
               {/* Kaydırılabilir galeri — mobilde swipe, masaüstünde sabit */}
@@ -221,6 +222,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
           {/* Badges - Sol Üst */}
           <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
+            {tag && <span className="bg-[var(--base)] px-2 py-1 text-[10px] uppercase tracking-[.14em]">{tag}</span>}
             {!product.priceOnRequest && product.oldPrice && (
               <span className="bg-gold text-white text-xs px-2 py-1 font-sans font-medium">
                 %{discountPercent}
@@ -249,19 +251,20 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Product Info */}
-        <div className="pt-4 pb-2">
-          <h3 className="text-base font-serif font-semibold text-foreground group-hover:text-gold transition-colors line-clamp-1">
+        <div className="pt-3 pb-2">
+          <p className="mb-1 text-[11px] font-light uppercase tracking-[.08em]">{`${product.categoryLabel || product.category}${product.material ? ` · ${product.material.replace(/sari/gi, "sarı")}` : ""}`}</p>
+          <h3 className="text-[22px] leading-tight font-serif font-normal text-foreground line-clamp-1">
             {formatProductName(product.name)}
           </h3>
 
-          <div className="flex items-center gap-2 mt-2">
-            {product.priceOnRequest ? (
-              <p className="text-base font-serif font-semibold text-foreground">
-                Ürün Hakkında Bilgi Al
+          <div className="flex items-center gap-2 mt-1">
+            {product.priceOnRequest || !product.price ? (
+              <p className="text-sm text-foreground">
+                Fiyat için danışın
               </p>
             ) : (
               <>
-                <p className="text-base font-serif font-semibold text-foreground">
+                <p className="text-sm text-foreground">
                   {formatPrice(product.price)}
                 </p>
                 {product.oldPrice && (

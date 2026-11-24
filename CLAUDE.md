@@ -1156,3 +1156,55 @@ Kullanicinin mevcut degisiklikleri korunacak; test edilmeden commit/push yapilma
 - Ortak anahtarlar: `image`, `title`, `subtitle`, `p1`–`p4`, `cap`, `buttonText`, `buttonUrl`; duyuru anahtarı `text`.
 - `admin/icerikler` içindeki `image` tipleri mevcut Supabase `ImageUploader` ile yükleme ve önizleme destekliyor.
 - Yüzük ve alyans seçimleri mevcut `homepageRing.productIds` / `homepageAlyans.productIds` akışını kullanmaya devam ediyor.
+
+## 2026-11-24 – Yeni Tasarım Devam Checkpointi
+
+Kullanıcı geri geldiğinde söyleyebileceği devam cümlesi:
+
+```text
+Favian'ı hatırla, kaldığımız yerden devam et; savelediğini oku.
+```
+
+Bu cümle gelince önce bu `CLAUDE.md` dosyası baştan sona okunacak; kullanıcıya Vercel hesabı, proje sahipliği veya eski kurulum yeniden sorulmayacak.
+
+### Mevcut Git durumu
+
+- Proje yolu: `C:\Users\User\Desktop\LİLİTHBROWNE\lilith!\yazici-atolye`
+- Çalışılan dal: `yeni-tasarim`
+- `main` ve `origin/main`: `e6c6102 Rename seller inquiry copy`
+- Yeni tasarım ana commit'i: `0500ba6 feat: apply new Favian storefront design`
+- Mobil düzen iyileştirmesi: `8fbde15 fix: refine mobile storefront layout`
+- Kullanıcı onayı olmadan `main`e merge edilmeyecek ve canlıya alınmayacak.
+
+### Yapılan yeni tasarım işi
+
+- `docs/yeni-tasarim/CODEX_YENI_TASARIM.md` ve `anasayfa-referans.html` okunup uygulandı.
+- Gilda Display + Hanken Grotesk, yeni renk tokenları, şeffaf/sticky header, yeni footer ve Burato tarzı ana sayfa hazırlandı.
+- Hero, yeni gelenler, değerler, 2x2 kategoriler, yüzük/alyans/diğer ürün şeritleri, editoryal alan, güven ikonları ve üçlü öne çıkan kutular eklendi.
+- Ürün kartları 4:5 görsel, ikinci görsel hover, mobil galeri ve `Fiyat için danışın` diliyle güncellendi.
+- Admin > İçerikler ekranına `image` tiplerinde mevcut Supabase `ImageUploader` ile yükleme ve önizleme eklendi.
+- Yeni `PageContent` seed alanları: `duyuru`, `degerler`, `kategori_1`–`kategori_4`, `editoryal`, `one_cikan_1`–`one_cikan_3`.
+- `npm run lint` 0 hata ile geçti; `npm run build` başarılı geçti. `/api/prices` için mevcut dinamik üretim uyarısı build'i engellemiyor.
+
+### Vercel durumu
+
+- GitHub push sonrası Vercel deployment başarıyla tamamlandı.
+- Dal preview adresi: `https://yazici-atolye-git-yeni-tasarim-himess-projects.vercel.app`
+- Bu preview Vercel Deployment Protection nedeniyle ekip girişi istiyor.
+- Bilgisayardaki Vercel CLI oturumu kapalı. Hesapsız geçici deployment denemesi Windows symlink yetkisi (`EPERM`) nedeniyle tamamlanmadı.
+- Tasarımın herkese açık masaüstü görseli dalda: `docs/yeni-tasarim/preview-desktop.png`.
+- Bu erişim konusu kullanıcıyı strese soktu; geri gelince önce bağlam okunmalı, sakin ve kısa ilerlenmeli.
+
+### Kesinlikle korunacak yerel değişiklikler
+
+Şu dosyalar kullanıcıya ait/commit edilmemiş durumda; silinmeyecek, geri alınmayacak ve açık talimat olmadan commit edilmeyecek:
+
+```text
+M  src/app/urun/[id]/page.tsx
+?? docs/yeni-tasarim/preview-mobile.png
+?? public/images/favian-hero-clean.png
+?? tmp/
+```
+
+- Ürün detayındaki commit edilmemiş değişiklik: fiyat gizliyken `Fiyat ve Detay İçin Sor`, tek `Ürün Danışmanına Sor` WhatsApp akışı; e-posta/ikinci WhatsApp/stok satırı kaldırılmış durumda.
+- `tmp/` ve `.env*` hiçbir zaman commit edilmeyecek.
